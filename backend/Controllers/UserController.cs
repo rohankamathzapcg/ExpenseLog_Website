@@ -99,14 +99,14 @@ namespace ExpenseTracker.Controllers
         public async Task<IActionResult> CheckLogin(string id, string password)
         {
             {
-                var user = await _repository.PostUserForLogin(id, password);
+                var user = await _repository.PostUserForLogin(id,password);
                 if (user == null)
                 {
                     return Ok("User Already Exists");
                 }
                 else
                 {
-                    return Ok($"Welcome! {user.FirstName}");
+                    return Ok(user);
                 }
 
             }

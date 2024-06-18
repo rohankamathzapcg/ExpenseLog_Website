@@ -61,11 +61,11 @@ public class AuthController : ControllerBase
             var newUser = new User
             {
                 EmailID = email,
-                FirstName = firstName,
-                LastName = lastName
+                FullName = firstName+" "+lastName
+                
             };
             await _userRepository.AddAsync(newUser);
-            return Ok($"Welcome! {newUser.FirstName}");
+            return Ok($"Welcome! {newUser.FullName}");
         }
         else
         {
