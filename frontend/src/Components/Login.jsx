@@ -125,7 +125,7 @@ const Login = () => {
     }
 
     const handleGoogleLogin = () => {
-        window.location.href = 'http://localhost:5261/api/auth/google-login'
+        window.location.href = 'http://localhost:5041/api/auth/google-login'
         ;
     }
     return (
