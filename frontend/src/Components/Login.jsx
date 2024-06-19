@@ -92,7 +92,7 @@ const Login = () => {
                             email: "",
                             password: "",
                         })
-                    } else if (result.status === 200) {
+                    } else if (result.status === 404) {
                         toast.error(result.data, {
                             theme: "dark",
                             autoClose: 1000,
