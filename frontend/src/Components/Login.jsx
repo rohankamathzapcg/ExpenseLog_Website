@@ -79,7 +79,7 @@ const Login = () => {
             }
             axios.post("http://localhost:5041/api/User/login", loginUser)
                 .then((result) => {
-                    if (result.status === 201) {
+                    if (result.status === 200) {
                         login(result.data)
                         toast.success("Logged In Successfully", {
                             theme: "dark",
