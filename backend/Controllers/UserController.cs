@@ -102,7 +102,7 @@ namespace ExpenseTracker.Controllers
                 var user = await _repository.PostUserForLogin(login);
                 if (user == null)
                 {
-                    return Ok("Invalid Email ID or Password");
+                    return NotFound("Invalid Email ID or Password");
                 }
                 else
                 {
