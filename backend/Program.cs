@@ -58,6 +58,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+/////Https
+//app.UseKestrel(options =>
+//{
+//    options.ListenAnyIP(5001, listenOptions =>
+//    {
+//        listenOptions.UseHttps("certificate.pfx", "password"); // Replace with your certificate path and password
+//    });
+//});
+
 // Using CORS Policy
 app.UseCors("corspolicy");
 

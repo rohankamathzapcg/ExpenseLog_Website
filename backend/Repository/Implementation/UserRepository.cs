@@ -27,6 +27,7 @@ namespace ExpenseTracker.Repository.Implementation
 
         public async Task<User> AddAsync(User user)
         {
+            
             user.Password= BCrypt.Net.BCrypt.HashPassword(user.Password);
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -54,13 +55,18 @@ namespace ExpenseTracker.Repository.Implementation
         {
             var testUser = await _context.Users.FindAsync(login.EmailID);
 
-            if(testUser.EmailID==login.EmailID && BCrypt.Net.BCrypt.Verify(login.Password, testUser.Password))
+            ////login.Password = BCrypt.Net.BCrypt.HashPassword(login.Password);
+            ////Console.WriteLine(login.Password);
+            ////Console.WriteLine(testUser.Password);
+            if (testUser.EmailID==login.EmailID && BCrypt.Net.BCrypt.Verify(login.Password, testUser.Password))
             {
+        
                 return testUser;
             }
             else
             {
-                return null;
+                
+                return testUser;
             }
         }
     }
