@@ -58,6 +58,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+// Using CORS Policy
+app.UseCors("corspolicy");
+
 app.UseAuthorization();
 
 app.MapControllers();
