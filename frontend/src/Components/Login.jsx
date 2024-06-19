@@ -72,10 +72,10 @@ const Login = () => {
 
     const handleLoginBtn = () => {
         if (validateEmail(loginData.email) && validatePassword(loginData.password)) {
-            const hashedPassword = bcrypt.hashSync(loginData.password, 10)
+            // const hashedPassword = bcrypt.hashSync(loginData.password, 10)
             const loginUser = {
                 emailID: loginData.email,
-                password: hashedPassword
+                password: loginData.password
             }
             axios.post("http://localhost:5041/api/User/login", loginUser)
                 .then((result) => {
@@ -117,11 +117,11 @@ const Login = () => {
             } else if (userData.cpassword !== userData.password) {
                 newCpasswordErrors.cpassword = "Password and Confirm password does not match"
             } else {
-                const hashedPassword = bcrypt.hashSync(userData.password, 10)
+                // const hashedPassword = bcrypt.hashSync(userData.password, 10)
                 const userRegisterData = {
                     fullName: userData.fullname,
                     emailID: userData.email,
-                    password: hashedPassword,
+                    password: userData.password,
                     occupation: userData.occupation
                 }
                 axios.post("http://localhost:5041/api/User/register", userRegisterData)
