@@ -8,7 +8,7 @@ const navLinks =[
         path: "/"
     },
     {
-        name: "Profile",
+        name: "My Profile",
         icon: "bi bi-person-badge",
         path: "/profile"
     },
@@ -18,12 +18,17 @@ const navLinks =[
         path: "/transactions"
     },
     {
-        name: "Activity",
+        name: "My Accounts",
         icon: "bi bi-clock-history",
         path: "/acivity"
     },
     {
         name: "Analytics",
+        icon: "bi bi-bar-chart",
+        path: "/analytics"
+    },
+    {
+        name: "Help Center",
         icon: "bi bi-bar-chart",
         path: "/analytics"
     },
