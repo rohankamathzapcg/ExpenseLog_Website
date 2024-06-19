@@ -66,7 +66,7 @@ namespace ExpenseTracker.Repository.Implementation
             else
             {
                 
-                return testUser;
+                return null;
             }
         }
     }
