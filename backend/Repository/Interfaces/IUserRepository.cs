@@ -10,7 +10,7 @@ namespace ExpenseTracker.Repository.Interfaces
         Task<User> AddAsync(User user);
         Task<User> UpdateAsync(User user);
         Task DeleteAsync(string id);
-        Task<User> PostUserForLogin(string id, string password);
+        Task<User> PostUserForLogin(User login);
     }
 }
 
