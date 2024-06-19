@@ -2,9 +2,13 @@ import React, { useState } from 'react'
 import bcrypt from 'bcryptjs'
 import axios from 'axios'
 import { toast } from 'react-toastify';
+import { useAuth } from '../Context/AuthContext';
 
 const Login = () => {
+    // const { login } = useAuth();
+
     const [userData, setUserData] = useState({
+        fullname: "",
         email: "",
         password: "",
         cpassword: "",
@@ -56,16 +60,39 @@ const Login = () => {
         return !newOccupationErrors.occupation;
     }
 
+    const validateFullname = (fullname) => {
+        const newFullnameErrors = {}
+        if (!fullname) {
+            newFullnameErrors.fullname = 'Fullname Field is required';
+        }
+        setErrors(newFullnameErrors)
+        return !newFullnameErrors.fullname;
+    }
+
     const handleLoginBtn = () => {
         if (validateEmail(loginData.email) && validatePassword(loginData.password)) {
-            const hashedPassword = bcrypt.hashSync(loginData.password, 10)
+            // const hashedPassword = bcrypt.hashSync(loginData.password, 10)
             const loginUser = {
                 email: loginData.email,
-                password: hashedPassword
+                password: loginData.password
             }
-            axios.post("http://localhost:5041/api/User", loginUser)
+            axios.post("http://localhost:5041/api/User/login", loginUser)
                 .then((result) => {
-                    //Login API
+                    if (result.status === 201) {
+                        toast.success("Logged In Successfully", {
+                            theme: "dark",
+                            autoClose: 1000,
+                        });
+                        setUserData({
+                            email: "",
+                            password: "",
+                        })
+                    } else if (result.status === 200) {
+                        toast.error(result.data, {
+                            theme: "dark",
+                            autoClose: 1000,
+                        });
+                    }
                 })
                 .catch((error) => {
                     console.log(error)
@@ -79,19 +106,20 @@ const Login = () => {
 
     const handleRegisterBtn = () => {
         const newCpasswordErrors = {}
-        if (validateEmail(userData.email) && validatePassword(userData.password) && validateOccupation(userData.occupation)) {
+        if (validateFullname(userData.fullname) && validateEmail(userData.email) && validatePassword(userData.password) && validateOccupation(userData.occupation)) {
             if (!userData.cpassword) {
                 newCpasswordErrors.cpassword = "Confirm password Field is required"
             } else if (userData.cpassword !== userData.password) {
                 newCpasswordErrors.cpassword = "Password and Confirm password does not match"
             } else {
-                const hashedPassword = bcrypt.hashSync(userData.password, 10)
+                // const hashedPassword = bcrypt.hashSync(userData.password, 10)
                 const userRegisterData = {
+                    fullName: userData.fullname,
                     emailID: userData.email,
-                    password: hashedPassword,
+                    password: userData.password,
                     occupation: userData.occupation
                 }
-                axios.post("http://localhost:5041/api/User", userRegisterData)
+                axios.post("http://localhost:5041/api/User/register", userRegisterData)
                     .then((result) => {
                         if (result.status === 201) {
                             toast.success("Registered Successfully", {
@@ -125,8 +153,7 @@ const Login = () => {
     }
 
     const handleGoogleLogin = () => {
-        window.location.href = 'http://localhost:5041/api/auth/google-login'
-        ;
+        window.location.href = 'http://localhost:5041/api/auth/google-login';
     }
     return (
         <>
@@ -177,6 +204,10 @@ const Login = () => {
                                     </div>
                                 </div>
                                 <div className="tab-pane" id="register" role="tabpanel" aria-labelledby="signup-tab">
+                                    <div className="form-group mb-3">
+                                        <input type="text" className={`form-control shadow-none ${errors.fullname ? 'error' : ''}`} id="fullname" placeholder='Enter your full name' autoComplete='off' value={userData.fullname} onChange={(e) => { handleInputChange(e); validateFullname(e.target.value); }} />
+                                        {errors.fullname === "Fullname Field is required" ? "" : <div className="validations">{errors.fullname}</div>}
+                                    </div>
                                     <div className="form-group mb-3">
                                         <input type="text" className={`form-control shadow-none ${errors.email ? 'error' : ''}`} id="email" placeholder='Enter your email-id' autoComplete='off' value={userData.email} onChange={(e) => { handleInputChange(e); validateEmail(e.target.value); }} />
                                         {errors.email === "Email Field is required" ? "" : <div className="validations">{errors.email}</div>}

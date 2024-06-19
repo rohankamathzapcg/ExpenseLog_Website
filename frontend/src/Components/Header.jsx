@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import profile from '../Assets/PP.jpg';
-import Login from './Login';
+import { useAuth } from '../Context/AuthContext';
 
 const Header = () => {
-
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+    // const { isLoggedIn } = useAuth();
     const handleToggleSideBar = () => {
         document.body.classList.toggle('toggle-sidebar');
     };
@@ -33,7 +31,7 @@ const Header = () => {
                 <nav className='header-nav ms-auto'>
                     <ul className='d-flex align-items-center'>
                         {
-                            isLoggedIn === false ? (
+                            false === false ? (
                                 <li className="nav-item dropdown pe-3">
                                     <button style={{backgroundColor: '#012970', color: 'white', fontFamily: '"Merriweather", sans-serif'}} type="button" className="btn" data-bs-toggle="modal" data-bs-target="#loginSignupModal">
                                         Login/SignUp
