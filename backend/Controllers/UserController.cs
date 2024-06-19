@@ -35,12 +35,12 @@ namespace ExpenseTracker.Controllers
             var user = await _repository.GetByIdAsync(id);
             if (user == null)
             {
-                return NotFound("There was a problem logging in. Check your email and password or create an account.");
+                return Ok("Check your email and password or create an account.");
             }
             return Ok(user);
         }
 
-        [HttpPost]
+        [HttpPost("register")]
         public async Task<ActionResult<User>> PostUser(User user)
         {
 
@@ -95,14 +95,14 @@ namespace ExpenseTracker.Controllers
             return NoContent();
         }
 
-        [HttpPost("{id}/{password}")]
-        public async Task<IActionResult> CheckLogin(string id, string password)
+        [HttpPost("login")]
+        public async Task<ActionResult<User>> CheckLogin(User login)
         {
             {
-                var user = await _repository.PostUserForLogin(id,password);
+                var user = await _repository.PostUserForLogin(login);
                 if (user == null)
                 {
-                    return Ok("User Already Exists");
+                    return Ok("Invalid Email ID or Password");
                 }
                 else
                 {

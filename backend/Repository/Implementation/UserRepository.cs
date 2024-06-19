@@ -1,6 +1,7 @@
 ﻿using ExpenseTracker.Data;
 using ExpenseTracker.Model;
 using ExpenseTracker.Repository.Interfaces;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Repository.Implementation
@@ -26,6 +27,7 @@ namespace ExpenseTracker.Repository.Implementation
 
         public async Task<User> AddAsync(User user)
         {
+            user.Password= BCrypt.Net.BCrypt.HashPassword(user.Password);
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             return user;
@@ -48,11 +50,11 @@ namespace ExpenseTracker.Repository.Implementation
             }
         }
 
-        public async Task<User> PostUserForLogin(string id, string password)
+        public async Task<User> PostUserForLogin(User login )
         {
-            var testUser = await _context.Users.FindAsync(id);
+            var testUser = await _context.Users.FindAsync(login.EmailID);
 
-            if(testUser.EmailID==id && testUser.Password == password)
+            if(testUser.EmailID==login.EmailID && BCrypt.Net.BCrypt.Verify(login.Password, testUser.Password))
             {
                 return testUser;
             }
