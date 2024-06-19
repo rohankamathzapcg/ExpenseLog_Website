@@ -5,8 +5,7 @@ import { toast } from 'react-toastify';
 import { useAuth } from '../Context/AuthContext';
 
 const Login = () => {
-    // const { login } = useAuth();
-
+    const { login } = useAuth();
     const [userData, setUserData] = useState({
         fullname: "",
         email: "",
@@ -71,14 +70,15 @@ const Login = () => {
 
     const handleLoginBtn = () => {
         if (validateEmail(loginData.email) && validatePassword(loginData.password)) {
-            // const hashedPassword = bcrypt.hashSync(loginData.password, 10)
+            const hashedPassword = bcrypt.hashSync(loginData.password, 10)
             const loginUser = {
-                email: loginData.email,
-                password: loginData.password
+                emailID: loginData.email,
+                password: hashedPassword
             }
             axios.post("http://localhost:5041/api/User/login", loginUser)
                 .then((result) => {
                     if (result.status === 201) {
+                        login(loginUser)
                         toast.success("Logged In Successfully", {
                             theme: "dark",
                             autoClose: 1000,
@@ -112,11 +112,11 @@ const Login = () => {
             } else if (userData.cpassword !== userData.password) {
                 newCpasswordErrors.cpassword = "Password and Confirm password does not match"
             } else {
-                // const hashedPassword = bcrypt.hashSync(userData.password, 10)
+                const hashedPassword = bcrypt.hashSync(userData.password, 10)
                 const userRegisterData = {
                     fullName: userData.fullname,
                     emailID: userData.email,
-                    password: userData.password,
+                    password: hashedPassword,
                     occupation: userData.occupation
                 }
                 axios.post("http://localhost:5041/api/User/register", userRegisterData)
