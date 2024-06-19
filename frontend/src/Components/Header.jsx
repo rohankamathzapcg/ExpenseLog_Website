@@ -1,9 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import profile from '../Assets/PP.jpg';
 import { useAuth } from '../Context/AuthContext';
 
 const Header = () => {
-    // const { isLoggedIn } = useAuth();
+    const { isLoggedIn, authUser } = useAuth();
+    const loginButtonRef = useRef(null);
+
+    useEffect(() => {
+        if (isLoggedIn === false && loginButtonRef.current) {
+            loginButtonRef.current.click();
+        }
+    }, [isLoggedIn]);
+
     const handleToggleSideBar = () => {
         document.body.classList.toggle('toggle-sidebar');
     };
@@ -31,9 +39,9 @@ const Header = () => {
                 <nav className='header-nav ms-auto'>
                     <ul className='d-flex align-items-center'>
                         {
-                            false === false ? (
+                            isLoggedIn === false ? (
                                 <li className="nav-item dropdown pe-3">
-                                    <button style={{backgroundColor: '#012970', color: 'white', fontFamily: '"Merriweather", sans-serif'}} type="button" className="btn" data-bs-toggle="modal" data-bs-target="#loginSignupModal">
+                                    <button ref={loginButtonRef} style={{ backgroundColor: '#012970', color: 'white', fontFamily: '"Merriweather", sans-serif' }} type="button" className="btn" data-bs-toggle="modal" data-bs-target="#loginSignupModal">
                                         Login/SignUp
                                     </button>
                                 </li>

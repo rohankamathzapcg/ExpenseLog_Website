@@ -1,11 +1,13 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import bcrypt from 'bcryptjs'
 import axios from 'axios'
 import { toast } from 'react-toastify';
 import { useAuth } from '../Context/AuthContext';
 
 const Login = () => {
-    const { login } = useAuth();
+    const { login, isLoggedIn } = useAuth();
+    const closeButtonRef = useRef(null);
+
     const [userData, setUserData] = useState({
         fullname: "",
         email: "",
@@ -78,12 +80,15 @@ const Login = () => {
             axios.post("http://localhost:5041/api/User/login", loginUser)
                 .then((result) => {
                     if (result.status === 201) {
-                        login(loginUser)
+                        login(result.data)
                         toast.success("Logged In Successfully", {
                             theme: "dark",
                             autoClose: 1000,
                         });
-                        setUserData({
+                        if (isLoggedIn && closeButtonRef.current) {
+                            closeButtonRef.current.click();
+                        }
+                        setLoginData({
                             email: "",
                             password: "",
                         })
@@ -170,6 +175,7 @@ const Login = () => {
                                 </li>
                             </ul>
                             <div className="social_login">
+                                <button ref={closeButtonRef} type="button" class="btn btn-secondary visually-hidden" data-bs-dismiss="modal">Close</button>
                                 <p>with your social network</p>
                                 <ul className="social_log">
                                     <li onClick={handleGoogleLogin}><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 48 48" className="mb-1 me-2">
