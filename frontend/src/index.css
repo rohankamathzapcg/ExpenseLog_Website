@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@200..700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@200..700&family=Roboto+Slab:wght@100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Oswald:wght@200..700&family=Roboto+Slab:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:wght@200..700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:wght@200..700&family=Roboto+Slab:wght@100..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Oswald:wght@200..700&family=Roboto+Slab:wght@100..900&display=swap");
 :root {
   scroll-behavior: smooth;
   --primary: #4154f1;
@@ -186,11 +186,9 @@ Navigation CSS
 }
 
 .header-nav .profile .dropdown-header h6 {
-  font-size: 10px;
+  font-size: 13px;
   font-family: "Merriweather", sans-serif;
-  margin-bottom: 0;
-  font-weight: 600;
-  color: #4444;
+  color: black;
 }
 
 .header-nav .profile .dropdown-header span {
@@ -240,59 +238,60 @@ Sidebar CSS
   }
 }
 
-.sidebar::-webkit-scrollbar{
+.sidebar::-webkit-scrollbar {
   width: 5px;
   height: 8px;
   background-color: #ffff;
 }
 
-.sidebar::-webkit-scrollbar-thumb{
+.sidebar::-webkit-scrollbar-thumb {
   background-color: #aab7cf;
 }
 
-@media (min-width: 1200px){
-  #main,#footer {
+@media (min-width: 1200px) {
+  #main,
+  #footer {
     margin-left: 300px;
   }
 }
 
-@media (min-width: 1199px){
-  .toggle-sidebar .sidebar{
-    left:0;
+@media (min-width: 1199px) {
+  .toggle-sidebar .sidebar {
+    left: 0;
   }
 }
 
-@media (min-width: 300px){
-  .toggle-sidebar .sidebar{
-    left:0;
+@media (min-width: 300px) {
+  .toggle-sidebar .sidebar {
+    left: 0;
   }
 }
 
-@media (min-width:1200px){
+@media (min-width: 1200px) {
   .toggle-sidebar #main,
-  .toggle-sidebar #footer{
+  .toggle-sidebar #footer {
     margin-left: 0;
   }
 
-  .toggle-sidebar .sidebar{
+  .toggle-sidebar .sidebar {
     left: -300px;
   }
 }
 
-.sidebar-nav{
+.sidebar-nav {
   padding: 0;
   margin: 0;
   list-style: none;
 }
 
-.sidebar-nav li{
+.sidebar-nav li {
   font-family: "Merriweather", sans-serif;
   padding: 0;
   margin: 0;
   list-style: none;
 }
 
-.sidebar-nav .nav-item{
+.sidebar-nav .nav-item {
   margin-bottom: 5px;
 }
 
@@ -304,7 +303,7 @@ Sidebar CSS
   margin: 10px 0 5px 15px;
 }
 
-.sidebar-nav .nav-link{
+.sidebar-nav .nav-link {
   display: flex;
   align-items: center;
   font-size: 15px;
@@ -315,7 +314,7 @@ Sidebar CSS
   border-radius: 4px;
 }
 
-.sidebar-nav .nav-link i{
+.sidebar-nav .nav-link i {
   font-size: 16px;
   margin-right: 10px;
 }
@@ -329,7 +328,7 @@ Sidebar CSS
   color: #899bbd;
 }
 
-.sidebar-nav .nav-link .bi-chevron-down{
+.sidebar-nav .nav-link .bi-chevron-down {
   margin-right: 0;
   transition: transform 0.2s ease-in-out;
 }
@@ -353,8 +352,8 @@ Main CSS
   transition: all 0.3s;
 }
 
-@media (max-width: 1199px){
-  #main{
+@media (max-width: 1199px) {
+  #main {
     padding: 20px;
   }
 }
@@ -367,7 +366,7 @@ Main CSS
   margin-bottom: 10px;
 }
 
-.pagetitle h1{
+.pagetitle h1 {
   font-size: 24px;
   margin-bottom: 0;
   font-weight: 600;
@@ -395,7 +394,7 @@ Main CSS
   flex-grow: 0;
 }
 
-.dashboard .sales-card .card-icon{
+.dashboard .sales-card .card-icon {
   color: #012970;
   background-color: #f6f6fe;
 }
@@ -408,10 +407,11 @@ Card CSS
   margin-bottom: 20px;
   border: none;
   border-radius: 5px;
-  box-shadow: 0 0 30px rgba(1,41,112,0.1);
+  box-shadow: 0 0 30px rgba(1, 41, 112, 0.1);
 }
 
-.card-header, .card-footer {
+.card-header,
+.card-footer {
   border-color: #ebeef4;
   background-color: #fff;
   color: #798eb3;
@@ -423,7 +423,7 @@ Card CSS
 }
 
 .card-img-overlay {
-  background-color: rgba(255,255,255,0.6);
+  background-color: rgba(255, 255, 255, 0.6);
 }
 
 .dashboard .activity {
@@ -439,7 +439,7 @@ Card CSS
 }
 
 .dashboard .activity .activity-item .activite-label::before {
-  content: '';
+  content: "";
   position: absolute;
   right: -10px;
   width: 4px;
@@ -464,11 +464,11 @@ Card CSS
   padding-bottom: 20px;
 }
 
-.dashboard .activity .activity-item:first-child .activite-label::before{
-  top:5px;
+.dashboard .activity .activity-item:first-child .activite-label::before {
+  top: 5px;
 }
 
-.dashboard .activity .activity-item:last-child .activity-content{
+.dashboard .activity .activity-item:last-child .activity-content {
   padding-bottom: 0;
 }
 
@@ -505,7 +505,7 @@ Login Modal CSS
   margin: 0 4px;
 }
 
-.social_login p{
+.social_login p {
   font-family: "Merriweather", sans-serif;
   color: #8c8c8c;
 }
@@ -513,7 +513,7 @@ Login Modal CSS
 .social_log li img {
   width: 50px;
 }
-.social_log li:hover{
+.social_log li:hover {
   cursor: pointer;
 }
 
@@ -529,11 +529,11 @@ Login Modal CSS
   border-color: #fff;
 }
 
-.signin_modal .nav-tabs .nav-link.active{
+.signin_modal .nav-tabs .nav-link.active {
   background-color: #012970;
   color: white;
   border-color: #fff;
-  font-family: "Merriweather", sans-serif; 
+  font-family: "Merriweather", sans-serif;
 }
 
 .signin_modal .nav-tabs .nav-item {
@@ -545,8 +545,8 @@ Login Modal CSS
   border-bottom: none;
 }
 
-p{
-  font-family: "Merriweather", sans-serif; 
+p {
+  font-family: "Merriweather", sans-serif;
 }
 
 .loginOR {
@@ -564,11 +564,11 @@ p{
 }
 
 .loginOR:before {
-  margin-right: 10px
+  margin-right: 10px;
 }
 
 .loginOR:after {
-  margin-left: 10px
+  margin-left: 10px;
 }
 
 .signin_tab {
@@ -604,7 +604,7 @@ p{
 Transaction CSS
 ******************/
 
-.pagination-container{
+.pagination-container {
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -620,7 +620,7 @@ Transaction CSS
   font-family: "Merriweather", sans-serif;
 }
 
-.table{
+.table {
   font-family: "Merriweather", sans-serif;
 }
 
@@ -635,7 +635,7 @@ Transaction CSS
   cursor: pointer;
 }
 
-.pagination-container .pagination .page-item.active .page-link{
+.pagination-container .pagination .page-item.active .page-link {
   color: white;
   background-color: #012970;
   border-color: #012970;
