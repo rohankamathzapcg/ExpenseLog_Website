@@ -34,6 +34,14 @@ namespace ExpenseTracker.Repository.Implementation
             return user;
         }
 
+        public async Task<User> AddSocialAsync(User user)
+        {
+
+            //user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+            return user;
+        }
         public async Task<User> UpdateAsync(User user)
         {
             _context.Entry(user).State = EntityState.Modified;

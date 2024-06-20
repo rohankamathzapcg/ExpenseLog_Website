@@ -11,6 +11,7 @@ namespace ExpenseTracker.Repository.Interfaces
         Task<User> UpdateAsync(User user);
         Task DeleteAsync(string id);
         Task<User> PostUserForLogin(User login);
+        Task<User> AddSocialAsync(User user);
     }
 }
 
