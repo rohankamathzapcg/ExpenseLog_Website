@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 const AuthContext = React.createContext();
 
@@ -9,6 +9,14 @@ export function useAuth() {
 export function AuthProvider(props) {
   const [authUser, setAuthUser] = useState(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const storedUser = window.sessionStorage.getItem("UserData");
+    if (storedUser) {
+      setAuthUser(JSON.parse(storedUser).user);
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   const login = (newData) => {
     window.sessionStorage.setItem(

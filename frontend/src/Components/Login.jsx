@@ -1,12 +1,16 @@
 import React, { useRef, useState } from 'react'
-import bcrypt from 'bcryptjs'
 import axios from 'axios'
 import { toast } from 'react-toastify';
 import { useAuth } from '../Context/AuthContext';
 
 const Login = () => {
-    const { login, isLoggedIn } = useAuth();
+    const { login, authUser } = useAuth();
+
     const closeButtonRef = useRef(null);
+
+    const autoCloseClick = () => {
+        closeButtonRef.current.click();
+    }
 
     const [userData, setUserData] = useState({
         fullname: "",
@@ -77,17 +81,15 @@ const Login = () => {
                 emailID: loginData.email,
                 password: loginData.password
             }
-            axios.post("http://localhost:5041/api/User/login", loginUser)
+            axios.post("https://localhost:7026/api/User/login", loginUser)
                 .then((result) => {
                     if (result.status === 200) {
-                        login(result.data)
                         toast.success("Logged In Successfully", {
                             theme: "dark",
                             autoClose: 1000,
                         });
-                        if (isLoggedIn && closeButtonRef.current) {
-                            closeButtonRef.current.click();
-                        }
+                        login(result.data)
+                        autoCloseClick();
                         setLoginData({
                             email: "",
                             password: "",
@@ -124,7 +126,7 @@ const Login = () => {
                     password: userData.password,
                     occupation: userData.occupation
                 }
-                axios.post("http://localhost:5041/api/User/register", userRegisterData)
+                axios.post("https://localhost:7026/api/User/register", userRegisterData)
                     .then((result) => {
                         if (result.status === 201) {
                             toast.success("Registered Successfully", {
@@ -158,7 +160,7 @@ const Login = () => {
     }
 
     const handleGoogleLogin = () => {
-        window.location.href = 'http://localhost:5041/api/auth/google-login';
+        window.location.href = 'https://localhost:7026/api/auth/google-login';
     }
     return (
         <>
