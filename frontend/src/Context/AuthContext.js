@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 
 const AuthContext = React.createContext();
 
@@ -7,34 +7,35 @@ export function useAuth() {
 }
 
 export function AuthProvider(props) {
-  const [authUser, setAuthUser] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // Fetch Userdata from session Storage if already available otherwise save null
+  const [authUser, setAuthUser] = useState(JSON.parse(window.sessionStorage.getItem('authUser')));
+  const x = window.sessionStorage.getItem('isLoggedIn') === 'true' ? true : false;
+  const [isLoggedIn, setIsLoggedIn] = useState(x);
 
-  useEffect(() => {
-    const storedUser = window.sessionStorage.getItem("UserData");
-    if (storedUser) {
-      setAuthUser(JSON.parse(storedUser).user);
-      setIsLoggedIn(true);
-    }
-  }, []);
+  const value = {
+    authUser,
+    setAuthUser,
+    isLoggedIn,
+    setIsLoggedIn
+  }
 
-  const login = (newData) => {
-    window.sessionStorage.setItem(
-      "UserData",
-      JSON.stringify({ user: newData })
-    );
-    setAuthUser(newData);
-    setIsLoggedIn(true);
-  };
+  // const login = (newData) => {
+  //   window.sessionStorage.setItem(
+  //     "UserData",
+  //     JSON.stringify({ user: newData })
+  //   );
+  //   setAuthUser(newData);
+  //   setIsLoggedIn(true);
+  // };
 
-  const logout = () => {
-    window.sessionStorage.removeItem("UserData");
-    setAuthUser(null);
-    setIsLoggedIn(false);
-  };
+  // const logout = () => {
+  //   window.sessionStorage.removeItem("UserData");
+  //   setAuthUser(null);
+  //   setIsLoggedIn(false);
+  // };
 
   return (
-    <AuthContext.Provider value={{ authUser, isLoggedIn, login, logout }}>
+    <AuthContext.Provider value={value}>
       {props.children}
     </AuthContext.Provider>
   );
