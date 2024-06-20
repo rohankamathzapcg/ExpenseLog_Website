@@ -46,14 +46,14 @@ const Transactions = () => {
             Add New Transaction
           </button>
           <button style={{ backgroundColor: '#012970', color: 'white', fontFamily: '"Merriweather", sans-serif' }} type="button" className="btn d-lg-none d-sm-block" data-bs-toggle="modal" data-bs-target="#loginSignupModal">
-            <i class="bi bi-plus"></i>
+            <i className="bi bi-plus"></i>
           </button>
         </div>
 
         <TransactionComponent users={getUsers(page, limit)} />
         <div className='pagination-container'>
           {/* Setting Page Limit */}
-          <select onChange={(e) => setLimit(e.target.value)} class="select">
+          <select onChange={(e) => setLimit(e.target.value)} className="select">
             <option value="5">5</option>
             <option value="10">10</option>
             <option value="15">15</option>

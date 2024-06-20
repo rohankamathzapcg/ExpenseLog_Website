@@ -4,7 +4,7 @@ const TransactionComponent = (props) => {
 
     return (
         <>
-            <div class="table-responsive mt-5">
+            <div className="table-responsive mt-5">
                 <table className="table table-bordered text-center">
                     <thead>
                         <tr>

@@ -2,15 +2,13 @@ import React from 'react';
 import LineChartReport from '../Components/Charts/LineChartReport';
 import BudgetChart from '../Components/Charts/BudgetChart';
 import OverallChart from '../Components/Charts/OverallChart';
-import Login from '../Components/Login';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 const Main = () => {
     
     return (
         <>
             <ToastContainer />
-            <Login />
             <main id="main" className='main'>
                 <div className='pagetitle'>
                     <h1>Dashboard</h1>

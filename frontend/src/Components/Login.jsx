@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { useAuth } from '../Context/AuthContext';
 
 const Login = () => {
-    const { login, authUser } = useAuth();
+    const { setIsLoggedIn, setAuthUser } = useAuth();
 
     const closeButtonRef = useRef(null);
 
@@ -49,7 +49,7 @@ const Login = () => {
 
         if (!password) {
             newPasswordErrors.password = 'Password Field is required';
-        } else if (password && !passwordPattern.test(password) && loginData.password) {
+        } else if (password && !passwordPattern.test(password)) {
             newPasswordErrors.password = 'Password must contain alphanumeric characters, at least one special character, and be more than 8 characters long';
         }
         setErrors(newPasswordErrors)
@@ -73,9 +73,18 @@ const Login = () => {
         setErrors(newFullnameErrors)
         return !newFullnameErrors.fullname;
     }
+    const validateLoginPassword = (password) => {
+        const passwordErrors = {};
+
+        if (!password) {
+            passwordErrors.password = 'Password Field is required';
+        }
+        setErrors(passwordErrors)
+        return !passwordErrors.password;
+    }
 
     const handleLoginBtn = () => {
-        if (validateEmail(loginData.email) && validatePassword(loginData.password)) {
+        if (validateEmail(loginData.email) && validateLoginPassword(loginData.password)) {
             // const hashedPassword = bcrypt.hashSync(loginData.password, 10)
             const loginUser = {
                 emailID: loginData.email,
@@ -83,18 +92,26 @@ const Login = () => {
             }
             axios.post("https://localhost:7026/api/User/login", loginUser)
                 .then((result) => {
+                    console.log(result)
                     if (result.status === 200) {
                         toast.success("Logged In Successfully", {
                             theme: "dark",
                             autoClose: 1000,
                         });
-                        login(result.data)
-                        autoCloseClick();
+                        // window.sessionStorage.setItem('isLoggedIn', JSON.stringify(true));
+                        // setIsLoggedIn(JSON.parse(window.sessionStorage.getItem('isLoggedIn')))
+                        setIsLoggedIn(true)
+
+                        //Storing Username and UserID in Session
+                        window.sessionStorage.setItem('authUser', JSON.stringify(result.data));
+                        setAuthUser(JSON.parse(window.sessionStorage.getItem('authUser')));
                         setLoginData({
                             email: "",
                             password: "",
                         })
-                    } else if (result.status === 404) {
+                        autoCloseClick();
+                    }
+                    else if (result.status === 202) {
                         toast.error(result.data, {
                             theme: "dark",
                             autoClose: 1000,
@@ -102,8 +119,7 @@ const Login = () => {
                     }
                 })
                 .catch((error) => {
-                    console.log(error)
-                    toast.error("An error occurred during Login", {
+                    toast.error(error.response.data, {
                         theme: "dark",
                         autoClose: 3000,
                     });
@@ -177,7 +193,7 @@ const Login = () => {
                                 </li>
                             </ul>
                             <div className="social_login">
-                                <button ref={closeButtonRef} type="button" class="btn btn-secondary visually-hidden" data-bs-dismiss="modal">Close</button>
+                                <button ref={closeButtonRef} type="button" className="btn btn-secondary visually-hidden" data-bs-dismiss="modal">Close</button>
                                 <p>with your social network</p>
                                 <ul className="social_log">
                                     <li onClick={handleGoogleLogin}><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 48 48" className="mb-1 me-2">
@@ -191,9 +207,11 @@ const Login = () => {
                                             <path fill="#FFB900" d="M280.23 280.23H512V512H280.23z" />
                                         </svg>
                                     </li>
-                                    <li><svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="30" height="30" viewBox="0 0 50 50" className="mb-1 me-3">
-                                        <path d="M 44.527344 34.75 C 43.449219 37.144531 42.929688 38.214844 41.542969 40.328125 C 39.601563 43.28125 36.863281 46.96875 33.480469 46.992188 C 30.46875 47.019531 29.691406 45.027344 25.601563 45.0625 C 21.515625 45.082031 20.664063 47.03125 17.648438 47 C 14.261719 46.96875 11.671875 43.648438 9.730469 40.699219 C 4.300781 32.429688 3.726563 22.734375 7.082031 17.578125 C 9.457031 13.921875 13.210938 11.773438 16.738281 11.773438 C 20.332031 11.773438 22.589844 13.746094 25.558594 13.746094 C 28.441406 13.746094 30.195313 11.769531 34.351563 11.769531 C 37.492188 11.769531 40.8125 13.480469 43.1875 16.433594 C 35.421875 20.691406 36.683594 31.78125 44.527344 34.75 Z M 31.195313 8.46875 C 32.707031 6.527344 33.855469 3.789063 33.4375 1 C 30.972656 1.167969 28.089844 2.742188 26.40625 4.78125 C 24.878906 6.640625 23.613281 9.398438 24.105469 12.066406 C 26.796875 12.152344 29.582031 10.546875 31.195313 8.46875 Z"></path>
-                                    </svg></li>
+                                    <li>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="#1877F2" height="28" viewBox="0 0 24 24" width="27" className="mb-1 me-3">
+                                            <path d="M22.675 0H1.325C.593 0 0 .592 0 1.324v21.351C0 23.407.593 24 1.325 24H12.81V14.708h-3.248V11.1h3.248V8.409c0-3.229 1.97-4.988 4.845-4.988 1.376 0 2.558.102 2.902.147v3.362l-1.991.001c-1.564 0-1.867.744-1.867 1.832v2.404h3.731l-.487 3.608h-3.244V24h6.361c.732 0 1.325-.593 1.325-1.325V1.324C24 .592 23.407 0 22.675 0z" />
+                                        </svg>
+                                    </li>
                                 </ul>
                             </div>
                             <p className="loginOR mt-3">OR</p>

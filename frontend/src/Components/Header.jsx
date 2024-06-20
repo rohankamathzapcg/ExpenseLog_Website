@@ -1,16 +1,24 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import profile from '../Assets/PP.jpg';
 import { useAuth } from '../Context/AuthContext';
 
 const Header = () => {
-    const { isLoggedIn, authUser } = useAuth();
-    const loginButtonRef = useRef(null);
+    const { authUser } = useAuth();
 
+    const loginButtonRef = useRef();
+    const autoOpenClick = () => {
+        loginButtonRef.current.click();
+    }
+
+    //If user is already logged In then Login modal is not shown otherwise show login modal
     useEffect(() => {
-        if (isLoggedIn === false && loginButtonRef.current) {
-            loginButtonRef.current.click();
+        if (authUser !== null) {
+            console.log("Already Logged In")
         }
-    }, [isLoggedIn]);
+        else {
+            autoOpenClick();
+        }
+    });
 
     const handleToggleSideBar = () => {
         document.body.classList.toggle('toggle-sidebar');
@@ -39,7 +47,7 @@ const Header = () => {
                 <nav className='header-nav ms-auto'>
                     <ul className='d-flex align-items-center'>
                         {
-                            isLoggedIn === false ? (
+                            authUser === null ? (
                                 <li className="nav-item dropdown pe-3">
                                     <button ref={loginButtonRef} style={{ backgroundColor: '#012970', color: 'white', fontFamily: '"Merriweather", sans-serif' }} type="button" className="btn" data-bs-toggle="modal" data-bs-target="#loginSignupModal">
                                         Login/SignUp
@@ -49,12 +57,12 @@ const Header = () => {
                                 <li className="nav-item dropdown pe-3">
                                     <a className='nav-link nav-profile d-flex align-items-center pe-0' href="/" data-bs-toggle="dropdown">
                                         <img src={profile} alt="Profile" className='rounded-circle' />
-                                        <span className="d-none d-md-block dropdown-toggle ps-2">Rohan Kamath</span>
+                                        <span className="d-none d-md-block dropdown-toggle ps-2">{authUser.fullName}</span>
                                     </a>
 
                                     <ul className='dropdown-menu dropdown-menu-end dropdown-menu-arrow profile'>
                                         <li className='dropdown-header'>
-                                            <h6>Rohan Kamath</h6>
+                                            <h6>{authUser.fullName}</h6>
                                             <span>Web Developer</span>
                                         </li>
                                         {/* Add other dropdown items here if necessary */}
