@@ -52,7 +52,7 @@ builder.Services.AddAuthentication(options =>
     options.Fields.Add("name");
     options.Fields.Add("email");
     options.Fields.Add("picture");
-    options.CallbackPath = new PathString("/localhost:5041/api/auth/facebook-response"); // Ensure this matches the redirect URI
+    options.CallbackPath = new PathString("/localhost:7026/api/auth/facebook-response"); // Ensure this matches the redirect URI
 });
 
 //Added Db Context

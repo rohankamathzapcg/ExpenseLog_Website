@@ -66,6 +66,10 @@ namespace ExpenseTracker.Repository.Implementation
             ////login.Password = BCrypt.Net.BCrypt.HashPassword(login.Password);
             ////Console.WriteLine(login.Password);
             ////Console.WriteLine(testUser.Password);
+            if (testUser == null)
+            {
+                return null;
+            }
             if (testUser.EmailID==login.EmailID && BCrypt.Net.BCrypt.Verify(login.Password, testUser.Password))
             {
         
