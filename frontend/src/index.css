@@ -640,3 +640,28 @@ Transaction CSS
   background-color: #012970;
   border-color: #012970;
 }
+
+/*****************
+Profile CSS
+******************/
+
+.profilesetting .profiledetails span {
+  color: black;
+  font-family: "Merriweather", sans-serif;
+  text-align: center;
+}
+
+.plus-icon-badge {
+  background-color: #012970;
+  position: relative;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  bottom: 36px;
+  left: 60px;
+}
+
+.formInput {
+  font-family: "Merriweather", sans-serif;
+  font-size: 13px;
+}
