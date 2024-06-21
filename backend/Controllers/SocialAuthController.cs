@@ -75,60 +75,60 @@ public class SocialAuthController : ControllerBase
             return Ok(existingUser);
         }
     }
-    [HttpGet("signin-facebook")]
-    public IActionResult SignInWithFacebook()
-    {
-        var properties = new AuthenticationProperties
-        {
-            RedirectUri = Url.Action("FacebookResponse")
-        };
-        return Challenge(properties, FacebookDefaults.AuthenticationScheme);
-    }
+    //[HttpGet("signin-facebook")]
+    //public IActionResult SignInWithFacebook()
+    //{
+    //    var properties = new AuthenticationProperties
+    //    {
+    //        RedirectUri = Url.Action("FacebookResponse")
+    //    };
+    //    return Challenge(properties, FacebookDefaults.AuthenticationScheme);
+    //}
 
-    [HttpGet("facebook-response")]
-    public async Task<IActionResult> FacebookResponse()
-    {
-        var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+    //[HttpGet("facebook-response")]
+    //public async Task<IActionResult> FacebookResponse()
+    //{
+    //    var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-        if (!result.Succeeded || result.Principal == null)
-        {
-            return BadRequest("Failed to authenticate with Facebook.");
-        }
+    //    if (!result.Succeeded || result.Principal == null)
+    //    {
+    //        return BadRequest("Failed to authenticate with Facebook.");
+    //    }
 
-        var identity = result.Principal.Identities.FirstOrDefault();
-        if (identity == null)
-        {
-            return BadRequest("No claims identity found.");
-        }
+    //    var identity = result.Principal.Identities.FirstOrDefault();
+    //    if (identity == null)
+    //    {
+    //        return BadRequest("No claims identity found.");
+    //    }
 
-        var claims = identity.Claims.ToList();
+    //    var claims = identity.Claims.ToList();
 
-        var email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
-        var userId = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
-        var name = claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
+    //    var email = claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value;
+    //    var userId = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
+    //    var name = claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)?.Value;
 
-        if (string.IsNullOrEmpty(email))
-        {
-            return BadRequest("Email not found in claims.");
-        }
+    //    if (string.IsNullOrEmpty(email))
+    //    {
+    //        return BadRequest("Email not found in claims.");
+    //    }
 
-        // Check if user exists in database
-        var existingUser = await _userRepository.GetByIdAsync(email);
-        if (existingUser == null)
-        {
-            // Create a new user if not exists
-            var newUser = new User
-            {
-                EmailID = email,
-                FullName = name
-            };
-            await _userRepository.AddSocialAsync(newUser);
-            return Ok(newUser);
-        }
-        else
-        {
-            // Return the existing user
-            return Ok(existingUser);
-        }
-    }
+    //    // Check if user exists in database
+    //    var existingUser = await _userRepository.GetByIdAsync(email);
+    //    if (existingUser == null)
+    //    {
+    //        // Create a new user if not exists
+    //        var newUser = new User
+    //        {
+    //            EmailID = email,
+    //            FullName = name
+    //        };
+    //        await _userRepository.AddSocialAsync(newUser);
+    //        return Ok(newUser);
+    //    }
+    //    else
+    //    {
+    //        // Return the existing user
+    //        return Ok(existingUser);
+    //    }
+    //}
 }

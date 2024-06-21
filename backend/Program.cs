@@ -43,6 +43,7 @@ builder.Services.AddAuthentication(options =>
     options.ClientSecret = Environment.GetEnvironmentVariable("GoogleOAuth_ClientSecret");
     options.Scope.Add("profile");
     options.Scope.Add("email");
+
 })
 .AddFacebook(options =>
 {
