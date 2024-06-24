@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const navLinks =[
+const navLinks = [
     {
         name: "Dashboard",
         icon: "bi bi-grid",
@@ -39,17 +39,27 @@ const navLinks =[
     }
 ]
 const SideBar = () => {
-    const [activeIndex, setActiveIndex] = useState(0);
+    const [activeIndex, setActiveIndex] = useState();
+
+    useEffect(() => {
+        const storedActiveIndex = localStorage.getItem('activeIndex');
+        if (storedActiveIndex !== null) {
+            setActiveIndex(parseInt(storedActiveIndex, 10));
+        } else {
+            setActiveIndex(0);
+        }
+    }, []);
 
     const handleNavItemClick = (index) => {
         setActiveIndex(index);
+        localStorage.setItem('activeIndex', index);
     };
     return (
         <>
             <aside id="sidebar" className='sidebar'>
                 <ul className='sidebar-nav' id="sidbar-nav">
                     {
-                        navLinks.map((items,index)=>
+                        navLinks.map((items, index) =>
                             <li className='nav-item' key={index}>
                                 <Link to={items.path} onClick={() => handleNavItemClick(index)} className={`nav-link ${activeIndex === index ? 'active' : ''}`} >
                                     <i className={items.icon}></i>
