@@ -6,19 +6,19 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Load environment variables
 Env.Load();
-//var ClientId = Environment.GetEnvironmentVariable("GoogleOAuth_ClientID");
-//var ClientSecret= Environment.GetEnvironmentVariable("GoogleOAuth_ClientSecret");
+
+// Add services to the container.
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Adding CORS
+// Configure CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("corspolicy", builder =>
@@ -29,12 +29,11 @@ builder.Services.AddCors(options =>
     });
 });
 
-//Google Auth
+// Configure Google and Facebook Authentication
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-    // Set a default challenge scheme to one of your providers, or leave it unspecified if you want to specify it in the controller.
 })
 .AddCookie()
 .AddGoogle(options =>
@@ -43,7 +42,6 @@ builder.Services.AddAuthentication(options =>
     options.ClientSecret = Environment.GetEnvironmentVariable("GoogleOAuth_ClientSecret");
     options.Scope.Add("profile");
     options.Scope.Add("email");
-
 })
 .AddFacebook(options =>
 {
@@ -56,35 +54,37 @@ builder.Services.AddAuthentication(options =>
     options.CallbackPath = new PathString("/localhost:7026/api/auth/facebook-response"); // Ensure this matches the redirect URI
 });
 
-//Added Db Context
+// Add DbContext
 builder.Services.AddDbContext<ExpenseTrackerDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("ExpenseTrackerCon")));
 
-//Mapping reposiories
+// Map repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
-
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-/////Https
-//app.UseKestrel(options =>
-//{
-//    options.ListenAnyIP(5001, listenOptions =>
-//    {
-//        listenOptions.UseHttps("certificate.pfx", "password"); // Replace with your certificate path and password
-//    });
-//});
 
-// Using CORS Policy
+app.UseHttpsRedirection();
+
+// Serve static files from the Images folder
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(app.Environment.ContentRootPath, "Images")),
+    RequestPath = "/Images"
+});
+
+// Use CORS Policy
 app.UseCors("corspolicy");
 
+app.UseAuthentication(); // Add authentication middleware
 app.UseAuthorization();
 
 app.MapControllers();
