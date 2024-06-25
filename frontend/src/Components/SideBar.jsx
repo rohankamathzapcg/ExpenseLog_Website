@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../Context/AuthContext';
 
 const navLinks = [
     {
@@ -13,13 +14,18 @@ const navLinks = [
         path: "/profile"
     },
     {
+        name: "Expense Categories",
+        icon: "bi bi-list-check",
+        path: "/category"
+    },
+    {
         name: "Transactions",
-        icon: "bi bi-bank",
+        icon: "bi bi-clock-history",
         path: "/transactions"
     },
     {
         name: "My Accounts",
-        icon: "bi bi-clock-history",
+        icon: "bi bi-bank",
         path: "/acivity"
     },
     {
@@ -29,17 +35,19 @@ const navLinks = [
     },
     {
         name: "Help Center",
-        icon: "bi bi-bar-chart",
+        icon: "bi bi-question-octagon",
         path: "/analytics"
     },
     {
         name: "Signout",
         icon: "bi bi-box-arrow-left",
-        path: "/analytics"
+        path: "/"
     }
 ]
 const SideBar = () => {
-    const [activeIndex, setActiveIndex] = useState();
+    const [activeIndex, setActiveIndex] = useState(0);
+    const { setIsLoggedIn, setAuthUser } = useAuth();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const storedActiveIndex = localStorage.getItem('activeIndex');
@@ -50,9 +58,18 @@ const SideBar = () => {
         }
     }, []);
 
-    const handleNavItemClick = (index) => {
-        setActiveIndex(index);
-        localStorage.setItem('activeIndex', index);
+    const handleNavItemClick = (index, name) => {
+        if (name === 'Signout') {
+            setAuthUser(null)
+            setIsLoggedIn(false)
+            window.sessionStorage.removeItem("authUser");
+            setActiveIndex(0);
+            localStorage.setItem('activeIndex', 0);
+            navigate("/")
+        } else {
+            setActiveIndex(index);
+            localStorage.setItem('activeIndex', index);
+        }
     };
     return (
         <>
@@ -61,7 +78,7 @@ const SideBar = () => {
                     {
                         navLinks.map((items, index) =>
                             <li className='nav-item' key={index}>
-                                <Link to={items.path} onClick={() => handleNavItemClick(index)} className={`nav-link ${activeIndex === index ? 'active' : ''}`} >
+                                <Link to={items.path} onClick={() => handleNavItemClick(index, items.name)} className={`nav-link ${activeIndex === index ? 'active' : ''}`} >
                                     <i className={items.icon}></i>
                                     <span>{items.name}</span>
                                 </Link>

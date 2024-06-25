@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import TransactionComponent from '../Components/TransactionComponent';
 import { getUsers, getLength } from '../api/users';
 import { returnPaginationRange } from '../utils/paginationUtils';
+import { toast , ToastContainer} from 'react-toastify';
+import AddTransaction from '../Components/AddTransaction';
 
 const Transactions = () => {
   const [page, setPage] = useState(1);
@@ -35,14 +37,15 @@ const Transactions = () => {
   }
   return (
     <>
+    <ToastContainer />
       <main id="main" className='main'>
-
+        <AddTransaction />
         <div className='pagetitle'>
           <h1>Transactions</h1>
         </div>
 
         <div className='mt-4'>
-          <button style={{ backgroundColor: '#012970', color: 'white', fontFamily: '"Merriweather", sans-serif' }} type="button" className="btn d-lg-block d-sm-none" data-bs-toggle="modal" data-bs-target="#loginSignupModal">
+          <button style={{ backgroundColor: '#012970', color: 'white', fontFamily: '"Merriweather", sans-serif' }} type="button" className="btn d-lg-block d-sm-none" data-bs-toggle="modal" data-bs-target="#addTransactionsModal">
             Add New Transaction
           </button>
           <button style={{ backgroundColor: '#012970', color: 'white', fontFamily: '"Merriweather", sans-serif' }} type="button" className="btn d-lg-none d-sm-block" data-bs-toggle="modal" data-bs-target="#loginSignupModal">

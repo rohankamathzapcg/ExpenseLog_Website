@@ -665,3 +665,26 @@ Profile CSS
   font-family: "Merriweather", sans-serif;
   font-size: 13px;
 }
+
+.headings-side{
+  font-family: "Merriweather", sans-serif;
+  font-size: 13px;
+  color: rgb(129, 129, 129);
+}
+
+.background-badge{
+  cursor: pointer;
+  background-color: white;
+  border: 1px solid black;
+  color: #012970;
+}
+
+.background-badge-selected{
+  cursor: pointer;
+  background-color: #012970;
+  border: 1px solid #012970;
+}
+
+.background-badge.text-badge{
+  color: #012970;
+}
