@@ -13,6 +13,8 @@ import Transactions from "./Pages/Transactions";
 import Analytics from "./Pages/Analytics";
 import Login from "./Components/Login";
 import Profile from "./Pages/Profile";
+import Categories from "./Pages/Categories";
+
 const App = () => {
   return (
     <>
@@ -23,6 +25,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Main />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/category" element={<Categories />} />
           <Route path="/transactions" element={<Transactions />} />
           <Route path="/analytics" element={<Analytics />} />
         </Routes>
