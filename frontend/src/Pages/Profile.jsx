@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import profile from '../Assets/PP.jpg';
 import { useAuth } from '../Context/AuthContext';
+import { toast, ToastContainer } from 'react-toastify';
 import axios from 'axios';
 
 const Profile = () => {
-    const { authUser } = useAuth();
+    const { authUser, setAuthUser } = useAuth();
     const [image, setImage] = useState("");
     const [userDetails, setuserDetails] = useState({
         emailID: "",
@@ -25,9 +26,27 @@ const Profile = () => {
             .catch((error) => {
                 console.log(error)
             })
-    })
+    }, [authUser.emailID])
+
+    const handleEditBtn = () => {
+        axios.put(`https://localhost:7026/api/UserAuth/${authUser.emailID}`, userDetails)
+            .then((result) => {
+                if (result.status === 204) {
+                    toast.success("Profile Updated Successfully", {
+                        theme: "dark",
+                        autoClose: 1000,
+                    });
+                    setAuthUser(userDetails)
+                }
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    }
+
     return (
         <>
+            <ToastContainer />
             <main id="main" className='main'>
                 <div className='pagetitle'>
                     <h1>Profile Settings</h1>
@@ -49,26 +68,26 @@ const Profile = () => {
                             <div className="p-3 formInput">
                                 <div className="form-group d-flex align-items-center mb-3">
                                     <label className='col-4'>Full Name:</label>
-                                    <input type="text" style={{ fontFamily: '"Merriweather", sans-serif', fontSize: "13px" }} className="form-control shadow-none" placeholder='Enter your full name' autoComplete='off' value={userDetails.fullName} />
+                                    <input type="text" style={{ fontFamily: '"Merriweather", sans-serif', fontSize: "13px" }} className="form-control shadow-none" placeholder='Enter your full name' autoComplete='off' value={userDetails.fullName} onChange={(e) => setuserDetails({ ...userDetails, fullName: e.target.value })} />
                                 </div>
                                 <div className="form-group d-flex align-items-center mb-3">
                                     <label className='col-4'>Email-Id:</label>
-                                    <input type="text" style={{ fontFamily: '"Merriweather", sans-serif', fontSize: "13px" }} disabled className="form-control shadow-none" placeholder='Enter your email-id' autoComplete='off' value={userDetails.emailID} />
+                                    <input type="text" style={{ fontFamily: '"Merriweather", sans-serif', fontSize: "13px" }} disabled className="form-control shadow-none" placeholder='Enter your email-id' autoComplete='off' value={userDetails.emailID} onChange={(e) => setuserDetails({ ...userDetails, emailID: e.target.value })} />
                                 </div>
                                 <div className="form-group d-flex align-items-center mb-3">
                                     <label className='col-4'>Occupation:</label>
-                                    <input type="text" style={{ fontFamily: '"Merriweather", sans-serif', fontSize: "13px" }} className="form-control shadow-none" placeholder='Enter your occupation' autoComplete='off' value={userDetails.occupation} />
+                                    <input type="text" style={{ fontFamily: '"Merriweather", sans-serif', fontSize: "13px" }} className="form-control shadow-none" placeholder='Enter your occupation' autoComplete='off' value={userDetails.occupation} onChange={(e) => setuserDetails({ ...userDetails, occupation: e.target.value })} />
                                 </div>
                                 <div className="form-group d-flex align-items-center mb-3">
                                     <label className='col-4'>Monthly Icome:</label>
-                                    <input type="text" style={{ fontFamily: '"Merriweather", sans-serif', fontSize: "13px" }} className="form-control shadow-none" placeholder='Enter your monthly income' autoComplete='off' value={userDetails.monthlyIncome} />
+                                    <input type="text" style={{ fontFamily: '"Merriweather", sans-serif', fontSize: "13px" }} className="form-control shadow-none" placeholder='Enter your monthly income' autoComplete='off' value={userDetails.monthlyIncome} onChange={(e) => setuserDetails({ ...userDetails, monthlyIncome: e.target.value })} />
                                 </div>
                                 <div className="form-group d-flex align-items-center mb-3">
                                     <label className='col-4'>Balance:</label>
-                                    <input type="text" style={{ fontFamily: '"Merriweather", sans-serif', fontSize: "13px" }} className="form-control shadow-none" placeholder='Enter your balance' autoComplete='off' value={userDetails.balance} />
+                                    <input type="text" style={{ fontFamily: '"Merriweather", sans-serif', fontSize: "13px" }} className="form-control shadow-none" placeholder='Enter your balance' autoComplete='off' value={userDetails.balance} onChange={(e) => setuserDetails({ ...userDetails, balance: e.target.value })} />
                                 </div>
                                 <div className="form-group mb-3">
-                                    <button type="button" style={{ marginBottom: "20px", width: "100%", backgroundColor: '#012970', color: 'white', fontFamily: '"Merriweather", sans-serif', fontSize: "12px" }} className="btn">Update</button>
+                                    <button type="button" style={{ marginBottom: "20px", width: "100%", backgroundColor: '#012970', color: 'white', fontFamily: '"Merriweather", sans-serif', fontSize: "12px" }} className="btn" onClick={handleEditBtn}>Update</button>
                                 </div>
                             </div>
                         </div>

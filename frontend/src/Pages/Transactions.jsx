@@ -45,10 +45,10 @@ const Transactions = () => {
         </div>
 
         <div className='mt-4'>
-          <button style={{ backgroundColor: '#012970', color: 'white', fontFamily: '"Merriweather", sans-serif' }} type="button" className="btn d-lg-block d-sm-none" data-bs-toggle="modal" data-bs-target="#addTransactionsModal">
+          <button style={{ backgroundColor: '#012970', color: 'white', fontFamily: '"Merriweather", sans-serif' }} type="button" className="btn d-lg-block d-none" data-bs-toggle="modal" data-bs-target="#addTransactionsModal">
             Add New Transaction
           </button>
-          <button style={{ backgroundColor: '#012970', color: 'white', fontFamily: '"Merriweather", sans-serif' }} type="button" className="btn d-lg-none d-sm-block" data-bs-toggle="modal" data-bs-target="#loginSignupModal">
+          <button style={{ backgroundColor: '#012970', color: 'white', fontFamily: '"Merriweather", sans-serif' }} type="button" className="btn d-lg-none" data-bs-toggle="modal" data-bs-target="#loginSignupModal">
             <i className="bi bi-plus"></i>
           </button>
         </div>
