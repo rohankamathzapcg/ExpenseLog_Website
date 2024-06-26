@@ -12,14 +12,8 @@ namespace ExpenseTracker.Model
         public string? Occupation {  get; set; } = null;
         public int MonthlyIncome { get; set; } = 0;
 
-        [NotMapped]
-        public IFormFile ImageFile { get; set; }
-
-        [NotMapped]
-        public string ImageSrc { get; set; }
 
         public string ImageName { get; set; }
-        public int Balance { get; set; } = 0;
 
 
     }
