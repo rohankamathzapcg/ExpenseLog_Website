@@ -22,6 +22,44 @@ namespace ExpenseTracker.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("ExpenseTracker.Model.Account", b =>
+                {
+                    b.Property<string>("AccountNo")
+                        .HasColumnType("text");
+
+                    b.Property<int>("Balance")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("AccountNo");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Accounts");
+                });
+
+            modelBuilder.Entity("ExpenseTracker.Model.CatMapUser", b =>
+                {
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("EmailID")
+                        .HasColumnType("text");
+
+                    b.Property<string>("UserEmailID")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("CategoryId", "EmailID");
+
+                    b.HasIndex("UserEmailID");
+
+                    b.ToTable("CategoriesMapUsers");
+                });
+
             modelBuilder.Entity("ExpenseTracker.Model.Category", b =>
                 {
                     b.Property<int>("CategoryId")
@@ -139,10 +177,11 @@ namespace ExpenseTracker.Migrations
                     b.Property<string>("EmailID")
                         .HasColumnType("text");
 
-                    b.Property<int>("Balance")
-                        .HasColumnType("integer");
-
                     b.Property<string>("FullName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ImageName")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("MonthlyIncome")
@@ -154,12 +193,39 @@ namespace ExpenseTracker.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("text");
 
-                    b.Property<string>("Photo")
-                        .HasColumnType("text");
-
                     b.HasKey("EmailID");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("ExpenseTracker.Model.Account", b =>
+                {
+                    b.HasOne("ExpenseTracker.Model.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ExpenseTracker.Model.CatMapUser", b =>
+                {
+                    b.HasOne("ExpenseTracker.Model.Category", "category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ExpenseTracker.Model.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserEmailID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+
+                    b.Navigation("category");
                 });
 
             modelBuilder.Entity("ExpenseTracker.Model.Expense", b =>
