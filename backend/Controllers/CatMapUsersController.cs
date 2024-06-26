@@ -26,6 +26,24 @@ namespace ExpenseTracker.Controllers
 
             return Ok(cat);
         }
+        [HttpPut]
+        public async Task<ActionResult<List<CatMapUserDTO>>> UpdateAsync(List<CatMapUserDTO> cat)
+        {
+            await _repository.UpdateAsync(cat);
+            return Ok(cat);
+        }
+        [HttpGet]
+        public async Task<ActionResult<List<CatMapUserDTO>>> GetAllAsync()
+        {
+            var catMapUsers = await _repository.GetAllAsync();
+            return Ok(catMapUsers);
+        }
+        [HttpGet("{emailID}")]
+        public async Task<ActionResult<List<CatMapUserDTOResponse>>> GetByEmailAsync(string emailID)
+        {
+            var catMapUsers = await _repository.GetByEmailAsync(emailID);
+            return Ok(catMapUsers);
+        }
 
     }
 }
