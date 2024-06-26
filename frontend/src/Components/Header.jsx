@@ -35,14 +35,6 @@ const Header = () => {
                     </a>
                 </div>
 
-                {/* Search Bar Section */}
-                <div className='search-bar'>
-                    <form className='search-form d-flex align-items-center'>
-                        <input type="text" name="query" placeholder='Enter search keyword ...' />
-                        <button type="submit"><i className='bi bi-search'></i></button>
-                    </form>
-                </div>
-
                 {/* Navigation Section */}
                 <nav className='header-nav ms-auto'>
                     <ul className='d-flex align-items-center'>

@@ -11,9 +11,7 @@ namespace ExpenseTracker.Model
         public string? Password {  get; set; }
         public string? Occupation {  get; set; } = null;
         public int MonthlyIncome { get; set; } = 0;
-
-
-        public string ImageName { get; set; }
+        public string? ImageName { get; set; }
 
 
     }

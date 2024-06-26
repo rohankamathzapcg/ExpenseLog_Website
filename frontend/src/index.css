@@ -9,10 +9,32 @@
   --bgColor: #f6f9ff;
 }
 
+/*****************
+Custome scrollbar
+******************/
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px rgb(235, 235, 235);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #012970;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #0d54d7;
+}
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -666,25 +688,27 @@ Profile CSS
   font-size: 13px;
 }
 
-.headings-side{
+.headings-side {
   font-family: "Merriweather", sans-serif;
   font-size: 13px;
   color: rgb(129, 129, 129);
 }
 
-.background-badge{
+.background-badge {
   cursor: pointer;
+  font-family: "Merriweather", sans-serif;
   background-color: white;
   border: 1px solid black;
   color: #012970;
 }
 
-.background-badge-selected{
+.background-badge-selected {
   cursor: pointer;
+  font-family: "Merriweather", sans-serif;
   background-color: #012970;
   border: 1px solid #012970;
 }
 
-.background-badge.text-badge{
+.background-badge.text-badge {
   color: #012970;
 }
