@@ -1,4 +1,5 @@
 ﻿using ExpenseTracker.Data;
+using ExpenseTracker.Migrations;
 using ExpenseTracker.Model;
 using ExpenseTracker.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -13,11 +14,20 @@ namespace ExpenseTracker.Repository.Implementation
         {
             _context = context;
         }
-        public async Task<Category> AddAsync(Category cat)
+        public async Task<Category> AddAsync(Category category)
         {
-            _context.Categories.Add(cat);
-            await _context.SaveChangesAsync();
-            return cat;
+            var existingCat = await _context.Categories
+                    .FirstOrDefaultAsync(cat => cat.CategoryName == category.CategoryName);
+            if (existingCat == null)
+            {
+                _context.Categories.Add(category);
+                await _context.SaveChangesAsync();
+                return category;
+            }
+            else
+            {
+                return null;
+            }
         }
 
         public async Task<IEnumerable<Category>> GetAllAsync()

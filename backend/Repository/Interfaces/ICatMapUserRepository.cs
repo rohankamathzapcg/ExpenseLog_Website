@@ -1,4 +1,4 @@
-﻿using ExpenseTracker.Model;
+﻿using ExpenseTracker.Model.DTO;
 
 namespace ExpenseTracker.Repository.Interfaces
 {

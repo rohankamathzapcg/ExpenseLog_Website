@@ -1,6 +1,7 @@
 ﻿using ExpenseTracker.Data;
 using ExpenseTracker.Migrations;
 using ExpenseTracker.Model;
+using ExpenseTracker.Model.DTO;
 using ExpenseTracker.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 

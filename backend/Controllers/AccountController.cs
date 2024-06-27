@@ -1,4 +1,5 @@
 ﻿using ExpenseTracker.Model;
+using ExpenseTracker.Model.DTO;
 using ExpenseTracker.Repository.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -18,11 +19,17 @@ namespace ExpenseTracker.Controllers
           
         }
         [HttpPost]
-        public async Task<ActionResult<Account>> AddAsync(Account acc)
+        public async Task<ActionResult<AccountDTO>> AddAsync(AccountDTO account)
         {
-            await _repository.AddAsync(acc);
-           
-            return Ok(acc);
+            var addedAccount=await _repository.AddAsync(account);
+            if (addedAccount != null)
+            {
+                return Ok(addedAccount);
+            }
+            else
+            {
+                return Ok("Invalid EmailID");
+            }
         }
 
     }

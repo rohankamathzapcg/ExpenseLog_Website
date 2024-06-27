@@ -69,9 +69,7 @@ public class SocialAuthController : ControllerBase
         }
         else
         {
-            // Update the existing user
-            // Add or update other fields as necessary
-            // e.g., existingUser.Photo = profilePhoto
+           
             return Ok(existingUser);
         }
     }

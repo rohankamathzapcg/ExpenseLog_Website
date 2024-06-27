@@ -1,4 +1,4 @@
-﻿namespace ExpenseTracker.Model
+﻿namespace ExpenseTracker.Model.DTO
 {
     public class CatMapUserDTO
     {
