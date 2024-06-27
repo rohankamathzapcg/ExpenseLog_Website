@@ -14,6 +14,7 @@ import Analytics from "./Pages/Analytics";
 import Login from "./Components/Login";
 import Profile from "./Pages/Profile";
 import Categories from "./Pages/Categories";
+import Accounts from "./Pages/Accounts";
 
 const App = () => {
   return (
@@ -27,6 +28,7 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/category" element={<Categories />} />
           <Route path="/transactions" element={<Transactions />} />
+          <Route path="/accounts" element={<Accounts />} />
           <Route path="/analytics" element={<Analytics />} />
         </Routes>
         <Footer />
