@@ -690,8 +690,8 @@ Profile CSS
 
 .headings-side {
   font-family: "Merriweather", sans-serif;
-  font-size: 13px;
-  color: rgb(129, 129, 129);
+  font-size: 14px;
+  color: rgb(96, 95, 95);
 }
 
 .background-badge {
@@ -709,6 +709,19 @@ Profile CSS
   border: 1px solid #012970;
 }
 
+.background-badge-blocked {
+  font-family: "Merriweather", sans-serif;
+  background-color: #d9d9d9;
+  border: 1px solid #d9d9d9;
+}
+.background-badge-blocked.text-blocked{
+  color:#adadad;
+}
+
 .background-badge.text-badge {
   color: #012970;
+}
+
+.button-Save{
+  
 }

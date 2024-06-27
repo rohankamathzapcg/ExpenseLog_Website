@@ -26,7 +26,7 @@ const navLinks = [
     {
         name: "My Accounts",
         icon: "bi bi-bank",
-        path: "/acivity"
+        path: "/accounts"
     },
     {
         name: "Analytics",
