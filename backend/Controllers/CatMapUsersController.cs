@@ -1,4 +1,4 @@
-﻿using ExpenseTracker.Model;
+﻿using ExpenseTracker.Model.DTO;
 using ExpenseTracker.Repository.Implementation;
 using ExpenseTracker.Repository.Interfaces;
 using Microsoft.AspNetCore.Http;

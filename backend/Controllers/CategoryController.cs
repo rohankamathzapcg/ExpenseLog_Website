@@ -22,29 +22,31 @@ namespace ExpenseTracker.Controllers
             var cat = await _repository.GetAllAsync();
             return Ok(cat);
         }
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCatById(int id)
-        {
-            var cat = await _repository.GetByIdAsync(id);
-            if (cat == null)
-            {
-                return Ok("No categories found");
-            }
-            return Ok(cat);
-        }
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<Category>> GetCatById(int id)
+        //{
+        //    var cat = await _repository.GetByIdAsync(id);
+        //    if (cat == null)
+        //    {
+        //        return Ok("No categories found");
+        //    }
+        //    return Ok(cat);
+        //}
 
         [HttpPost("Add")]
         public async Task<ActionResult<Category>> PostUser(Category cat)
-        {
-
-            var existingCat = await _repository.GetByIdAsync(cat.CategoryId);
-            if (existingCat != null)
-            {
-                return Ok("Category already exists.");
-            }
+        { 
             var newCat = await _repository.AddAsync(cat);
             
-            return CreatedAtAction(nameof(GetCatById), new { id = newCat.CategoryId }, newCat);
+           if (newCat == null)
+            {
+                return Ok("Category already exists");
+            }
+            else 
+            {
+                return Ok(newCat); 
+            }
+            
         }
 
 
