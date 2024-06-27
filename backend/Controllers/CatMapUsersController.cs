@@ -42,6 +42,10 @@ namespace ExpenseTracker.Controllers
         public async Task<ActionResult<List<CatMapUserDTOResponse>>> GetByEmailAsync(string emailID)
         {
             var catMapUsers = await _repository.GetByEmailAsync(emailID);
+            if (catMapUsers == null)
+            {
+                return Ok("No records Found.");
+            }
             return Ok(catMapUsers);
         }
 
