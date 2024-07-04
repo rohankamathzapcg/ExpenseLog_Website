@@ -2,6 +2,7 @@
 using ExpenseTracker.Repository.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Globalization;
 
 namespace ExpenseTracker.Controllers
 {
@@ -35,7 +36,8 @@ namespace ExpenseTracker.Controllers
 
         [HttpPost("Add")]
         public async Task<ActionResult<Category>> PostUser(Category cat)
-        { 
+        {
+            cat.CategoryName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(cat.CategoryName.ToLower());
             var newCat = await _repository.AddAsync(cat);
             
            if (newCat == null)

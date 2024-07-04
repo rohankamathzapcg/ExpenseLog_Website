@@ -7,6 +7,10 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Security.Policy;
 using Microsoft.AspNetCore.Authentication.Facebook;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using NuGet.Common;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -29,6 +33,7 @@ public class SocialAuthController : ControllerBase
     [HttpGet("google-response")]
     public async Task<IActionResult> GoogleResponse()
     {
+        string token;
         var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
         if (!result.Succeeded || result.Principal == null)
@@ -65,16 +70,38 @@ public class SocialAuthController : ControllerBase
                 FullName = firstName + " " + lastName
             };
             await _userRepository.AddSocialAsync(newUser);
-            return Ok(newUser);
+            token = GenerateToken(newUser);  
         }
         else
         {
-           
-            return Ok(existingUser);
+            token= GenerateToken(existingUser);
         }
+        var redirectUrl = $"http://localhost:3000/auth-callback?token={token}";
+        return Redirect(redirectUrl);
     }
 
+    private string GenerateToken(User user)
+    {
+        List<Claim> claims = new List<Claim> {
+                new Claim(ClaimTypes.Email, user.EmailID),
+               new Claim(ClaimTypes.Name,user.FullName),
+            };
 
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
+            Environment.GetEnvironmentVariable("TokenSecret")!));
+
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+        var token = new JwtSecurityToken(
+                claims: claims,
+                expires: DateTime.Now.AddMinutes(60),
+                signingCredentials: creds
+            );
+
+        var jwt = new JwtSecurityTokenHandler().WriteToken(token);
+
+        return jwt;
+    }
 
     //[HttpGet("signin-facebook")]
     //public IActionResult SignInWithFacebook()

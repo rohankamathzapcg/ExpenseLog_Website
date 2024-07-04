@@ -3,6 +3,7 @@ using ExpenseTracker.Model;
 using ExpenseTracker.Repository.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Globalization;
 
 namespace ExpenseTracker.Repository.Implementation
 {
@@ -29,6 +30,7 @@ namespace ExpenseTracker.Repository.Implementation
         {
 
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+            user.FullName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(user.FullName.ToLower());
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             return user;
@@ -44,6 +46,7 @@ namespace ExpenseTracker.Repository.Implementation
         }
         public async Task<User> UpdateAsync(User user)
         {
+            user.FullName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(user.FullName.ToLower());
             _context.Entry(user).State = EntityState.Modified;
             await _context.SaveChangesAsync();
             return user;
