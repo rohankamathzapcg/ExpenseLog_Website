@@ -68,7 +68,9 @@ public class SocialAuthController : ControllerBase
             {
                 EmailID = email,
                 FullName = firstName + " " + lastName,
-                Occupation = "None"
+                Password= BCrypt.Net.BCrypt.HashPassword("123"),
+                Occupation = "None",
+                MonthlyIncome=0
             };
             await _userRepository.AddSocialAsync(newUser);
             token = GenerateToken(newUser);  
@@ -77,16 +79,19 @@ public class SocialAuthController : ControllerBase
         {
             token= GenerateToken(existingUser);
         }
-        var redirectUrl = $"http://localhost:3000/auth-callback?token={token}";
+        var redirectUrl = $"{Environment.GetEnvironmentVariable("BaseUrl")}/auth-callback?token={token}";
         return Redirect(redirectUrl);
     }
 
     private string GenerateToken(User user)
     {
         List<Claim> claims = new List<Claim> {
-                new Claim("EmailID", user.EmailID),
-               new Claim("FullName",user.FullName),
-               new Claim("Occupation",user.Occupation)
+                new Claim("emailID", user.EmailID),
+               new Claim("fullName",user.FullName),
+               new Claim("password",user.Password),
+               new Claim("occupation",user.Occupation),
+               new Claim("monthlyIncome",user.MonthlyIncome.ToString()),
+
             };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
@@ -152,7 +157,9 @@ public class SocialAuthController : ControllerBase
             {
                 EmailID = email,
                 FullName = name,
-                Occupation = "None"
+                Occupation = "None",
+                Password = BCrypt.Net.BCrypt.HashPassword("123"),
+                MonthlyIncome = 0
             };
             await _userRepository.AddSocialAsync(newUser);
             token = GenerateToken(newUser);
@@ -161,7 +168,7 @@ public class SocialAuthController : ControllerBase
         {
             token = GenerateToken(existingUser);
         }
-        var redirectUrl = $"http://localhost:3000/auth-callback?token={token}";
+        var redirectUrl = $"{Environment.GetEnvironmentVariable("BaseUrl")}/auth-callback?token={token}";
         return Redirect(redirectUrl);
     }
 
