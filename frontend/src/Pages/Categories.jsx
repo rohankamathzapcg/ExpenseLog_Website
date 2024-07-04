@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify';
 import AddCategory from '../Components/AddCategory';
 import axios from 'axios'
@@ -9,30 +9,34 @@ const Categories = () => {
     const [categories, setCategories] = useState([]);
     const { authUser } = useAuth();
     const [updateCategory, setUpdateCategory] = useState([]);
-    const closeButtonRef = useRef(null);
 
     const isSelected = (categoryName) => myCategory.some(cat => cat.catName === categoryName);
 
     const handleCategoryClick = (categoryName, id) => {
-        if (!isSelected(categoryName)) { // Only allow adding categories, not removing
+        if (!isSelected(categoryName)) {
             setMyCategory([...myCategory, { catName: categoryName }]);
             setUpdateCategory([...updateCategory, { categoryId: id, emailID: authUser.emailID }]);
         }
     };
 
-    useEffect(()=>{
+    useEffect(() => {
         axios.get("https://localhost:7026/api/Category")
-        .then((result) => {
-            setCategories(result.data);
-        })
-        .catch(err => console.log(err));
+            .then((result) => {
+                setCategories(result.data);
+            })
+            .catch(err => console.log(err));
     })
 
     useEffect(() => {
 
         axios.get(`https://localhost:7026/api/CatMapUsers/${authUser.emailID}`)
             .then((result) => {
-                setMyCategory(result.data);
+                if (result.status === 200) {
+                    setMyCategory(result.data);
+                } else if (result.status === 202) {
+                    setMyCategory([])
+                }
+
             })
             .catch(err => console.log(err));
     }, [authUser.emailID]);

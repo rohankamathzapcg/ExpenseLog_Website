@@ -1,12 +1,15 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import { toast } from 'react-toastify';
 import { useAuth } from '../Context/AuthContext';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 
 const Login = () => {
     const { setIsLoggedIn, setAuthUser } = useAuth();
-
     const closeButtonRef = useRef(null);
+    const location = useLocation();
+    const navigate =useNavigate();
 
     const autoCloseClick = () => {
         closeButtonRef.current.click();
@@ -29,6 +32,27 @@ const Login = () => {
         const { id, value } = e.target;
         setUserData({ ...userData, [id]: value });
     };
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const token = params.get('token');
+        if (token) {
+            try {
+                window.sessionStorage.setItem('authUser', JSON.stringify(jwtDecode(token)));
+                setAuthUser(jwtDecode(token));
+                setIsLoggedIn(true);
+                navigate('/')
+                window.location.reload(true);
+
+            } catch (error) {
+                console.error("Invalid token", error);
+                toast.error("Invalid token", {
+                    theme: "dark",
+                    autoClose: 3000,
+                });
+            }
+        }
+    }, [location, setAuthUser, setIsLoggedIn, navigate]);
 
     const validateEmail = (email) => {
         const newEmailErrors = {};
@@ -175,41 +199,11 @@ const Login = () => {
     }
 
     const handleGoogleLogin = () => {
-        window.location.href="https://localhost:7026/api/SocialAuth/google-login"
-        axios.get('https://localhost:7026/api/SocialAuth/google-response')
-            .then((result) => {
-                if (result.status === 200) {
-                    toast.success("Logged In Successfully", {
-                        theme: "dark",
-                        autoClose: 1000,
-                    });
-                    // window.sessionStorage.setItem('isLoggedIn', JSON.stringify(true));
-                    // setIsLoggedIn(JSON.parse(window.sessionStorage.getItem('isLoggedIn')))
-                    setIsLoggedIn(true)
+        window.location.href="https://localhost:7026/api/SocialAuth/google-login";
+    }
 
-                    //Storing Username and UserID in Session
-                    window.sessionStorage.setItem('authUser', JSON.stringify(result.data));
-                    setAuthUser(JSON.parse(window.sessionStorage.getItem('authUser')));
-                    setLoginData({
-                        email: "",
-                        password: "",
-                    })
-                    autoCloseClick();
-                }
-                else if (result.status === 202) {
-                    toast.error(result.data, {
-                        theme: "dark",
-                        autoClose: 1000,
-                    });
-                }
-            })
-            .catch((error) => {
-                console.log(error)
-                // toast.error(error.response.data, {
-                //     theme: "dark",
-                //     autoClose: 3000,
-                // });
-            })
+    const handleFaceBookLogin = () => {
+        window.location.href="https://localhost:7026/api/SocialAuth/signin-facebook";
     }
     return (
         <>
@@ -240,7 +234,7 @@ const Login = () => {
                                             <path fill="#FFB900" d="M280.23 280.23H512V512H280.23z" />
                                         </svg>
                                     </li>
-                                    <li>
+                                    <li onClick={handleFaceBookLogin}>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="#1877F2" height="28" viewBox="0 0 24 24" width="27" className="mb-1 me-3">
                                             <path d="M22.675 0H1.325C.593 0 0 .592 0 1.324v21.351C0 23.407.593 24 1.325 24H12.81V14.708h-3.248V11.1h3.248V8.409c0-3.229 1.97-4.988 4.845-4.988 1.376 0 2.558.102 2.902.147v3.362l-1.991.001c-1.564 0-1.867.744-1.867 1.832v2.404h3.731l-.487 3.608h-3.244V24h6.361c.732 0 1.325-.593 1.325-1.325V1.324C24 .592 23.407 0 22.675 0z" />
                                         </svg>
