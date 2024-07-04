@@ -1,5 +1,5 @@
 ﻿using ExpenseTracker.Data;
-using ExpenseTracker.Migrations;
+
 using ExpenseTracker.Model;
 using ExpenseTracker.Model.DTO;
 using ExpenseTracker.Repository.Interfaces;
@@ -110,7 +110,7 @@ namespace ExpenseTracker.Repository.Implementation
 
             if (catMapUsers == null || !catMapUsers.Any())
             {
-                throw new InvalidOperationException($"No records found for EmailID '{emailID}'.");
+                return null;
             }
 
             var catMapUserDTOs = catMapUsers.Select(cmu => new CatMapUserDTOResponse

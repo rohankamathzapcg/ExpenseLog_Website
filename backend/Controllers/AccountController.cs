@@ -4,6 +4,9 @@ using ExpenseTracker.Repository.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
+using NuGet.Protocol;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
 
 namespace ExpenseTracker.Controllers
 {
@@ -18,6 +21,23 @@ namespace ExpenseTracker.Controllers
             _repository = repository;
           
         }
+        [HttpGet("Account")]
+        public async Task<ActionResult<Account>> GetAccount(string accountNo, string EmailId) 
+        {
+            var existingAccount=  await _repository.GetAsync(accountNo, EmailId);
+            if (existingAccount == null)
+            {
+                return Ok("Account does not exist");
+            }
+            return Ok(existingAccount);
+        }
+        [HttpGet("AllAccounts")]
+        public async Task<ActionResult<IEnumerable<Account>>> GetAllAccounts(string EmailId)
+        {
+            var accounts= await _repository.GetAllAsync(EmailId);
+            return Ok(accounts);
+            
+        }
         [HttpPost]
         public async Task<ActionResult<AccountDTO>> AddAsync(AccountDTO account)
         {
@@ -30,6 +50,22 @@ namespace ExpenseTracker.Controllers
             {
                 return Ok("Invalid EmailID");
             }
+        }
+        [HttpPut("UpdateAccount")]
+        public async Task<ActionResult<Account>> UpdateAsync(AccountDTO account)
+        {
+            var existingAccount = await _repository.UpdateAsync(account);
+            return Ok(existingAccount);
+        }
+        [HttpDelete("DeleteAccount")]
+        public async Task<ActionResult<Account>> DeleteAsync(string EmailId,string accountNo)
+        {
+            var deletedUser= await _repository.DeleteAsync(EmailId,accountNo);
+            if (deletedUser != null)
+            {
+                return Ok(deletedUser);
+            }
+            return Ok("Invalid account details");
         }
 
     }

@@ -1,5 +1,5 @@
 ﻿using ExpenseTracker.Data;
-using ExpenseTracker.Migrations;
+
 using ExpenseTracker.Model;
 using ExpenseTracker.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
