@@ -1,12 +1,15 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import { toast } from 'react-toastify';
 import { useAuth } from '../Context/AuthContext';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 
 const Login = () => {
     const { setIsLoggedIn, setAuthUser } = useAuth();
-
     const closeButtonRef = useRef(null);
+    const location = useLocation();
+    const navigate =useNavigate();
 
     const autoCloseClick = () => {
         closeButtonRef.current.click();
@@ -29,6 +32,33 @@ const Login = () => {
         const { id, value } = e.target;
         setUserData({ ...userData, [id]: value });
     };
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const token = params.get('token');
+        if (token) {
+            try {
+                const decodedToken = jwtDecode(token);
+
+                const emailID = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"];
+                const fullName = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
+                const expiration = decodedToken.exp;
+
+                window.sessionStorage.setItem('authUser', JSON.stringify({ emailID, fullName, expiration }));
+                setAuthUser({ emailID, fullName });
+                setIsLoggedIn(true);
+                navigate('/')
+                window.location.reload(true);
+
+            } catch (error) {
+                console.error("Invalid token", error);
+                toast.error("Invalid token", {
+                    theme: "dark",
+                    autoClose: 3000,
+                });
+            }
+        }
+    }, [location, setAuthUser, setIsLoggedIn, navigate]);
 
     const validateEmail = (email) => {
         const newEmailErrors = {};
@@ -175,41 +205,7 @@ const Login = () => {
     }
 
     const handleGoogleLogin = () => {
-        window.location.href="https://localhost:7026/api/SocialAuth/google-login"
-        axios.get('https://localhost:7026/api/SocialAuth/google-response')
-            .then((result) => {
-                if (result.status === 200) {
-                    toast.success("Logged In Successfully", {
-                        theme: "dark",
-                        autoClose: 1000,
-                    });
-                    // window.sessionStorage.setItem('isLoggedIn', JSON.stringify(true));
-                    // setIsLoggedIn(JSON.parse(window.sessionStorage.getItem('isLoggedIn')))
-                    setIsLoggedIn(true)
-
-                    //Storing Username and UserID in Session
-                    window.sessionStorage.setItem('authUser', JSON.stringify(result.data));
-                    setAuthUser(JSON.parse(window.sessionStorage.getItem('authUser')));
-                    setLoginData({
-                        email: "",
-                        password: "",
-                    })
-                    autoCloseClick();
-                }
-                else if (result.status === 202) {
-                    toast.error(result.data, {
-                        theme: "dark",
-                        autoClose: 1000,
-                    });
-                }
-            })
-            .catch((error) => {
-                console.log(error)
-                // toast.error(error.response.data, {
-                //     theme: "dark",
-                //     autoClose: 3000,
-                // });
-            })
+        window.location.href="https://localhost:7026/api/SocialAuth/google-login";
     }
     return (
         <>

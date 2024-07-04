@@ -19,21 +19,6 @@ export function AuthProvider(props) {
     setIsLoggedIn
   }
 
-  // const login = (newData) => {
-  //   window.sessionStorage.setItem(
-  //     "UserData",
-  //     JSON.stringify({ user: newData })
-  //   );
-  //   setAuthUser(newData);
-  //   setIsLoggedIn(true);
-  // };
-
-  // const logout = () => {
-  //   window.sessionStorage.removeItem("UserData");
-  //   setAuthUser(null);
-  //   setIsLoggedIn(false);
-  // };
-
   return (
     <AuthContext.Provider value={value}>
       {props.children}
