@@ -38,14 +38,8 @@ const Login = () => {
         const token = params.get('token');
         if (token) {
             try {
-                const decodedToken = jwtDecode(token);
-
-                const emailID = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"];
-                const fullName = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"];
-                const expiration = decodedToken.exp;
-
-                window.sessionStorage.setItem('authUser', JSON.stringify({ emailID, fullName, expiration }));
-                setAuthUser({ emailID, fullName });
+                window.sessionStorage.setItem('authUser', JSON.stringify(jwtDecode(token)));
+                setAuthUser(jwtDecode(token));
                 setIsLoggedIn(true);
                 navigate('/')
                 window.location.reload(true);
@@ -207,6 +201,10 @@ const Login = () => {
     const handleGoogleLogin = () => {
         window.location.href="https://localhost:7026/api/SocialAuth/google-login";
     }
+
+    const handleFaceBookLogin = () => {
+        window.location.href="https://localhost:7026/api/SocialAuth/signin-facebook";
+    }
     return (
         <>
             <div className="modal fade square-modal" id="loginSignupModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="loginSignupModalLabel" aria-hidden="true">
@@ -236,7 +234,7 @@ const Login = () => {
                                             <path fill="#FFB900" d="M280.23 280.23H512V512H280.23z" />
                                         </svg>
                                     </li>
-                                    <li>
+                                    <li onClick={handleFaceBookLogin}>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="#1877F2" height="28" viewBox="0 0 24 24" width="27" className="mb-1 me-3">
                                             <path d="M22.675 0H1.325C.593 0 0 .592 0 1.324v21.351C0 23.407.593 24 1.325 24H12.81V14.708h-3.248V11.1h3.248V8.409c0-3.229 1.97-4.988 4.845-4.988 1.376 0 2.558.102 2.902.147v3.362l-1.991.001c-1.564 0-1.867.744-1.867 1.832v2.404h3.731l-.487 3.608h-3.244V24h6.361c.732 0 1.325-.593 1.325-1.325V1.324C24 .592 23.407 0 22.675 0z" />
                                         </svg>

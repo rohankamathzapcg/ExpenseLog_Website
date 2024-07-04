@@ -35,10 +35,6 @@ const Categories = () => {
                     setMyCategory(result.data);
                 } else if (result.status === 202) {
                     setMyCategory([])
-                    toast.error(result.data, {
-                        theme: "dark",
-                        autoClose: 1000,
-                    });
                 }
 
             })

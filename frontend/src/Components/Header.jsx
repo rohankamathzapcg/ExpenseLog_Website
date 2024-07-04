@@ -55,8 +55,8 @@ const Header = () => {
                                     <ul className='dropdown-menu dropdown-menu-end dropdown-menu-arrow profile'>
                                         <li className='dropdown-header'>
                                             <h6><i className="bi bi-person-fill"></i>&nbsp;&nbsp;{authUser.fullName}</h6>
-                                            <h6 style={{marginTop: "10px"}}><i className="bi bi-envelope"></i>&nbsp;&nbsp;{authUser.emailID}</h6>
-                                            <h6 style={{marginTop: "10px"}}><i className="bi bi-building"></i>&nbsp;&nbsp;{authUser.occupation}</h6>
+                                            <h6 style={{ marginTop: "10px" }}><i className="bi bi-envelope"></i>&nbsp;&nbsp;{authUser.emailID}</h6>
+                                            <h6 style={{ marginTop: "10px" }}><i className="bi bi-building"></i>&nbsp;&nbsp;{authUser.occupation}</h6>
                                         </li>
                                     </ul>
                                 </li>
