@@ -15,7 +15,6 @@ namespace ExpenseTracker.Controllers
         public CatMapUsersController(ICatMapUserRepository repository)
         {
             _repository = repository;
-
         }
       
         [HttpPost]
@@ -44,7 +43,7 @@ namespace ExpenseTracker.Controllers
             var catMapUsers = await _repository.GetByEmailAsync(emailID);
             if (catMapUsers == null)
             {
-                return Ok("No records Found.");
+                return Accepted("application/json", "No records Found.");
             }
             return Ok(catMapUsers);
         }
