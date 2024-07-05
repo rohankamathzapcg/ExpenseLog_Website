@@ -1,10 +1,12 @@
 import React from 'react'
 import AccountCards from '../Components/AccountCards'
 import AddAccount from '../Components/AddAccount'
+import { ToastContainer, toast } from 'react-toastify';
 
 const Accounts = () => {
     return (
         <>
+            <ToastContainer />
             <main id="main" className='main'>
                 <div className='pagetitle'>
                     <h1>My Accounts</h1>
