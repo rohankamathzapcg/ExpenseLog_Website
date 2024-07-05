@@ -53,11 +53,17 @@ const AddAccount = () => {
         }
         axios.post("https://localhost:7026/api/Account/", userBankDetails)
             .then((result) => {
-                if (result.status === 201) {
-                    toast.success("New Category added successfully", {
+                if (result.status === 200) {
+                    toast.success("Account added successfully", {
                         theme: "dark",
                         autoClose: 1000,
                     });
+                    setUserBankDetails({
+                        accountNo: "",
+                        bankName: "",
+                        branchName: "",
+                        balance: 0,
+                    })
                 } else {
                     toast.error(result.data, {
                         theme: "dark",
@@ -88,13 +94,13 @@ const AddAccount = () => {
                                 <span className="input-group-text" style={{ fontSize: "13px", fontFamily: '"Merriweather", sans-serif' }}><i class="bi bi-person-vcard"></i></span>
                                 <input type="text" style={{ fontSize: "13px", fontFamily: '"Merriweather", sans-serif' }} className="form-control shadow-none" placeholder="Enter account number" value={userBankDetails.accountNo} onChange={(e) => { setUserBankDetails({ ...userBankDetails, accountNo: e.target.value }) }} />
                             </div>
-                            {errors.branchErrMsg && <div className="validations" style={{ color: 'red' }}>{errors.branchErrMsg}</div>}
+                            {errors.accnoErrMsg && <div className="validations" style={{ color: 'red' }}>{errors.accnoErrMsg}</div>}
 
                             <div className="input-group mt-2">
                                 <span className="input-group-text" style={{ fontSize: "13px", fontFamily: '"Merriweather", sans-serif' }}><i class="bi bi-safe2"></i></span>
                                 <input type="text" style={{ fontSize: "13px", fontFamily: '"Merriweather", sans-serif' }} className="form-control shadow-none" placeholder="Enter branch name" value={userBankDetails.branchName} onChange={(e) => { setUserBankDetails({ ...userBankDetails, branchName: e.target.value }) }} />
                             </div>
-                            {errors.accnoErrMsg && <div className="validations" style={{ color: 'red' }}>{errors.accnoErrMsg}</div>}
+                            {errors.branchErrMsg && <div className="validations" style={{ color: 'red' }}>{errors.branchErrMsg}</div>}
 
                             <div className="input-group mt-2">
                                 <span className="input-group-text" style={{ fontSize: "13px", fontFamily: '"Merriweather", sans-serif' }}><i class="bi bi-cash-coin"></i></span>
