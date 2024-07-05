@@ -11,7 +11,6 @@ namespace ExpenseTracker.Model
         public string remarks {  get; set; }
         public string EmailId { get; set; }
         public User User { get; set; }
-        public string AccountNo { get; set; }
         public Account Account { get; set; }
 
     }
