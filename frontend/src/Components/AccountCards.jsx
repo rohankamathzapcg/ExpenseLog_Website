@@ -3,11 +3,18 @@ import React from 'react'
 const AccountCards = () => {
     return (
         <>
-            <div class="card me-3" style={{width: "20rem"}}>
-                <div class="card-body">
-                    <h5 class="card-title">Card title</h5>
-                    <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <div className="card me-3" style={{ width: "16rem" }}>
+                <div className="card-body text-center">
+                    <div className='card-logo-i'>
+                        <i className="bi bi-bank"></i>
+                    </div>
+                    <h5 className="card-title">Bank Name</h5>
+                    <h6 className="card-subtitle mb-2 text-muted">123456789</h6>
+                    <h6 className="card-subtitle mb-2 text-muted">KARB0002</h6>
+                    <h5 className="card-subtitle mb-2 text-muted">Balance: ₹ 10,000</h5>
+                </div>
+                <div style={{ padding: "0 10px 10px 15px" }} className="d-flex justify-content-end">
+                    <i className="bi bi-pencil-square me-2" style={{ cursor: "pointer" }}></i>
                 </div>
             </div>
         </>
