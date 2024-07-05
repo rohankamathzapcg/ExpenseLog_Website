@@ -48,7 +48,7 @@ namespace ExpenseTracker.Controllers
             }
             else
             {
-                return Ok("Invalid EmailID");
+                return Accepted("application/json","Account already exists");
             }
         }
         [HttpPut("UpdateAccount")]
@@ -65,7 +65,7 @@ namespace ExpenseTracker.Controllers
             {
                 return Ok(deletedUser);
             }
-            return Ok("Invalid account details");
+            return Accepted("application/json","Invalid account details");
         }
 
     }
