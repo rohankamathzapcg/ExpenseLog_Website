@@ -714,14 +714,26 @@ Profile CSS
   background-color: #d9d9d9;
   border: 1px solid #d9d9d9;
 }
-.background-badge-blocked.text-blocked{
-  color:#adadad;
+.background-badge-blocked.text-blocked {
+  color: #adadad;
 }
 
 .background-badge.text-badge {
   color: #012970;
 }
 
-.button-Save{
-  
+.card .card-body .card-logo-i {
+  background-color: #012970;
+  border-radius: 50%;
+  width: 70px;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto 1rem;
+}
+
+.card .card-body .card-logo-i i{
+  font-size: 30px;
+  color: white;
 }
