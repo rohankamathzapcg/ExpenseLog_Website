@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "remixicon/fonts/remixicon.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
@@ -15,10 +15,93 @@ import Login from "./Components/Login";
 import Profile from "./Pages/Profile";
 import Categories from "./Pages/Categories";
 import Accounts from "./Pages/Accounts";
+import Joyride, { STATUS } from "react-joyride";
 
 const App = () => {
+  const [joyrideState, setJoyrideState] = useState({
+    run: true,
+    steps: [
+      {
+        content: <h4>Welcome to RupeeTrack!! </h4>,
+        locale: { skip: <strong>SKIP</strong> },
+        placement: "center",
+        target: "body",
+      },
+      {
+        content: <p style={{ fontSize: '12px', color: 'gray'}}>Get an overview of all your expenses and financial activities at a glance.</p>,
+        placement: "bottom",
+        target: "#step-0",
+        title: "Dashboard Section",
+      },
+      {
+        content: <p style={{ fontSize: '12px', color: 'gray'}}>Manage and update your personal information and preferences.</p>,
+        placement: "bottom",
+        target: "#step-1",
+        title: "My Profile",
+      },
+      {
+        content: <p style={{ fontSize: '12px', color: 'gray'}}>Customize and add new categories to organize your expenses efficiently.</p>,
+        placement: "bottom",
+        target: "#step-2",
+        title: "Expense Categories ",
+      },
+      {
+        content: <p style={{ fontSize: '12px', color: 'gray'}}>View detailed records of all your financial transactions, past and present.</p>,
+        placement: "bottom",
+        target: "#step-3",
+        title: "Transactions",
+      },
+      {
+        content: <p style={{ fontSize: '12px', color: 'gray'}}>Manage and edit your bank accounts seamlessly, all in one place.</p>,
+        placement: "bottom",
+        target: "#step-4",
+        title: "My Accounts ",
+      },
+      {
+        content: <p style={{ fontSize: '12px', color: 'gray'}}>Visualize your income, expenses, and financial trends with interactive charts and graphs.</p>,
+        placement: "bottom",
+        target: "#step-5",
+        title: "Analytics",
+      },
+      {
+        content: <p style={{ fontSize: '12px', color: 'gray'}}>Find assistance and answers to your queries quickly and easily.</p>,
+        placement: "bottom",
+        target: "#step-6",
+        title: "Help Center",
+      },
+    ],
+  });
+
+  const handleJoyrideCallback = (data) => {
+    const { status } = data;
+    const finishedStatuses = [STATUS.FINISHED, STATUS.SKIPPED];
+  
+    if (finishedStatuses.includes(status)) {
+      setJoyrideState({ ...joyrideState, run: false });
+    }
+  };
+  
+
   return (
     <>
+      <Joyride
+        continuous
+        callback={handleJoyrideCallback}
+        run={joyrideState.run}
+        steps={joyrideState.steps}
+        hideCloseButton
+        scrollToFirstStep
+        showSkipButton
+        styles={{
+          options: {
+            primaryColor: '#012970',
+            buttonBorderColor: '#012970',
+            textColor: 'black',
+            zIndex: 1000,
+            buttonFontFamily: "'Merriweather', serif"
+          },
+        }}
+      />
       <BrowserRouter>
         <Header />
         <Login />

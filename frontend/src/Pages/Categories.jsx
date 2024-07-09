@@ -36,7 +36,6 @@ const Categories = () => {
                 } else if (result.status === 202) {
                     setMyCategory([])
                 }
-
             })
             .catch(err => console.log(err));
     }, [authUser.emailID]);

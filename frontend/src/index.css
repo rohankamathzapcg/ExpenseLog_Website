@@ -498,6 +498,8 @@ Card CSS
 Footer CSS
 ******************/
 .footer {
+  position: relative;
+  z-index: 995;
   padding: 20px;
   font-size: 14px;
   transition: all 0.3s;
@@ -736,4 +738,19 @@ Profile CSS
 .card .card-body .card-logo-i i{
   font-size: 30px;
   color: white;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  pointer-events: none;
+  display: none;
+}
+
+.overlay.active {
+  display: block;
 }

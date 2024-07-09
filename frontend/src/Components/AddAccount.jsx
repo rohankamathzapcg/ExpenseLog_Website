@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useAuth } from '../Context/AuthContext';
 import axios from 'axios'
 import { toast } from 'react-toastify';
@@ -13,6 +13,12 @@ const AddAccount = () => {
         emailID: authUser.emailID
     })
     const [errors, setErrors] = useState({})
+
+    const closeButtonRef = useRef(null);
+
+    const autoCloseClick = () => {
+        closeButtonRef.current.click();
+    }
 
     const validateBankName = () => {
         const bankNameError = {};
@@ -38,9 +44,15 @@ const AddAccount = () => {
 
     const validateAccNo = () => {
         const accoNoError = {};
+        const accountNoRegex = /^\d{11,16}$/;
+
         if (userBankDetails.accountNo.trim() === "") {
-            accoNoError.accnoErrMsg = "* Bank name field is required";
-            setErrors(accoNoError)
+            accoNoError.accnoErrMsg = "* Account number field is required";
+            setErrors(accoNoError);
+            return false;
+        } else if (!accountNoRegex.test(userBankDetails.accountNo)) {
+            accoNoError.accnoErrMsg = "* Account number must be between 11 to 16 digits";
+            setErrors(accoNoError);
             return false;
         }
         setErrors({});
@@ -48,7 +60,7 @@ const AddAccount = () => {
     };
 
     const handleAccountBtn = () => {
-        if (!validateBankName() && !validateBranchName() && !validateAccNo()) {
+        if (!validateBankName() || !validateAccNo() || !validateBranchName()) {
             return;
         }
         axios.post("https://localhost:7026/api/Account/", userBankDetails)
@@ -64,6 +76,7 @@ const AddAccount = () => {
                         branchName: "",
                         balance: 0,
                     })
+                    autoCloseClick();
                 } else {
                     toast.error(result.data, {
                         theme: "dark",
@@ -76,34 +89,34 @@ const AddAccount = () => {
 
     return (
         <>
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Account</h1>
-                            <button type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h1 className="modal-title fs-5" id="exampleModalLabel">Add New Account</h1>
+                            <button ref={closeButtonRef} type="button" className="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
+                        <div className="modal-body">
                             <div className="input-group">
-                                <span className="input-group-text" style={{ fontSize: "13px", fontFamily: '"Merriweather", sans-serif' }}><i class="bi bi-bank2"></i></span>
+                                <span className="input-group-text" style={{ fontSize: "13px", fontFamily: '"Merriweather", sans-serif' }}><i className="bi bi-bank2"></i></span>
                                 <input type="text" style={{ fontSize: "13px", fontFamily: '"Merriweather", sans-serif' }} className="form-control shadow-none" placeholder="Enter bank name" value={userBankDetails.bankName} onChange={(e) => { setUserBankDetails({ ...userBankDetails, bankName: e.target.value }) }} />
                             </div>
                             {errors.bankErrMsg && <div className="validations" style={{ color: 'red' }}>{errors.bankErrMsg}</div>}
 
                             <div className="input-group mt-2">
-                                <span className="input-group-text" style={{ fontSize: "13px", fontFamily: '"Merriweather", sans-serif' }}><i class="bi bi-person-vcard"></i></span>
+                                <span className="input-group-text" style={{ fontSize: "13px", fontFamily: '"Merriweather", sans-serif' }}><i className="bi bi-person-vcard"></i></span>
                                 <input type="text" style={{ fontSize: "13px", fontFamily: '"Merriweather", sans-serif' }} className="form-control shadow-none" placeholder="Enter account number" value={userBankDetails.accountNo} onChange={(e) => { setUserBankDetails({ ...userBankDetails, accountNo: e.target.value }) }} />
                             </div>
                             {errors.accnoErrMsg && <div className="validations" style={{ color: 'red' }}>{errors.accnoErrMsg}</div>}
 
                             <div className="input-group mt-2">
-                                <span className="input-group-text" style={{ fontSize: "13px", fontFamily: '"Merriweather", sans-serif' }}><i class="bi bi-safe2"></i></span>
+                                <span className="input-group-text" style={{ fontSize: "13px", fontFamily: '"Merriweather", sans-serif' }}><i className="bi bi-safe2"></i></span>
                                 <input type="text" style={{ fontSize: "13px", fontFamily: '"Merriweather", sans-serif' }} className="form-control shadow-none" placeholder="Enter branch name" value={userBankDetails.branchName} onChange={(e) => { setUserBankDetails({ ...userBankDetails, branchName: e.target.value }) }} />
                             </div>
                             {errors.branchErrMsg && <div className="validations" style={{ color: 'red' }}>{errors.branchErrMsg}</div>}
 
                             <div className="input-group mt-2">
-                                <span className="input-group-text" style={{ fontSize: "13px", fontFamily: '"Merriweather", sans-serif' }}><i class="bi bi-cash-coin"></i></span>
+                                <span className="input-group-text" style={{ fontSize: "13px", fontFamily: '"Merriweather", sans-serif' }}><i className="bi bi-cash-coin"></i></span>
                                 <input type="text" style={{ fontSize: "13px", fontFamily: '"Merriweather", sans-serif' }} className="form-control shadow-none" placeholder="Enter balance amount" value={userBankDetails.balance} onChange={(e) => { setUserBankDetails({ ...userBankDetails, balance: e.target.value }) }} />
                             </div>
                             <div className="d-flex justify-content-end mt-3">
