@@ -77,7 +77,7 @@ const SideBar = () => {
                 <ul className='sidebar-nav' id="sidbar-nav">
                     {
                         navLinks.map((items, index) =>
-                            <li className='nav-item' key={index}>
+                            <li className='nav-item' id={`step-${index}`} key={index}>
                                 <Link to={items.path} onClick={() => handleNavItemClick(index, items.name)} className={`nav-link ${activeIndex === index ? 'active' : ''}`} >
                                     <i className={items.icon}></i>
                                     <span>{items.name}</span>
