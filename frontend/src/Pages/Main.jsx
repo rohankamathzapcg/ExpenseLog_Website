@@ -112,7 +112,7 @@ const Main = () => {
                                             <div className='activity-content'>20000</div>
                                         </div>
                                         <div className="activity-item d-flex">
-                                            <div className='activite-label'>Income</div>
+                                            <div className='activite-label'>Income1</div>
                                             <i className='bi bi-circle-fill activity-badge align-self-start'></i>
                                             <div className='activity-content'>20000</div>
                                         </div>
