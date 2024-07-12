@@ -36,7 +36,7 @@ const navLinks = [
     {
         name: "Help Center",
         icon: "bi bi-question-octagon",
-        path: "/analytics"
+        path: "/helpcenter"
     },
     {
         name: "Signout",

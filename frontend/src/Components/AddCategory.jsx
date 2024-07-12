@@ -55,12 +55,12 @@ const AddCategory = () => {
     }
     return (
         <>
-            <div class="modal fade" id="addCategoryModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="categoryModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="categoryModalLabel">Add New Category</h1>
-                            <button ref={closeButtonRef} type="button" class="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close" onClick={HandleCloseCategory}></button>
+            <div className="modal fade" id="addCategoryModal" data-bs-backdrop="static" tabindex="-1" aria-labelledby="categoryModalLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h1 className="modal-title fs-5" id="categoryModalLabel">Add New Category</h1>
+                            <button ref={closeButtonRef} type="button" className="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close" onClick={HandleCloseCategory}></button>
                         </div>
                         <div className="modal-body">
                             <div className="input-group">

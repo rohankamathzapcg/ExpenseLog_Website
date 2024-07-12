@@ -28,7 +28,6 @@ const Categories = () => {
     })
 
     useEffect(() => {
-
         axios.get(`https://localhost:7026/api/CatMapUsers/${authUser.emailID}`)
             .then((result) => {
                 if (result.status === 200) {
