@@ -498,17 +498,10 @@ Card CSS
 Footer CSS
 ******************/
 .footer {
-  position: relative;
-  z-index: 995;
   padding: 20px;
   font-size: 14px;
   transition: all 0.3s;
   border-top: 1px solid #cddfff;
-}
-
-.footer .copyright {
-  text-align: center;
-  color: #012970;
 }
 
 /*****************
@@ -740,17 +733,22 @@ Profile CSS
   color: white;
 }
 
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 9999;
-  pointer-events: none;
-  display: none;
+.my-category {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+  overflow-x: auto;
+  max-width: calc(100% - 20px);
 }
 
-.overlay.active {
-  display: block;
+.my-category .badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  background-color: #f0f0f0; /* Example background color */
+  border-radius: 5px;
+  word-wrap: break-word;
+  white-space: normal; /* Ensure content wraps within the badge */
+  text-align: center; /* Center align text */
 }

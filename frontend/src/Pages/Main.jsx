@@ -1,11 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import LineChartReport from '../Components/Charts/LineChartReport';
 import BudgetChart from '../Components/Charts/BudgetChart';
 import OverallChart from '../Components/Charts/OverallChart';
 import { ToastContainer } from 'react-toastify';
+import axios from 'axios';
+import { useAuth } from '../Context/AuthContext';
 
 const Main = () => {
-    
+    const [myCategory, setMyCategory] = useState([]);
+    const [myRecentTransactions, setMyRecentTransactions] = useState([]);
+    const { authUser } = useAuth();
+
+    useEffect(() => {
+        if (authUser && authUser.emailID) {
+            axios.get(`https://localhost:7026/api/CatMapUsers/${authUser.emailID}`)
+                .then((result) => {
+                    if (result.status === 200) {
+                        setMyCategory(result.data);
+                    } else if (result.status === 202) {
+                        setMyCategory([])
+                    }
+                })
+                .catch(err => console.log(err));
+        }
+
+        setMyRecentTransactions([])
+
+    }, [authUser]);
+
     return (
         <>
             <ToastContainer />
@@ -96,30 +118,59 @@ const Main = () => {
                         {/* Right Side Starts */}
                         <div className="col-lg-4">
 
+                            {/* My Category Starts */}
+                            <div className="card recent-sales">
+                                <div className='card-body'>
+                                    <h5 className='card-title mb-4'>My Expense Categories</h5>
+                                    {myCategory.length === 0 ? (
+                                        <p className='text-center' style={{ color: "grey" }}>No Records Found</p>
+                                    ) : (
+                                        <div className="row">
+                                            <div className="col">
+                                                {myCategory.map((category, index) => (
+                                                    <span key={index} className="badge background-badge text-badge me-2">{category.catName}</span>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+                            {/* My Category Ends */}
+
                             {/* Recent Transaction Starts */}
                             <div className="card recent-sales">
                                 <div className='card-body'>
                                     <h5 className='card-title mb-4'>Recent Transactions</h5>
                                     <div className='activity'>
-                                        <div className="activity-item d-flex">
-                                            <div className='activite-label'>Income</div>
-                                            <i className='bi bi-circle-fill activity-badge align-self-start'></i>
-                                            <div className='activity-content'>20000</div>
-                                        </div>
-                                        <div className="activity-item d-flex">
-                                            <div className='activite-label'>Income</div>
-                                            <i className='bi bi-circle-fill activity-badge align-self-start'></i>
-                                            <div className='activity-content'>20000</div>
-                                        </div>
-                                        <div className="activity-item d-flex">
-                                            <div className='activite-label'>Income1</div>
-                                            <i className='bi bi-circle-fill activity-badge align-self-start'></i>
-                                            <div className='activity-content'>20000</div>
-                                        </div>
+                                        {
+                                            myRecentTransactions.length === 0 ? (
+                                                <p className='text-center' style={{ color: "grey" }}>No Records Found</p>
+                                            ) : (
+                                                <>
+                                                    <div className="activity-item d-flex">
+                                                        <div className='activite-label'>Income</div>
+                                                        <i className='bi bi-circle-fill activity-badge align-self-start'></i>
+                                                        <div className='activity-content'>20000</div>
+                                                    </div>
+                                                    <div className="activity-item d-flex">
+                                                        <div className='activite-label'>Income</div>
+                                                        <i className='bi bi-circle-fill activity-badge align-self-start'></i>
+                                                        <div className='activity-content'>20000</div>
+                                                    </div>
+                                                    <div className="activity-item d-flex">
+                                                        <div className='activite-label'>Income1</div>
+                                                        <i className='bi bi-circle-fill activity-badge align-self-start'></i>
+                                                        <div className='activity-content'>20000</div>
+                                                    </div>
+                                                </>
+                                            )
+                                        }
+
                                     </div>
                                 </div>
                             </div>
                             {/* Recent Transaction Ends */}
+
                             <div className='card'>
                                 <div className="card-body pb-0">
                                     <h5 className='card-title mb-4'>Overall Tracker</h5>
