@@ -74,11 +74,13 @@ public class SocialAuthController : ControllerBase
                 CreatedDate = DateTime.UtcNow
             };
             await _userRepository.AddSocialAsync(newUser);
-            token = GenerateToken(newUser);  
+            User responseUser = ConvertDate(newUser);
+            token = GenerateToken(responseUser);  
         }
         else
         {
-            token= GenerateToken(existingUser);
+            User responseUser = ConvertDate(existingUser);
+            token = GenerateToken(responseUser);
         }
         var redirectUrl = $"{Environment.GetEnvironmentVariable("BaseUrl")}/auth-callback?token={token}";
         return Redirect(redirectUrl);
@@ -165,14 +167,23 @@ public class SocialAuthController : ControllerBase
                 CreatedDate = DateTime.UtcNow,
             };
             await _userRepository.AddSocialAsync(newUser);
-            token = GenerateToken(newUser);
+            User responseUser  = ConvertDate(newUser);
+            token = GenerateToken(responseUser);
         }
         else
         {
-            token = GenerateToken(existingUser);
+            User responseUser = ConvertDate(existingUser);
+            token = GenerateToken(responseUser);
         }
         var redirectUrl = $"{Environment.GetEnvironmentVariable("BaseUrl")}/auth-callback?token={token}";
         return Redirect(redirectUrl);
+    }
+    private User ConvertDate(User user)
+    {
+        TimeZoneInfo istZone = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
+        DateTime istNow = TimeZoneInfo.ConvertTimeFromUtc(user.CreatedDate, istZone);
+        user.CreatedDate = istNow;
+        return user;
     }
 
 }
