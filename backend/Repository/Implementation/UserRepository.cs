@@ -30,6 +30,7 @@ namespace ExpenseTracker.Repository.Implementation
         {
 
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+            user.CreatedDate= DateTime.UtcNow;
             user.FullName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(user.FullName.ToLower());
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
