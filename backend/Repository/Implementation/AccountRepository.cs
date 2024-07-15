@@ -29,23 +29,24 @@ namespace ExpenseTracker.Repository.Implementation
                     .FirstOrDefaultAsync(acc => acc.EmailID == account.EmailID);
             var existingAccount = await _context.Accounts
                    .FirstOrDefaultAsync(acc => acc.AccountNo == account.AccountNo);
-            if (existingUser == null && existingAccount == null)
+            if (existingUser == null )
             {
-
                 return null;
 
             }
-            var userAccount = new Account
+            if (existingAccount == null && existingUser != null)
             {
-                AccountNo = account.AccountNo,
-                Balance = account.Balance,
-                BankName= account.BankName,
-                BranchName=account.BranchName,
-                User = existingUser
-            };
-
-            _context.Accounts.Add(userAccount);
-            await _context.SaveChangesAsync();
+                var userAccount = new Account
+                {
+                    AccountNo = account.AccountNo,
+                    Balance = account.Balance,
+                    BankName = account.BankName,
+                    BranchName = account.BranchName,
+                    User = existingUser
+                };
+                _context.Accounts.Add(userAccount);
+                await _context.SaveChangesAsync();
+            }
             return account;
         }
 
@@ -53,6 +54,7 @@ namespace ExpenseTracker.Repository.Implementation
         {
             var existingUser = await _context.Users
                       .FirstOrDefaultAsync(acc => acc.EmailID == account.EmailID);
+            
             var accountToUpdate = new Account
             {
                 AccountNo = account.AccountNo,

@@ -70,7 +70,8 @@ public class SocialAuthController : ControllerBase
                 FullName = firstName + " " + lastName,
                 Password= BCrypt.Net.BCrypt.HashPassword("123"),
                 Occupation = "None",
-                MonthlyIncome=0
+                MonthlyIncome=0,
+                CreatedDate = DateTime.UtcNow
             };
             await _userRepository.AddSocialAsync(newUser);
             token = GenerateToken(newUser);  
@@ -91,6 +92,7 @@ public class SocialAuthController : ControllerBase
                new Claim("password",user.Password),
                new Claim("occupation",user.Occupation),
                new Claim("monthlyIncome",user.MonthlyIncome.ToString()),
+               new Claim("creationDate",user.CreatedDate.ToString())
 
             };
 
@@ -159,7 +161,8 @@ public class SocialAuthController : ControllerBase
                 FullName = name,
                 Occupation = "None",
                 Password = BCrypt.Net.BCrypt.HashPassword("123"),
-                MonthlyIncome = 0
+                MonthlyIncome = 0,
+                CreatedDate = DateTime.UtcNow,
             };
             await _userRepository.AddSocialAsync(newUser);
             token = GenerateToken(newUser);
