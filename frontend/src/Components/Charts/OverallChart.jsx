@@ -14,7 +14,7 @@ const OverallChart = () => {
                 {
                     name: 'Access From',
                     type:'pie',
-                    radius: ["40%","70%"],
+                    radius: ["50%","70%"],
                     avoidLabelOverlap: false,
                     label: {
                         show: false,
@@ -46,7 +46,7 @@ const OverallChart = () => {
     }, [])
   return (
     <>
-      <div id="overallTracker" className='echart' style={{ minHeight: '400px' }}></div>
+      <div id="overallTracker" className='echart' style={{ minHeight: '312px' }}></div>
     </>
   );
 }

@@ -1,57 +1,60 @@
 import * as echarts from 'echarts';
 import React, { useEffect } from 'react';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, CartesianGrid } from 'recharts'
 
 const BudgetChart = () => {
+    const data = [
+        {
+            name: "Page A",
+            uv: 4000,
+        },
+        {
+            name: "Page B",
+            uv: 3000,
 
-    useEffect(() => {
-        echarts.init(document.querySelector('#budgetChart')).setOption({
-            legend: {
-                data: ["Actual Budget", "Actual Spending"],
-            },
-            radar: {
-                shape: 'circle',
-                indicator: [
-                    {
-                        name: "Shopping",
-                        max: 6500,
-                    },
-                    {
-                        name: 'Food',
-                        max: 16000,
-                    },
-                    {
-                        name: 'Rent',
-                        max: 30000,
-                    },
-                    {
-                        name: 'Education',
-                        max: 38000,
-                    },
-                ],
-            },
-            series: [
-                {
-                    name: 'Budget vs Spending',
-                    type: 'radar',
-                    data: [
-                        {
-                            name: "Actual Budget",
-                            value: [4200, 3000, 20000, 35000],
-                        },
-                        {
-                            name: "Actual Spending",
-                            value: [5000, 14000, 28000, 26000],
-                        },
-                    ],
-                },
-            ],
-        });
-    }, []);
-  return (
-    <>
-      <div id="budgetChart" style={{ minHeight: '400px' }} className='echart'></div>
-    </>
-  );
+        },
+        {
+            name: "Page C",
+            uv: 2000,
+
+        },
+        {
+            name: "Page D",
+            uv: 2780,
+
+        },
+        {
+            name: "Page E",
+            uv: 1890,
+
+        },
+        {
+            name: "Page F",
+            uv: 2390,
+
+        },
+        {
+            name: "Page G",
+            uv: 3490,
+
+        }
+    ]
+    return (
+        <>
+            <div className='echart'>
+                <ResponsiveContainer width="100%" height={400}>
+                    <BarChart data={data}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="name" />
+                        <YAxis />
+                        <Tooltip />
+                        <Legend />
+                        <Bar dataKey="uv" fill="#82ca9d" />
+                    </BarChart>
+                </ResponsiveContainer>
+            </div>
+        </>
+    );
 }
 
 export default BudgetChart;

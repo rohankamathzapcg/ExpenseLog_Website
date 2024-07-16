@@ -93,15 +93,6 @@ const Main = () => {
                                 </div>
                                 {/* Overall Card Amounts Ends */}
 
-                                {/* Line Chart Starts */}
-                                <div className='col-12'>
-                                    <div className='card'>
-                                        <div className='card-body'>
-                                            <h5 className='card-title mb-4'>Reports</h5>
-                                            <LineChartReport />
-                                        </div>
-                                    </div>
-                                </div>
                                 {/* Line Chart Ends */}
                                 <div className='col-12'>
                                     <div className='card'>
@@ -123,7 +114,7 @@ const Main = () => {
                                 <div className='card-body'>
                                     <h5 className='card-title mb-4'>My Expense Categories</h5>
                                     {myCategory.length === 0 ? (
-                                        <p className='text-center' style={{ color: "grey" }}>No Records Found</p>
+                                        <p className='text-center' style={{ color: "grey",fontSize: "14px" }}>No Records Found</p>
                                     ) : (
                                         <div className="row">
                                             <div className="col">
