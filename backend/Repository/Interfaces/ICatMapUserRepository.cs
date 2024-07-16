@@ -8,5 +8,6 @@ namespace ExpenseTracker.Repository.Interfaces
         Task<List<CatMapUserDTO>> GetAllAsync();
         Task<List<CatMapUserDTOResponse>> GetByEmailAsync(string emailID);
         Task<List<CatMapUserDTO>> UpdateAsync(List<CatMapUserDTO> cat);
+
     }
 }

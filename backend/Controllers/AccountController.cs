@@ -25,7 +25,7 @@ namespace ExpenseTracker.Controllers
         public async Task<ActionResult<Account>> GetAccount(string accountNo, string EmailId) 
         {
             var existingAccount=  await _repository.GetAsync(accountNo, EmailId);
-            if (existingAccount == null)
+            if (existingAccount != null)
             {
                 return Ok("Account does not exist");
             }

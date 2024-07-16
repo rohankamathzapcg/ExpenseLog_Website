@@ -7,7 +7,7 @@ namespace ExpenseTracker.Model.DTO
         public string AccountNo { get; set; }
         public string BankName { get; set; }
         public string BranchName { get; set; }
-        public int Balance { get; set; }
+        public float Balance { get; set; }
         public string EmailID { get; set; }
      }
 }

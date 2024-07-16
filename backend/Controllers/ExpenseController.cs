@@ -1,87 +1,71 @@
-﻿using ExpenseTracker.Model;
-using ExpenseTracker.Repository.Interfaces;
-using Microsoft.AspNetCore.Http;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using ExpenseTracker.Data;
+using ExpenseTracker.Model.DTO;
+using ExpenseTracker.Repository.Interfaces;
+using ExpenseTracker.Model;
 
 namespace ExpenseTracker.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ExpensesController : ControllerBase
+    public class ExpenseController : ControllerBase
     {
         private readonly IExpenseRepository _expenseRepository;
 
-        public ExpensesController(IExpenseRepository expenseRepository)
+        public ExpenseController(IExpenseRepository expenseRepository)
         {
             _expenseRepository = expenseRepository;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Expense>>> GetExpenses()
+        [HttpGet("{email}")]
+        public async Task<ActionResult<IEnumerable<Expense>>> GetExpensesByEmail(string email)
         {
-            var expenses = await _expenseRepository.GetAllAsync();
-            return Ok(expenses);
-        }
-
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Expense>> GetExpense(int id)
-        {
-            var expense = await _expenseRepository.GetByIdAsync(id);
-            if (expense == null)
+            var expenses = await _expenseRepository.GetByEmailAsync(email);
+            if (expenses == null || !expenses.Any())
             {
                 return NotFound();
             }
-            return Ok(expense);
+            return Ok(expenses);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Expense>> PostExpense(Expense expense)
+        public async Task<ActionResult> CreateExpense([FromBody] ExpenseDTO expenseDto)
         {
-            var newExpense = await _expenseRepository.AddAsync(expense);
-            return CreatedAtAction(nameof(GetExpense), new { id = newExpense.ExpenseId }, newExpense);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                var createdExpense = await _expenseRepository.AddAsync(expenseDto);
+                return CreatedAtAction(nameof(GetExpensesByEmail), new { email = createdExpense.EmailId }, createdExpense);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutExpense(int id, Expense expense)
+        public async Task<ActionResult> UpdateExpense(int id, [FromBody] ExpenseDTO expenseDto)
         {
-            if (id != expense.ExpenseId)
+            if (id != expenseDto.ExpenseId)
             {
                 return BadRequest();
             }
 
             try
             {
-                await _expenseRepository.UpdateAsync(expense);
+                var updatedExpense = await _expenseRepository.UpdateAsync(expenseDto);
+                return Ok(updatedExpense);
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (await _expenseRepository.GetByIdAsync(id) == null)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest(ex.Message);
             }
-
-            return NoContent();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteExpense(int id)
-        {
-            var expense = await _expenseRepository.GetByIdAsync(id);
-            if (expense == null)
-            {
-                return NotFound();
-            }
-
-            await _expenseRepository.DeleteAsync(id);
-
-            return NoContent();
         }
     }
-
 }

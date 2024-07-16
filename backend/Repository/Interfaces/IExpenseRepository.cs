@@ -1,14 +1,13 @@
 ﻿using ExpenseTracker.Model;
+using ExpenseTracker.Model.DTO;
 
 namespace ExpenseTracker.Repository.Interfaces
 {
     public interface IExpenseRepository
     {
-        Task<IEnumerable<Expense>> GetAllAsync();
-        Task<Expense> GetByIdAsync(int id);
-        Task<Expense> AddAsync(Expense expense);
-        Task<Expense> UpdateAsync(Expense expense);
-        Task DeleteAsync(int id);
+        Task<IEnumerable<Expense>> GetByEmailAsync(string email);
+        Task<ExpenseDTO> AddAsync(ExpenseDTO income);
+        Task<ExpenseDTO> UpdateAsync(ExpenseDTO income);
     }
 
 }
