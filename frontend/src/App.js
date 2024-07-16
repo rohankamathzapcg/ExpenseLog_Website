@@ -25,7 +25,7 @@ const App = () => {
     run: true,
     steps: [
       {
-        content: <h4>Welcome to RupeeTrack!! </h4>,
+        content: <h4>Welcome to Expense Tracker!! </h4>,
         locale: { skip: <strong>SKIP</strong> },
         placement: "center",
         target: "body",
