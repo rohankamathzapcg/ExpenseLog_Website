@@ -1,5 +1,10 @@
-﻿using ExpenseTracker.Data;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using ExpenseTracker.Data;
 using ExpenseTracker.Model;
+using ExpenseTracker.Model.DTO;
 using ExpenseTracker.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,39 +19,91 @@ namespace ExpenseTracker.Repository.Implementation
             _context = context;
         }
 
-        public async Task<IEnumerable<Expense>> GetAllAsync()
+        public async Task<IEnumerable<Expense>> GetByEmailAsync(string email)
         {
-            return await _context.Expenses.ToListAsync();
+            return await _context.Expenses.Include(e => e.User)
+                                          .Include(e => e.Account)
+                                          .Where(e => e.EmailId == email)
+                                          .ToListAsync();
         }
 
-        public async Task<Expense> GetByIdAsync(int id)
+        public async Task<ExpenseDTO> AddAsync(ExpenseDTO expenseDto)
         {
-            return await _context.Expenses.FindAsync(id);
-        }
+            var account = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountNo == expenseDto.AccountNo);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.EmailID == expenseDto.EmailId);
 
-        public async Task<Expense> AddAsync(Expense expense)
-        {
+            if (account == null)
+            {
+                throw new Exception("Invalid AccountNo");
+            }
+
+            if (user == null)
+            {
+                throw new Exception("Invalid EmailId");
+            }
+
+            var expense = new Expense
+            {
+                ExpenseDate = expenseDto.ExpenseDate,
+                Amount = expenseDto.Amount,
+                Remarks = expenseDto.Remarks,
+                Account = account,
+                EmailId = expenseDto.EmailId,
+                User = user,
+                CategoryId = expenseDto.CategoryId,
+                NewBalance = account.Balance - expenseDto.Amount
+            };
+
+            account.Balance -= expenseDto.Amount;
             _context.Expenses.Add(expense);
             await _context.SaveChangesAsync();
-            return expense;
+
+            expenseDto.ExpenseId = expense.ExpenseId;
+            expenseDto.NewBalance = expense.NewBalance;
+            return expenseDto;
         }
 
-        public async Task<Expense> UpdateAsync(Expense expense)
+        public async Task<ExpenseDTO> UpdateAsync(ExpenseDTO expenseDto)
         {
-            _context.Entry(expense).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
-            return expense;
-        }
+            var expense = await _context.Expenses.Include(e => e.Account).Include(e => e.User)
+                                                 .FirstOrDefaultAsync(e => e.ExpenseId == expenseDto.ExpenseId);
 
-        public async Task DeleteAsync(int id)
-        {
-            var expense = await _context.Expenses.FindAsync(id);
-            if (expense != null)
+            if (expense == null)
             {
-                _context.Expenses.Remove(expense);
-                await _context.SaveChangesAsync();
+                throw new Exception("Expense not found");
             }
+
+            var account = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountNo == expenseDto.AccountNo);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.EmailID == expenseDto.EmailId);
+
+            if (account == null)
+            {
+                throw new Exception("Invalid AccountNo");
+            }
+
+            if (user == null)
+            {
+                throw new Exception("Invalid EmailId");
+            }
+
+            // Reverse the balance update for the old amount
+            account.Balance += expense.Amount;
+
+            expense.ExpenseDate = expenseDto.ExpenseDate;
+            expense.Amount = expenseDto.Amount;
+            expense.Remarks = expenseDto.Remarks;
+            expense.Account = account;
+            expense.User = user;
+            expense.CategoryId = expenseDto.CategoryId;
+            expense.NewBalance = account.Balance - expenseDto.Amount;
+
+            // Update the account balance with the new amount
+            account.Balance -= expenseDto.Amount;
+
+            await _context.SaveChangesAsync();
+
+            expenseDto.NewBalance = expense.NewBalance;
+            return expenseDto;
         }
     }
-
 }

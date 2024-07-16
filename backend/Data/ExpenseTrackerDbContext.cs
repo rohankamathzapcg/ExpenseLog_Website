@@ -14,7 +14,6 @@ namespace ExpenseTracker.Data
         {
         }
         public DbSet<User> Users { get; set; }
-        public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Income> Incomes { get; set; }
         public DbSet<Expense> Expenses { get; set; }
         public DbSet<Category> Categories { get; set; }

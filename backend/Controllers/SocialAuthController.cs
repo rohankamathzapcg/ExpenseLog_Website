@@ -89,7 +89,7 @@ public class SocialAuthController : ControllerBase
     private string GenerateToken(User user)
     {
         List<Claim> claims = new List<Claim> {
-                new Claim("emailID", user.EmailID),
+               new Claim("emailID", user.EmailID),
                new Claim("fullName",user.FullName),
                new Claim("password",user.Password),
                new Claim("occupation",user.Occupation),

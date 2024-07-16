@@ -203,6 +203,9 @@ namespace ExpenseTracker.Migrations
                     b.Property<string>("EmailID")
                         .HasColumnType("text");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("FullName")
                         .HasColumnType("text");
 
