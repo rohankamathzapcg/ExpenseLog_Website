@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ExpenseTracker.Model
 {
@@ -10,7 +11,7 @@ namespace ExpenseTracker.Model
         public float amount { get; set; }
         public float NewBalance { get; set; }
         public string remarks {  get; set; }
-        public string AccountNo { get; set; }
+        public string AccountNO { get; set; }
         public string EmailId { get; set; }
         public User User { get; set; }
         public Account Account { get; set; }

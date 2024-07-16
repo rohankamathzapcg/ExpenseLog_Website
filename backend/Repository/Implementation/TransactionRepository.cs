@@ -30,7 +30,7 @@ namespace ExpenseTracker.Repository.Implementation
                     Amount = i.amount,
                     NewBalance = i.NewBalance,
                     Remarks = i.remarks,
-                    AccountNo = i.AccountNo,
+                    AccountNo = i.AccountNO,
                     EmailId = i.EmailId,
                     Type = "Income"
                 })
@@ -45,7 +45,7 @@ namespace ExpenseTracker.Repository.Implementation
                     Amount = e.Amount,
                     NewBalance = e.NewBalance,
                     Remarks = e.Remarks,
-                    AccountNo = e.AccountNo,
+                    AccountNo = e.AccountNO,
                     EmailId = e.EmailId,
                     Type = "Expense"
                 })

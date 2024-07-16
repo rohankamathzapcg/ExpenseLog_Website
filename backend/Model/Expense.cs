@@ -12,8 +12,7 @@ namespace ExpenseTracker.Model
         public string Remarks {  get; set; }
         public float Amount {  get; set; }
         public float NewBalance { get; set; }
-
-        public string AccountNo {  get; set; }
+        public string AccountNO {  get; set; }
         public User User { get; set; }
         public Category Category { get; set; }
         public Account Account { get; set; }
