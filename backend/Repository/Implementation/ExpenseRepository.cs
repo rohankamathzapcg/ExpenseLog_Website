@@ -23,7 +23,7 @@ namespace ExpenseTracker.Repository.Implementation
         {
             return await _context.Expenses.Include(e => e.User)
                                           .Include(e => e.Account)
-                                          .Where(e => e.EmailId == email)
+                                          .Where(e => e.EmailID == email)
                                           .ToListAsync();
         }
 
@@ -31,6 +31,7 @@ namespace ExpenseTracker.Repository.Implementation
         {
             var account = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountNo == expenseDto.AccountNo);
             var user = await _context.Users.FirstOrDefaultAsync(u => u.EmailID == expenseDto.EmailId);
+            var category = await _context.Categories.FirstOrDefaultAsync(c => c.CategoryId == expenseDto.CategoryId); // Load the Category
 
             if (account == null)
             {
@@ -42,15 +43,21 @@ namespace ExpenseTracker.Repository.Implementation
                 throw new Exception("Invalid EmailId");
             }
 
+            if (category == null)
+            {
+                throw new Exception("Invalid CategoryId");
+            }
+
             var expense = new Expense
             {
                 ExpenseDate = expenseDto.ExpenseDate,
                 Amount = expenseDto.Amount,
                 Remarks = expenseDto.Remarks,
                 Account = account,
-                EmailId = expenseDto.EmailId,
+                //EmailID = expenseDto.EmailId,
                 User = user,
-                CategoryId = expenseDto.CategoryId,
+                //CategoryId = expenseDto.CategoryId,
+                Category = category,
                 NewBalance = account.Balance - expenseDto.Amount
             };
 
@@ -65,8 +72,7 @@ namespace ExpenseTracker.Repository.Implementation
 
         public async Task<ExpenseDTO> UpdateAsync(ExpenseDTO expenseDto)
         {
-            var expense = await _context.Expenses.Include(e => e.Account).Include(e => e.User)
-                                                 .FirstOrDefaultAsync(e => e.ExpenseId == expenseDto.ExpenseId);
+            var expense = await _context.Expenses.Include(e => e.Account).Include(e => e.User).FirstOrDefaultAsync(e => e.ExpenseId == expenseDto.ExpenseId);
 
             if (expense == null)
             {
@@ -75,6 +81,7 @@ namespace ExpenseTracker.Repository.Implementation
 
             var account = await _context.Accounts.FirstOrDefaultAsync(a => a.AccountNo == expenseDto.AccountNo);
             var user = await _context.Users.FirstOrDefaultAsync(u => u.EmailID == expenseDto.EmailId);
+            var category = await _context.Categories.FirstOrDefaultAsync(c => c.CategoryId == expenseDto.CategoryId); // Load the Category
 
             if (account == null)
             {
@@ -86,15 +93,22 @@ namespace ExpenseTracker.Repository.Implementation
                 throw new Exception("Invalid EmailId");
             }
 
+            if (category == null)
+            {
+                throw new Exception("Invalid CategoryId");
+            }
+
             // Reverse the balance update for the old amount
             account.Balance += expense.Amount;
 
+            // Update the expense entity
             expense.ExpenseDate = expenseDto.ExpenseDate;
             expense.Amount = expenseDto.Amount;
             expense.Remarks = expenseDto.Remarks;
             expense.Account = account;
             expense.User = user;
-            expense.CategoryId = expenseDto.CategoryId;
+            //expense.CategoryId = expenseDto.CategoryId;
+            expense.Category = category; // Set the Category object
             expense.NewBalance = account.Balance - expenseDto.Amount;
 
             // Update the account balance with the new amount

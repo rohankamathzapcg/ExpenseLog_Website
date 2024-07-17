@@ -3,6 +3,7 @@ using System;
 using ExpenseTracker.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpenseTracker.Migrations
 {
     [DbContext(typeof(ExpenseTrackerDbContext))]
-    partial class ExpenseTrackerDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240717045641_UpdatedForigenKey")]
+    partial class UpdatedForigenKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -197,7 +200,7 @@ namespace ExpenseTracker.Migrations
             modelBuilder.Entity("ExpenseTracker.Model.Account", b =>
                 {
                     b.HasOne("ExpenseTracker.Model.User", "User")
-                        .WithMany()
+                        .WithMany("Accounts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -227,7 +230,7 @@ namespace ExpenseTracker.Migrations
             modelBuilder.Entity("ExpenseTracker.Model.Expense", b =>
                 {
                     b.HasOne("ExpenseTracker.Model.Account", "Account")
-                        .WithMany()
+                        .WithMany("Expenses")
                         .HasForeignKey("AccountNo")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -239,7 +242,7 @@ namespace ExpenseTracker.Migrations
                         .IsRequired();
 
                     b.HasOne("ExpenseTracker.Model.User", "User")
-                        .WithMany()
+                        .WithMany("Expenses")
                         .HasForeignKey("EmailID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -254,13 +257,13 @@ namespace ExpenseTracker.Migrations
             modelBuilder.Entity("ExpenseTracker.Model.Income", b =>
                 {
                     b.HasOne("ExpenseTracker.Model.Account", "Account")
-                        .WithMany()
+                        .WithMany("Incomes")
                         .HasForeignKey("AccountNo")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ExpenseTracker.Model.User", "User")
-                        .WithMany()
+                        .WithMany("Incomes")
                         .HasForeignKey("EmailID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -268,6 +271,22 @@ namespace ExpenseTracker.Migrations
                     b.Navigation("Account");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ExpenseTracker.Model.Account", b =>
+                {
+                    b.Navigation("Expenses");
+
+                    b.Navigation("Incomes");
+                });
+
+            modelBuilder.Entity("ExpenseTracker.Model.User", b =>
+                {
+                    b.Navigation("Accounts");
+
+                    b.Navigation("Expenses");
+
+                    b.Navigation("Incomes");
                 });
 #pragma warning restore 612, 618
         }

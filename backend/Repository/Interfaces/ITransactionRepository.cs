@@ -1,4 +1,6 @@
-﻿using ExpenseTracker.Model.DTO;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using ExpenseTracker.Model.DTO;
 
 namespace ExpenseTracker.Repository.Interfaces
 {

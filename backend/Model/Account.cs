@@ -1,19 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ExpenseTracker.Model
 {
     public class Account
     {
-        [Key] 
+        [Key]
         public string AccountNo { get; set; }
         public string BankName { get; set; }
-        public string BranchName {  get; set; }
+        public string BranchName { get; set; }
         public float Balance { get; set; }
-        public string UserId {  get; set; }
+
+        [ForeignKey("User")]
+        public string UserId { get; set; }
         public User User { get; set; }
 
-        
+       
     }
 }
-
-

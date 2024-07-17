@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpenseTracker.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class UpdatedForigenKey : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -34,6 +34,7 @@ namespace ExpenseTracker.Migrations
                     Password = table.Column<string>(type: "text", nullable: true),
                     Occupation = table.Column<string>(type: "text", nullable: true),
                     MonthlyIncome = table.Column<int>(type: "integer", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     ImageName = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
@@ -48,7 +49,7 @@ namespace ExpenseTracker.Migrations
                     AccountNo = table.Column<string>(type: "text", nullable: false),
                     BankName = table.Column<string>(type: "text", nullable: false),
                     BranchName = table.Column<string>(type: "text", nullable: false),
-                    Balance = table.Column<int>(type: "integer", nullable: false),
+                    Balance = table.Column<float>(type: "real", nullable: false),
                     UserId = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -95,13 +96,21 @@ namespace ExpenseTracker.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ExpenseDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Remarks = table.Column<string>(type: "text", nullable: false),
-                    Amount = table.Column<int>(type: "integer", nullable: false),
-                    UserEmailID = table.Column<string>(type: "text", nullable: false),
-                    CategoryId = table.Column<int>(type: "integer", nullable: false)
+                    Amount = table.Column<float>(type: "real", nullable: false),
+                    NewBalance = table.Column<float>(type: "real", nullable: false),
+                    CategoryId = table.Column<int>(type: "integer", nullable: false),
+                    EmailID = table.Column<string>(type: "text", nullable: false),
+                    AccountNo = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Expenses", x => x.ExpenseId);
+                    table.ForeignKey(
+                        name: "FK_Expenses_Accounts_AccountNo",
+                        column: x => x.AccountNo,
+                        principalTable: "Accounts",
+                        principalColumn: "AccountNo",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Expenses_Categories_CategoryId",
                         column: x => x.CategoryId,
@@ -109,8 +118,8 @@ namespace ExpenseTracker.Migrations
                         principalColumn: "CategoryId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Expenses_Users_UserEmailID",
-                        column: x => x.UserEmailID,
+                        name: "FK_Expenses_Users_EmailID",
+                        column: x => x.EmailID,
                         principalTable: "Users",
                         principalColumn: "EmailID",
                         onDelete: ReferentialAction.Cascade);
@@ -123,39 +132,24 @@ namespace ExpenseTracker.Migrations
                     IncomeId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     IncomeDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    amount = table.Column<int>(type: "integer", nullable: false),
-                    remarks = table.Column<string>(type: "text", nullable: false),
-                    UserEmailID = table.Column<string>(type: "text", nullable: false)
+                    Amount = table.Column<float>(type: "real", nullable: false),
+                    NewBalance = table.Column<float>(type: "real", nullable: false),
+                    Remarks = table.Column<string>(type: "text", nullable: false),
+                    EmailID = table.Column<string>(type: "text", nullable: false),
+                    AccountNo = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Incomes", x => x.IncomeId);
                     table.ForeignKey(
-                        name: "FK_Incomes_Users_UserEmailID",
-                        column: x => x.UserEmailID,
-                        principalTable: "Users",
-                        principalColumn: "EmailID",
+                        name: "FK_Incomes_Accounts_AccountNo",
+                        column: x => x.AccountNo,
+                        principalTable: "Accounts",
+                        principalColumn: "AccountNo",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Transactions",
-                columns: table => new
-                {
-                    TransId = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    TransDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    IncomeExpense = table.Column<bool>(type: "boolean", nullable: false),
-                    Remarks = table.Column<string>(type: "text", nullable: false),
-                    Amount = table.Column<int>(type: "integer", nullable: false),
-                    UserEmailID = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Transactions", x => x.TransId);
                     table.ForeignKey(
-                        name: "FK_Transactions_Users_UserEmailID",
-                        column: x => x.UserEmailID,
+                        name: "FK_Incomes_Users_EmailID",
+                        column: x => x.EmailID,
                         principalTable: "Users",
                         principalColumn: "EmailID",
                         onDelete: ReferentialAction.Cascade);
@@ -172,32 +166,34 @@ namespace ExpenseTracker.Migrations
                 column: "UserEmailID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Expenses_AccountNo",
+                table: "Expenses",
+                column: "AccountNo");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Expenses_CategoryId",
                 table: "Expenses",
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Expenses_UserEmailID",
+                name: "IX_Expenses_EmailID",
                 table: "Expenses",
-                column: "UserEmailID");
+                column: "EmailID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Incomes_UserEmailID",
+                name: "IX_Incomes_AccountNo",
                 table: "Incomes",
-                column: "UserEmailID");
+                column: "AccountNo");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Transactions_UserEmailID",
-                table: "Transactions",
-                column: "UserEmailID");
+                name: "IX_Incomes_EmailID",
+                table: "Incomes",
+                column: "EmailID");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Accounts");
-
             migrationBuilder.DropTable(
                 name: "CategoriesMapUsers");
 
@@ -208,10 +204,10 @@ namespace ExpenseTracker.Migrations
                 name: "Incomes");
 
             migrationBuilder.DropTable(
-                name: "Transactions");
+                name: "Categories");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "Accounts");
 
             migrationBuilder.DropTable(
                 name: "Users");

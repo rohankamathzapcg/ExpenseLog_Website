@@ -23,6 +23,7 @@ namespace ExpenseTracker.Data
         {
             modelBuilder.Entity<CatMapUser>()
                 .HasKey(c => new { c.CategoryId, c.EmailID });
+
         }
 
         }
