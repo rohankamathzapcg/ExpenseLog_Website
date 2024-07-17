@@ -1,5 +1,6 @@
 ﻿using ExpenseTracker.Model;
 using ExpenseTracker.Model.DTO;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseTracker.Repository.Interfaces
 {
@@ -10,6 +11,7 @@ namespace ExpenseTracker.Repository.Interfaces
         Task<Account> DeleteAsync(string EmailId, string accountNo);
         Task<IEnumerable<Account>> GetAllAsync(string EmailId);
         Task<Account> GetAsync(string EmailId, string accountNo);
+        Task<float> GetTotalBalance(string email);
 
     }
 }
