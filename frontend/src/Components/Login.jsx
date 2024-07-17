@@ -9,7 +9,7 @@ const Login = () => {
     const { setIsLoggedIn, setAuthUser } = useAuth();
     const closeButtonRef = useRef(null);
     const location = useLocation();
-    const navigate =useNavigate();
+    const navigate = useNavigate();
 
     const autoCloseClick = () => {
         closeButtonRef.current.click();
@@ -20,11 +20,14 @@ const Login = () => {
         email: "",
         password: "",
         cpassword: "",
-        occupation: ""
+        occupation: "",
+        showPassword: false,
+        showCPassword: false
     });
     const [loginData, setLoginData] = useState({
         email: "",
-        password: ""
+        password: "",
+        showPassword: false
     })
     const [errors, setErrors] = useState({});
 
@@ -97,18 +100,29 @@ const Login = () => {
         setErrors(newFullnameErrors)
         return !newFullnameErrors.fullname;
     }
+
+    const validateLoginEmail = (email) => {
+        const newEmailErrors = {};
+
+        if (!email) {
+            newEmailErrors.emailLogin = 'Email Field is required';
+        }
+        setErrors(newEmailErrors)
+        return !newEmailErrors.emailLogin;
+    }
+
     const validateLoginPassword = (password) => {
         const passwordErrors = {};
 
         if (!password) {
-            passwordErrors.password = 'Password Field is required';
+            passwordErrors.passwordLogin = 'Password Field is required';
         }
         setErrors(passwordErrors)
-        return !passwordErrors.password;
+        return !passwordErrors.passwordLogin;
     }
 
     const handleLoginBtn = () => {
-        if (validateEmail(loginData.email) && validateLoginPassword(loginData.password)) {
+        if (validateLoginEmail(loginData.email) && validateLoginPassword(loginData.password)) {
             // const hashedPassword = bcrypt.hashSync(loginData.password, 10)
             const loginUser = {
                 emailID: loginData.email,
@@ -131,6 +145,7 @@ const Login = () => {
                         setLoginData({
                             email: "",
                             password: "",
+                            showPassword: false
                         })
                         autoCloseClick();
                     }
@@ -176,7 +191,9 @@ const Login = () => {
                                 email: "",
                                 password: "",
                                 occupation: "",
-                                cpassword: ""
+                                cpassword: "",
+                                showPassword: false,
+                                showCPassword: false
                             })
                         } else if (result.status === 200) {
                             console.log(userRegisterData.password)
@@ -198,12 +215,33 @@ const Login = () => {
         }
     }
 
+    const toggleLoginPasswordVisibility = () => {
+        setLoginData((prevState) => ({
+            ...prevState,
+            showPassword: !prevState.showPassword
+        }));
+    }
+
+    const toggleRegisterPasswordVisibility = () => {
+        setUserData((prevState) => ({
+            ...prevState,
+            showPassword: !prevState.showPassword
+        }));
+    }
+
+    const toggleRegisterCPasswordVisibility = () => {
+        setUserData((prevState) => ({
+            ...prevState,
+            showCPassword: !prevState.showCPassword
+        }));
+    }
+
     const handleGoogleLogin = () => {
-        window.location.href="https://localhost:7026/api/SocialAuth/google-login";
+        window.location.href = "https://localhost:7026/api/SocialAuth/google-login";
     }
 
     const handleFaceBookLogin = () => {
-        window.location.href="https://localhost:7026/api/SocialAuth/signin-facebook";
+        window.location.href = "https://localhost:7026/api/SocialAuth/signin-facebook";
     }
     return (
         <>
@@ -245,12 +283,21 @@ const Login = () => {
                             <div className="tab-content signin_tab">
                                 <div className="tab-pane active" id="login" role="tabpanel" aria-labelledby="signin-tab">
                                     <div className="form-group mb-3">
-                                        <input type="text" className={`form-control shadow-none ${errors.email ? 'error' : ''}`} id="userLoginEmail" placeholder='Enter your email-id' autoComplete='off' value={loginData.email} onChange={(e) => setLoginData({ ...loginData, email: e.target.value })} />
-                                        {errors.email === "Email Field is required" ? "" : <div className="validations">{errors.email}</div>}
+                                        <input type="text" className={`form-control shadow-none ${errors.emailLogin ? 'error' : ''}`} id="userLoginEmail" placeholder='Enter your email-id' autoComplete='off' value={loginData.email} onChange={(e) => setLoginData({ ...loginData, email: e.target.value })} />
+                                        {errors.emailLogin === "Email Field is required" ? "" : <div className="validations">{errors.emailLogin}</div>}
                                     </div>
                                     <div className="form-group mb-3">
-                                        <input type="password" className={`form-control shadow-none ${errors.password ? 'error' : ''}`} id="userLoginPassword" placeholder='Enter your password' autoComplete='off' value={loginData.password} onChange={(e) => setLoginData({ ...loginData, password: e.target.value })} />
-                                        {errors.password === "Password Field is required" ? "" : <div className="validations">{errors.password}</div>}
+                                        <div class="input-group">
+                                            <input type={loginData.showPassword ? "text" : "password"} className={`form-control shadow-none ${errors.passwordLogin ? 'error' : ''}`} id="userLoginPassword" placeholder='Enter your password' autoComplete='off' value={loginData.password} onChange={(e) => setLoginData({ ...loginData, password: e.target.value })} />
+                                            <span class="input-group-text" style={{ cursor: "pointer", fontSize: "13px" }} onClick={toggleLoginPasswordVisibility}>
+                                                {loginData.showPassword ? (
+                                                    <i class="bi bi-eye-slash-fill"></i>
+                                                ) : (
+                                                    <i className="bi bi-eye-fill"></i>
+                                                )}
+                                            </span>
+                                        </div>
+                                        {errors.passwordLogin === "Password Field is required" ? "" : <div className="validations">{errors.passwordLogin}</div>}
                                     </div>
                                     <div className="form-group mb-3">
                                         <button type="button" style={{ marginBottom: "20px", width: "100%", backgroundColor: '#012970', color: 'white', fontFamily: '"Merriweather", sans-serif', fontSize: "12px" }} className="btn" onClick={handleLoginBtn}>Login</button>
@@ -263,14 +310,32 @@ const Login = () => {
                                     </div>
                                     <div className="form-group mb-3">
                                         <input type="text" className={`form-control shadow-none ${errors.email ? 'error' : ''}`} id="email" placeholder='Enter your email-id' autoComplete='off' value={userData.email} onChange={(e) => { handleInputChange(e); validateEmail(e.target.value); }} />
-                                        {errors.email === "Email Field is required" ? "" : <div className="validations">{errors.email}</div>}
+                                        {errors.emailRegister === "Email Field is required" ? "" : <div className="validations">{errors.emailRegister}</div>}
                                     </div>
                                     <div className="form-group mb-3">
-                                        <input type="password" className={`form-control shadow-none ${errors.password ? 'error' : ''}`} id="password" placeholder='Enter your password' autoComplete='off' value={userData.password} onChange={(e) => { handleInputChange(e); validatePassword(e.target.value); }} />
+                                        <div class="input-group">
+                                            <input type={userData.showPassword ? "text" : "password"} className={`form-control shadow-none ${errors.password ? 'error' : ''}`} id="password" placeholder='Enter your password' autoComplete='off' value={userData.password} onChange={(e) => { handleInputChange(e); validatePassword(e.target.value); }} />
+                                            <span class="input-group-text" onClick={toggleRegisterPasswordVisibility} style={{ cursor: "pointer", fontSize: "13px" }}>
+                                            {userData.showPassword ? (
+                                                    <i class="bi bi-eye-slash-fill"></i>
+                                                ) : (
+                                                    <i className="bi bi-eye-fill"></i>
+                                                )}
+                                            </span>
+                                        </div>
                                         {errors.password === "Password Field is required" ? "" : <div className="validations">{errors.password}</div>}
                                     </div>
                                     <div className="form-group mb-3">
-                                        <input type="password" className={`form-control shadow-none ${errors.cpassword ? 'error' : ''}`} id="cpassword" placeholder='Enter confirm password' autoComplete='off' value={userData.cpassword} onChange={(e) => { handleInputChange(e) }} />
+                                        <div class="input-group">
+                                            <input type={userData.showCPassword ? "text" : "password"} className={`form-control shadow-none ${errors.cpassword ? 'error' : ''}`} id="cpassword" placeholder='Enter confirm password' autoComplete='off' value={userData.cpassword} onChange={(e) => { handleInputChange(e) }} />
+                                            <span class="input-group-text" onClick={toggleRegisterCPasswordVisibility} style={{ cursor: "pointer", fontSize: "13px" }}>
+                                                {userData.showCPassword ? (
+                                                    <i class="bi bi-eye-slash-fill"></i>
+                                                ) : (
+                                                    <i className="bi bi-eye-fill"></i>
+                                                )}
+                                            </span>
+                                        </div>
                                         {errors.cpassword === "Confirm password Field is required" ? "" : <div className="validations">{errors.cpassword}</div>}
                                     </div>
                                     <div className="form-group mb-3">
