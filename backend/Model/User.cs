@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ExpenseTracker.Model
 {
@@ -7,15 +6,13 @@ namespace ExpenseTracker.Model
     {
         [Key]
         public string EmailID { get; set; }
-        public string? FullName { get; set; } = null;
-        public string? Password {  get; set; }
-        public string? Occupation {  get; set; } = null;
+        public string? FullName { get; set; }
+        public string? Password { get; set; }
+        public string? Occupation { get; set; }
         public int MonthlyIncome { get; set; } = 0;
-
         public DateTime CreatedDate { get; set; }
         public string? ImageName { get; set; }
 
-
+ 
     }
-    
 }

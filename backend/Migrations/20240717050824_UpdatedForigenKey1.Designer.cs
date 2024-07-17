@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpenseTracker.Migrations
 {
     [DbContext(typeof(ExpenseTrackerDbContext))]
-    [Migration("20240701051811_Initial")]
-    partial class Initial
+    [Migration("20240717050824_UpdatedForigenKey1")]
+    partial class UpdatedForigenKey1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -30,8 +30,8 @@ namespace ExpenseTracker.Migrations
                     b.Property<string>("AccountNo")
                         .HasColumnType("text");
 
-                    b.Property<int>("Balance")
-                        .HasColumnType("integer");
+                    b.Property<float>("Balance")
+                        .HasColumnType("real");
 
                     b.Property<string>("BankName")
                         .IsRequired()
@@ -96,28 +96,37 @@ namespace ExpenseTracker.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ExpenseId"));
 
-                    b.Property<int>("Amount")
-                        .HasColumnType("integer");
+                    b.Property<string>("AccountNo")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<float>("Amount")
+                        .HasColumnType("real");
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("integer");
 
+                    b.Property<string>("EmailID")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("ExpenseDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<float>("NewBalance")
+                        .HasColumnType("real");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("UserEmailID")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.HasKey("ExpenseId");
+
+                    b.HasIndex("AccountNo");
 
                     b.HasIndex("CategoryId");
 
-                    b.HasIndex("UserEmailID");
+                    b.HasIndex("EmailID");
 
                     b.ToTable("Expenses");
                 });
@@ -130,63 +139,43 @@ namespace ExpenseTracker.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("IncomeId"));
 
+                    b.Property<string>("AccountNo")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<float>("Amount")
+                        .HasColumnType("real");
+
+                    b.Property<string>("EmailID")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("IncomeDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<string>("UserEmailID")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("amount")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("remarks")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("IncomeId");
-
-                    b.HasIndex("UserEmailID");
-
-                    b.ToTable("Incomes");
-                });
-
-            modelBuilder.Entity("ExpenseTracker.Model.Transaction", b =>
-                {
-                    b.Property<int>("TransId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("TransId"));
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("IncomeExpense")
-                        .HasColumnType("boolean");
+                    b.Property<float>("NewBalance")
+                        .HasColumnType("real");
 
                     b.Property<string>("Remarks")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("TransDate")
-                        .HasColumnType("timestamp with time zone");
+                    b.HasKey("IncomeId");
 
-                    b.Property<string>("UserEmailID")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.HasIndex("AccountNo");
 
-                    b.HasKey("TransId");
+                    b.HasIndex("EmailID");
 
-                    b.HasIndex("UserEmailID");
-
-                    b.ToTable("Transactions");
+                    b.ToTable("Incomes");
                 });
 
             modelBuilder.Entity("ExpenseTracker.Model.User", b =>
                 {
                     b.Property<string>("EmailID")
                         .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("FullName")
                         .HasColumnType("text");
@@ -211,7 +200,7 @@ namespace ExpenseTracker.Migrations
             modelBuilder.Entity("ExpenseTracker.Model.Account", b =>
                 {
                     b.HasOne("ExpenseTracker.Model.User", "User")
-                        .WithMany()
+                        .WithMany("Accounts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -240,6 +229,12 @@ namespace ExpenseTracker.Migrations
 
             modelBuilder.Entity("ExpenseTracker.Model.Expense", b =>
                 {
+                    b.HasOne("ExpenseTracker.Model.Account", "Account")
+                        .WithMany("Expenses")
+                        .HasForeignKey("AccountNo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("ExpenseTracker.Model.Category", "Category")
                         .WithMany()
                         .HasForeignKey("CategoryId")
@@ -247,10 +242,12 @@ namespace ExpenseTracker.Migrations
                         .IsRequired();
 
                     b.HasOne("ExpenseTracker.Model.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserEmailID")
+                        .WithMany("Expenses")
+                        .HasForeignKey("EmailID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Account");
 
                     b.Navigation("Category");
 
@@ -259,24 +256,37 @@ namespace ExpenseTracker.Migrations
 
             modelBuilder.Entity("ExpenseTracker.Model.Income", b =>
                 {
-                    b.HasOne("ExpenseTracker.Model.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserEmailID")
+                    b.HasOne("ExpenseTracker.Model.Account", "Account")
+                        .WithMany("Incomes")
+                        .HasForeignKey("AccountNo")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("ExpenseTracker.Model.User", "User")
+                        .WithMany("Incomes")
+                        .HasForeignKey("EmailID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Account");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ExpenseTracker.Model.Transaction", b =>
+            modelBuilder.Entity("ExpenseTracker.Model.Account", b =>
                 {
-                    b.HasOne("ExpenseTracker.Model.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserEmailID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Expenses");
 
-                    b.Navigation("User");
+                    b.Navigation("Incomes");
+                });
+
+            modelBuilder.Entity("ExpenseTracker.Model.User", b =>
+                {
+                    b.Navigation("Accounts");
+
+                    b.Navigation("Expenses");
+
+                    b.Navigation("Incomes");
                 });
 #pragma warning restore 612, 618
         }

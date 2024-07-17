@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
 
 namespace ExpenseTracker.Model.DTO
 {
@@ -12,6 +12,7 @@ namespace ExpenseTracker.Model.DTO
         public string AccountNo { get; set; }
         public string EmailId { get; set; }
         public string Type { get; set; } // "Income" or "Expense"
+        public int? CategoryId { get; set; } // Nullable to accommodate income transactions
+        public string CategoryName { get; set; } // Category name for display or filtering
     }
-
 }

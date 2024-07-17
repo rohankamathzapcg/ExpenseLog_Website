@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ExpenseTracker.Data;
-using ExpenseTracker.Model;
 using ExpenseTracker.Model.DTO;
 using ExpenseTracker.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -22,22 +20,22 @@ namespace ExpenseTracker.Repository.Implementation
         public async Task<IEnumerable<TransactionDTO>> GetTransactionsAsync(string email)
         {
             var incomes = await _context.Incomes
-                .Where(i => i.EmailId == email)
+                .Where(i => i.EmailID == email)
                 .Select(i => new TransactionDTO
                 {
                     TransactionId = i.IncomeId,
                     Date = i.IncomeDate,
-                    Amount = i.amount,
+                    Amount = i.Amount,
                     NewBalance = i.NewBalance,
-                    Remarks = i.remarks,
-                    AccountNo = i.AccountNO,
-                    EmailId = i.EmailId,
+                    Remarks = i.Remarks,
+                    AccountNo = i.AccountNo,
+                    EmailId = i.EmailID,
                     Type = "Income"
                 })
                 .ToListAsync();
 
             var expenses = await _context.Expenses
-                .Where(e => e.EmailId == email)
+                .Where(e => e.EmailID == email)
                 .Select(e => new TransactionDTO
                 {
                     TransactionId = e.ExpenseId,
@@ -45,9 +43,11 @@ namespace ExpenseTracker.Repository.Implementation
                     Amount = e.Amount,
                     NewBalance = e.NewBalance,
                     Remarks = e.Remarks,
-                    AccountNo = e.AccountNO,
-                    EmailId = e.EmailId,
-                    Type = "Expense"
+                    AccountNo = e.AccountNo,
+                    EmailId = e.EmailID,
+                    Type = "Expense",
+                    CategoryId = e.CategoryId,
+                    CategoryName = e.Category.CategoryName // Include category name from Expense
                 })
                 .ToListAsync();
 

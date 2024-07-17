@@ -23,7 +23,7 @@ namespace ExpenseTracker.Repository.Implementation
         {
             return await _context.Incomes.Include(i => i.User)
                                          .Include(i => i.Account)
-                                         .Where(i => i.EmailId == email)
+                                         .Where(i => i.EmailID == email)
                                          .ToListAsync();
         }
 
@@ -45,10 +45,10 @@ namespace ExpenseTracker.Repository.Implementation
             var income = new Income
             {
                 IncomeDate = incomeDto.IncomeDate,
-                amount = incomeDto.amount,
-                remarks = incomeDto.remarks,
+                Amount = incomeDto.amount,
+                Remarks = incomeDto.remarks,
                 Account = account,
-                EmailId = incomeDto.EmailId,
+                //EmailID = incomeDto.EmailId,
                 User = user,
                 NewBalance = account.Balance + incomeDto.amount
             };
@@ -86,11 +86,11 @@ namespace ExpenseTracker.Repository.Implementation
             }
 
             // Reverse the balance update for the old amount
-            account.Balance -= income.amount;
+            account.Balance -= income.Amount;
 
             income.IncomeDate = incomeDto.IncomeDate;
-            income.amount = incomeDto.amount;
-            income.remarks = incomeDto.remarks;
+            income.Amount = incomeDto.amount;
+            income.Remarks = incomeDto.remarks;
             income.Account = account;
             income.User = user;
             income.NewBalance = account.Balance + incomeDto.amount;
