@@ -17,37 +17,64 @@ namespace ExpenseTracker.Repository.Implementation
 
     {
         private readonly ExpenseTrackerDbContext _context;
+        private readonly IIncomeRepository _incomeRepository;
 
-        public AccountRepository(ExpenseTrackerDbContext context)
+        public AccountRepository(ExpenseTrackerDbContext context, IIncomeRepository incomeRepository)
         {
             _context = context;
+            _incomeRepository=incomeRepository;
         }
-        public async Task<AccountDTO> AddAsync(AccountDTO account)
+
+        public async Task<AccountDTO> AddAsync(AccountDTO accountDto)
         {
-
             var existingUser = await _context.Users
-                    .FirstOrDefaultAsync(acc => acc.EmailID == account.EmailID);
-            var existingAccount = await _context.Accounts
-                   .FirstOrDefaultAsync(acc => acc.AccountNo == account.AccountNo);
-            if (existingUser == null )
-            {
-                return null;
+                    .FirstOrDefaultAsync(u => u.EmailID == accountDto.EmailID);
 
-            }
-            if (existingAccount == null && existingUser != null)
+            if (existingUser == null)
             {
-                var userAccount = new Account
+                return null; // Return null or throw exception as needed
+            }
+
+            var existingAccount = await _context.Accounts
+                   .FirstOrDefaultAsync(a => a.AccountNo == accountDto.AccountNo);
+
+            if (existingAccount == null)
+            {
+                // Create new account
+                var newAccount = new Account
                 {
-                    AccountNo = account.AccountNo,
-                    Balance = account.Balance,
-                    BankName = account.BankName,
-                    BranchName = account.BranchName,
+                    AccountNo = accountDto.AccountNo,
+                    Balance = accountDto.Balance,
+                    BankName = accountDto.BankName,
+                    BranchName = accountDto.BranchName,
                     User = existingUser
                 };
-                _context.Accounts.Add(userAccount);
+
+                _context.Accounts.Add(newAccount);
                 await _context.SaveChangesAsync();
+
+                // Add income record for initial balance if necessary
+                if (accountDto.Balance > 0)
+                {
+                    var incomeDto = new IncomeDTO
+                    {
+                        IncomeDate = DateTime.UtcNow, // Example: using UTC time for consistency
+                        amount = accountDto.Balance,
+                        remarks = "Initial deposit for account " + accountDto.AccountNo,
+                        EmailId = accountDto.EmailID,
+                        AccountNo = accountDto.AccountNo
+                    };
+
+                    await _incomeRepository.AddAsync(incomeDto);
+                }
+
+                return accountDto;
             }
-            return account;
+            else
+            {
+                // Handle existing account scenario (return null, throw exception, etc.)
+                return null;
+            }
         }
 
         public async Task<AccountDTO> UpdateAsync(AccountDTO account)
@@ -103,6 +130,15 @@ namespace ExpenseTracker.Repository.Implementation
                 return null;
             }
         }
+        public async Task<float> GetTotalBalance(string emailId)
+        {
+            var totalBalance = await _context.Accounts
+                .Where(acc => acc.UserId == emailId)
+                .SumAsync(acc => acc.Balance);
 
+            return totalBalance;
+        }
+
+       
     }
 }

@@ -1,5 +1,6 @@
 ﻿using ExpenseTracker.Model;
 using ExpenseTracker.Model.DTO;
+using ExpenseTracker.Repository.Implementation;
 using ExpenseTracker.Repository.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -66,6 +67,19 @@ namespace ExpenseTracker.Controllers
                 return Ok(deletedUser);
             }
             return Accepted("application/json","Invalid account details");
+        }
+
+        [HttpGet("balance/{email}")]
+        public async Task<ActionResult<float>> GetTotalBalance(string email)
+        {
+            var totalBalance = await _repository.GetTotalBalance(email);
+
+            if (totalBalance == 0)
+            {
+                return NotFound();
+            }
+
+            return Ok(totalBalance);
         }
 
     }
