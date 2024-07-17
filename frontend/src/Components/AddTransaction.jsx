@@ -42,7 +42,7 @@ const AddTransaction = () => {
             newErrors.transactionType = "* Transaction type is required";
         }
         if (!transactionDetails.transactionDate) {
-            newErrors.transactionDate = "* Date is required";
+            newErrors.transactionDate = "* Transaction Date is required";
         }
         if (transactionDetails.transactionType === "Expense" && !transactionDetails.category) {
             newErrors.category = "* Category is required for expense mode";
@@ -62,6 +62,7 @@ const AddTransaction = () => {
 
     const handleSubmitBtn = () => {
         if (validateForm()) {
+            console.log(categories)
             console.log("Form submitted", transactionDetails);
         }
     }

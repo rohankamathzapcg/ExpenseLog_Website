@@ -732,3 +732,8 @@ Profile CSS
   font-size: 30px;
   color: white;
 }
+
+.accordion-button.collapsed {
+  background-color: white;
+  color: black;
+}
