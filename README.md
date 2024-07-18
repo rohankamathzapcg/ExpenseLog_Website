@@ -32,6 +32,7 @@ git clone https://github.com/rohankamathzapcg/ExpenseTracker_Website
 # Navigate to the website directory
 ```bash
 cd ExpenseTracker_Website
+cd frontend
 ```
 # Install dependencies
 ```bash
@@ -59,6 +60,7 @@ npm install -g expo-cli
 # Navigate to the mobile app directory
 ```bash 
 cd ExpenseTracker_Website
+cd frontend-mobile
 ```
 
 # Install dependencies
