@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { useAuth } from '../Context/AuthContext';
+import { toast } from 'react-toastify';
+
 const AddTransaction = () => {
     const [transactionDetails, setTransactionDetails] = useState({
         transactionType: "",
@@ -34,7 +36,7 @@ const AddTransaction = () => {
                 .catch(err => console.log(err))
         }
 
-    }, [authUser]);
+    }, [authUser,]);
 
     const validateForm = () => {
         const newErrors = {};
@@ -62,8 +64,71 @@ const AddTransaction = () => {
 
     const handleSubmitBtn = () => {
         if (validateForm()) {
-            console.log(categories)
-            console.log("Form submitted", transactionDetails);
+            if (transactionDetails.transactionType === "Income") {
+                const incomeTransaction = {
+                    incomeDate: transactionDetails.transacionDate,
+                    amount: transactionDetails.amount,
+                    remarks: transactionDetails.remarks,
+                    accountNo: transactionDetails.bAccount,
+                    emailId: authUser.emailID
+                }
+                axios.post("https://localhost:7026/api/Income", incomeTransaction)
+                    .then((result) => {
+                        if (result.status === 201) {
+                            toast.success("Income Transaction Added Successfully", {
+                                theme: "dark",
+                                autoClose: 1000,
+                            });
+                            setTransactionDetails({
+                                transactionType: "",
+                                transacionDate: "",
+                                tCategory: "",
+                                bAccount: "",
+                                remarks: "",
+                                amount: 0
+                            })
+                        } else if (result.status === 200) {
+                            toast.error(result.data, {
+                                theme: "dark",
+                                autoClose: 1000,
+                            });
+                        }
+                    })
+                    .catch((err) => console.log(err))
+            } else {
+                const expenseTransaction = {
+                    expenseDate: transactionDetails.transacionDate,
+                    categoryId: transactionDetails.tCategory,
+                    amount: transactionDetails.amount,
+                    remarks: transactionDetails.remarks,
+                    accountNo: transactionDetails.bAccount,
+                    emailId: authUser.emailID
+                }
+
+                axios.post("https://localhost:7026/api/Expense", expenseTransaction)
+                    .then((result) => {
+                        if (result.status === 201) {
+                            toast.success("Expense Transaction Added Successfully", {
+                                theme: "dark",
+                                autoClose: 1000,
+                            });
+                            setTransactionDetails({
+                                transactionType: "",
+                                transacionDate: "",
+                                tCategory: "",
+                                bAccount: "",
+                                remarks: "",
+                                amount: 0
+                            })
+                        } else if (result.status === 200) {
+                            toast.error(result.data, {
+                                theme: "dark",
+                                autoClose: 1000,
+                            });
+                        }
+                    })
+                    .catch((err) => console.log(err))
+            }
         }
     }
     return (
@@ -102,7 +167,7 @@ const AddTransaction = () => {
                                             {
                                                 categories.map((items, index) => {
                                                     return (
-                                                        <option key={index} value={items.catName}>{items.catName}</option>
+                                                        <option key={index} value={items.categoryId}>{items.catName}</option>
                                                     )
                                                 })
                                             }

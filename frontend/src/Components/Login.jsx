@@ -196,7 +196,6 @@ const Login = () => {
                                 showCPassword: false
                             })
                         } else if (result.status === 200) {
-                            console.log(userRegisterData.password)
                             toast.error(result.data, {
                                 theme: "dark",
                                 autoClose: 1000,
@@ -287,11 +286,11 @@ const Login = () => {
                                         {errors.emailLogin === "Email Field is required" ? "" : <div className="validations">{errors.emailLogin}</div>}
                                     </div>
                                     <div className="form-group mb-3">
-                                        <div class="input-group">
+                                        <div className="input-group">
                                             <input type={loginData.showPassword ? "text" : "password"} className={`form-control shadow-none ${errors.passwordLogin ? 'error' : ''}`} id="userLoginPassword" placeholder='Enter your password' autoComplete='off' value={loginData.password} onChange={(e) => setLoginData({ ...loginData, password: e.target.value })} />
-                                            <span class="input-group-text" style={{ cursor: "pointer", fontSize: "13px" }} onClick={toggleLoginPasswordVisibility}>
+                                            <span className="input-group-text" style={{ cursor: "pointer", fontSize: "13px" }} onClick={toggleLoginPasswordVisibility}>
                                                 {loginData.showPassword ? (
-                                                    <i class="bi bi-eye-slash-fill"></i>
+                                                    <i className="bi bi-eye-slash-fill"></i>
                                                 ) : (
                                                     <i className="bi bi-eye-fill"></i>
                                                 )}
@@ -313,11 +312,11 @@ const Login = () => {
                                         {errors.emailRegister === "Email Field is required" ? "" : <div className="validations">{errors.emailRegister}</div>}
                                     </div>
                                     <div className="form-group mb-3">
-                                        <div class="input-group">
+                                        <div className="input-group">
                                             <input type={userData.showPassword ? "text" : "password"} className={`form-control shadow-none ${errors.password ? 'error' : ''}`} id="password" placeholder='Enter your password' autoComplete='off' value={userData.password} onChange={(e) => { handleInputChange(e); validatePassword(e.target.value); }} />
-                                            <span class="input-group-text" onClick={toggleRegisterPasswordVisibility} style={{ cursor: "pointer", fontSize: "13px" }}>
+                                            <span className="input-group-text" onClick={toggleRegisterPasswordVisibility} style={{ cursor: "pointer", fontSize: "13px" }}>
                                             {userData.showPassword ? (
-                                                    <i class="bi bi-eye-slash-fill"></i>
+                                                    <i className="bi bi-eye-slash-fill"></i>
                                                 ) : (
                                                     <i className="bi bi-eye-fill"></i>
                                                 )}
@@ -326,11 +325,11 @@ const Login = () => {
                                         {errors.password === "Password Field is required" ? "" : <div className="validations">{errors.password}</div>}
                                     </div>
                                     <div className="form-group mb-3">
-                                        <div class="input-group">
+                                        <div className="input-group">
                                             <input type={userData.showCPassword ? "text" : "password"} className={`form-control shadow-none ${errors.cpassword ? 'error' : ''}`} id="cpassword" placeholder='Enter confirm password' autoComplete='off' value={userData.cpassword} onChange={(e) => { handleInputChange(e) }} />
-                                            <span class="input-group-text" onClick={toggleRegisterCPasswordVisibility} style={{ cursor: "pointer", fontSize: "13px" }}>
+                                            <span className="input-group-text" onClick={toggleRegisterCPasswordVisibility} style={{ cursor: "pointer", fontSize: "13px" }}>
                                                 {userData.showCPassword ? (
-                                                    <i class="bi bi-eye-slash-fill"></i>
+                                                    <i className="bi bi-eye-slash-fill"></i>
                                                 ) : (
                                                     <i className="bi bi-eye-fill"></i>
                                                 )}

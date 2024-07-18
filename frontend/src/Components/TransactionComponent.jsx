@@ -1,6 +1,13 @@
-import React from 'react'
+
+import React, { useEffect } from 'react'
+import { fetchUsers } from '../api/users';
+import { useAuth } from '../Context/AuthContext';
 
 const TransactionComponent = (props) => {
+    const { authUser } = useAuth();
+    useEffect(() => {
+        fetchUsers(authUser.emailID)
+    })
 
     return (
         <>
@@ -8,23 +15,26 @@ const TransactionComponent = (props) => {
                 <table className="table table-bordered text-center">
                     <thead>
                         <tr>
-                            <th scope="col">Id</th>
-                            <th scope="col">First Name</th>
-                            <th scope="col">Email-Id</th>
-                            <th scope="col">Gender</th>
-                            <th scope="col">Mobile Number</th>
-
+                            <th scope="col">Transaction ID</th>
+                            <th scope="col">Transaction Date</th>
+                            <th scope="col">Account Number</th>
+                            <th scope="col">Amount (₹)</th>
+                            <th scope="col">Remarks</th>
+                            <th scope="col">Transaction Type</th>
+                            <th scope="col">Balance</th>
                         </tr>
                     </thead>
                     <tbody>
                         {
-                            props.users.map((user, index) => (
+                            props.users.map((transactions, index) => (
                                 <tr key={index}>
-                                    <th scope="row">{user.id}</th>
-                                    <td>{user.first_name}</td>
-                                    <td>{user.email}</td>
-                                    <td>{user.gender}</td>
-                                    <td>{user.mobile_no}</td>
+                                    <th scope="row">T100{transactions.transactionId}</th>
+                                    <td>{transactions.date}</td>
+                                    <td>{transactions.accountNo}</td>
+                                    <td>{transactions.amount}</td>
+                                    <td>{transactions.remarks}</td>
+                                    <td>{transactions.type}</td>
+                                    <td>{transactions.newBalance}</td>
                                 </tr>
                             ))
                         }

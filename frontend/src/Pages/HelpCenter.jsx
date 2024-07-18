@@ -53,17 +53,17 @@ const HelpCenter = () => {
                 </div>
                 <div className="profilesetting container col-12 mt-4 mx-0 p-4 rounded shadow-sm border">
                     <h2 className="h4 h-sm-5">FAQ</h2>
-                    <div class="accordion" id="accordionExample">
+                    <div className="accordion" id="accordionExample">
                         {
                             FAQ.map((items, index) => (
-                                <div key={index} class="accordion-item">
-                                    <h2 class="accordion-header">
-                                        <button class="accordion-button shadow-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target={`#collapse${index}`} aria-expanded="true" aria-controls={`collapse${index}`}>
+                                <div key={index} className="accordion-item">
+                                    <h2 className="accordion-header">
+                                        <button className="accordion-button shadow-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target={`#collapse${index}`} aria-expanded="true" aria-controls={`collapse${index}`}>
                                             {items.question}
                                         </button>
                                     </h2>
                                     <div id={`collapse${index}`} className={`accordion-collapse collapse ${index === 0 ? 'show' : ''}`} data-bs-parent="#accordionExample">
-                                        <div class="accordion-body" style={{ fontFamily: '"Merriweather", sans-serif', fontSize: "13px" }}>
+                                        <div className="accordion-body" style={{ fontFamily: '"Merriweather", sans-serif', fontSize: "13px" }}>
                                             {items.answer}
                                         </div>
                                     </div>
