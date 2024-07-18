@@ -58,7 +58,7 @@ npm install -g expo-cli
 
 # Navigate to the mobile app directory
 ```bash 
-cd mobile-app
+cd ExpenseTracker_Website
 ```
 
 # Install dependencies
