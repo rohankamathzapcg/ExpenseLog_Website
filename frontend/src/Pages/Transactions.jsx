@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import TransactionComponent from '../Components/TransactionComponent';
 import { getUsers, getLength } from '../api/users';
 import { returnPaginationRange } from '../utils/paginationUtils';
-import { toast , ToastContainer} from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import AddTransaction from '../Components/AddTransaction';
 
 const Transactions = () => {
@@ -37,7 +37,7 @@ const Transactions = () => {
   }
   return (
     <>
-    <ToastContainer />
+      <ToastContainer />
       <main id="main" className='main'>
         <AddTransaction />
         <div className='pagetitle'>
