@@ -24,13 +24,17 @@ This Expense Tracker application helps users manage their finances by categorizi
 - .NET Core SDK installed
 
 #### Frontend (ReactJS with Bootstrap)
+
 ```bash
 # Clone the repository
 git clone https://github.com/your/repository.git
+
 # Navigate to the website directory
 cd website
+
 # Install dependencies
 npm install
+
 # Start the development server
 npm start
  
@@ -41,6 +45,7 @@ npm start
 ### Prerequisites for React Native
 1. **Node.js and npm/yarn installed**: Ensure you have Node.js and npm (or yarn) installed. You can download them from [Node.js official website](https://nodejs.org/). 
 2. **Expo CLI installed**: Install Expo CLI globally by running the following command:    
+
 ```bash 
 npm install -g expo-cli
 3. **Android Studio (for Android emulator)**: Download and install Android Studio from the official website. Ensure you have the Android SDK and a virtual device set up.
@@ -49,8 +54,10 @@ npm install -g expo-cli
 
 # Navigate to the mobile app directory
 cd mobile-app
+
 # Install dependencies
 npm install
+
 # Start the Expo development server
 npm start
  
