@@ -44,7 +44,7 @@ namespace ExpenseTracker.Repository.Implementation
                 var newAccount = new Account
                 {
                     AccountNo = accountDto.AccountNo,
-                    Balance = accountDto.Balance,
+                    Balance = 0,
                     BankName = accountDto.BankName,
                     BranchName = accountDto.BranchName,
                     User = existingUser
@@ -59,7 +59,7 @@ namespace ExpenseTracker.Repository.Implementation
                     var incomeDto = new IncomeDTO
                     {
                         IncomeDate = DateTime.UtcNow, // Example: using UTC time for consistency
-                        amount = 0,
+                        amount = accountDto.Balance,
                         remarks = "Account Added",
                         EmailId = accountDto.EmailID,
                         AccountNo = accountDto.AccountNo
