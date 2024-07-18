@@ -50,7 +50,7 @@ namespace ExpenseTracker.Repository.Implementation
 
             var expense = new Expense
             {
-                ExpenseDate = expenseDto.ExpenseDate,
+                ExpenseDate = expenseDto.ExpenseDate.ToUniversalTime(),
                 Amount = expenseDto.Amount,
                 Remarks = expenseDto.Remarks,
                 Account = account,
@@ -102,7 +102,7 @@ namespace ExpenseTracker.Repository.Implementation
             account.Balance += expense.Amount;
 
             // Update the expense entity
-            expense.ExpenseDate = expenseDto.ExpenseDate;
+            expense.ExpenseDate = expenseDto.ExpenseDate.ToUniversalTime();
             expense.Amount = expenseDto.Amount;
             expense.Remarks = expenseDto.Remarks;
             expense.Account = account;

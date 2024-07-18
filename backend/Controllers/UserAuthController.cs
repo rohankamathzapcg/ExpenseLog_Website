@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ExpenseTracker.Data;
 using ExpenseTracker.Model;
 using ExpenseTracker.Repository.Interfaces;
+using ExpenseTracker.Repository.Implementation;
 
 namespace ExpenseTracker.Controllers
 {
@@ -109,6 +110,30 @@ namespace ExpenseTracker.Controllers
                     return Ok(user);
                 }
 
+            }
+        }
+        [HttpPost("upload-profile-image")]
+        public async Task<IActionResult> UploadProfileImage(string emailId, [FromForm] FileStream image)
+        {
+            // Save the image file to a location or storage service
+            var imageName = Guid.NewGuid().ToString(); // Generate a unique name or use the original file name
+            // Example: Save to a folder on the server
+            var imagePath = Path.Combine("../Data/img", imageName);
+            using (var stream = new FileStream(imagePath, FileMode.Create))
+            {
+                await image.CopyToAsync(stream);
+            }
+
+            // Save image name or path to the database
+            var updatedUser = await _repository.UploadProfileImageAsync(emailId, imageName);
+
+            if (updatedUser != null)
+            {
+                return Ok(updatedUser); // Return updated user with image name/path
+            }
+            else
+            {
+                return NotFound(); // Handle not found scenario
             }
         }
     }

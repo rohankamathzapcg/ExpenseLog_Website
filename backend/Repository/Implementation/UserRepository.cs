@@ -45,6 +45,18 @@ namespace ExpenseTracker.Repository.Implementation
             return user;
         }
 
+        public async Task<User> UploadProfileImageAsync(string emailId, string imageName)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.EmailID == emailId);
+
+            if (user != null)
+            {
+                user.ImageName = imageName;
+                await _context.SaveChangesAsync();
+            }
+
+            return user;
+        }
         public async Task<User> AddSocialAsync(User user)
         {
 

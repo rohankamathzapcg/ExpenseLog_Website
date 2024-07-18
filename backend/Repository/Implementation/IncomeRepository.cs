@@ -44,7 +44,7 @@ namespace ExpenseTracker.Repository.Implementation
 
             var income = new Income
             {
-                IncomeDate = incomeDto.IncomeDate,
+                IncomeDate = incomeDto.IncomeDate.ToUniversalTime(),
                 Amount = incomeDto.amount,
                 Remarks = incomeDto.remarks,
                 Account = account,
@@ -88,7 +88,7 @@ namespace ExpenseTracker.Repository.Implementation
             // Reverse the balance update for the old amount
             account.Balance -= income.Amount;
 
-            income.IncomeDate = incomeDto.IncomeDate;
+            income.IncomeDate = incomeDto.IncomeDate.ToUniversalTime();
             income.Amount = incomeDto.amount;
             income.Remarks = incomeDto.remarks;
             income.Account = account;

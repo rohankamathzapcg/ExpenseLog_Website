@@ -59,8 +59,8 @@ namespace ExpenseTracker.Repository.Implementation
                     var incomeDto = new IncomeDTO
                     {
                         IncomeDate = DateTime.UtcNow, // Example: using UTC time for consistency
-                        amount = accountDto.Balance,
-                        remarks = "Initial deposit for account " + accountDto.AccountNo,
+                        amount = 0,
+                        remarks = "Account Added",
                         EmailId = accountDto.EmailID,
                         AccountNo = accountDto.AccountNo
                     };
