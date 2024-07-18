@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 const AddTransaction = () => {
     const [transactionDetails, setTransactionDetails] = useState({
         transactionType: "",
-        transacionDate: "",
+        transactionDate: "",
         tCategory: "",
         bAccount: "",
         remarks: "",
@@ -66,12 +66,13 @@ const AddTransaction = () => {
         if (validateForm()) {
             if (transactionDetails.transactionType === "Income") {
                 const incomeTransaction = {
-                    incomeDate: transactionDetails.transacionDate,
+                    incomeDate: transactionDetails.transactionDate,
                     amount: transactionDetails.amount,
                     remarks: transactionDetails.remarks,
                     accountNo: transactionDetails.bAccount,
                     emailId: authUser.emailID
                 }
+                console.log("hi",transactionDetails)
                 axios.post("https://localhost:7026/api/Income", incomeTransaction)
                     .then((result) => {
                         if (result.status === 201) {
@@ -97,7 +98,7 @@ const AddTransaction = () => {
                     .catch((err) => console.log(err))
             } else {
                 const expenseTransaction = {
-                    expenseDate: transactionDetails.transacionDate,
+                    expenseDate: transactionDetails.transactionDate,
                     categoryId: transactionDetails.tCategory,
                     amount: transactionDetails.amount,
                     remarks: transactionDetails.remarks,
