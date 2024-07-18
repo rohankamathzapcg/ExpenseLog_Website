@@ -23,22 +23,25 @@ This Expense Tracker application helps users manage their finances by categorizi
 - PostgreSQL database setup
 - .NET Core SDK installed
 
-#### Frontend (ReactJS with Bootstrap)
+#### Frontend-Setup (Website)
 
-```bash
 # Clone the repository
-git clone https://github.com/your/repository.git
-
+```bash
+git clone https://github.com/rohankamathzapcg/ExpenseTracker_Website
+```
 # Navigate to the website directory
-cd website
-
+```bash
+cd ExpenseTracker_Website
+```
 # Install dependencies
+```bash
 npm install
-
+```
 # Start the development server
+```bash
 npm start
- 
-## Frontend (Mobile)
+```
+### Frontend-Setup (Mobile App)
 
 ### Setup Instructions
 
@@ -48,19 +51,25 @@ npm start
 
 ```bash 
 npm install -g expo-cli
+```
 3. **Android Studio (for Android emulator)**: Download and install Android Studio from the official website. Ensure you have the Android SDK and a virtual device set up.
 4. **Xcode (for iOS simulator)**: Download and install Xcode from the Mac App Store. Ensure you have the necessary Xcode Command Line Tools installed.
 5. **Expo Go app installed on your mobile device**: Download and install the Expo Go app from the App Store (iOS) or Google Play Store (Android).
 
 # Navigate to the mobile app directory
+```bash 
 cd mobile-app
+```
 
 # Install dependencies
+```bash
 npm install
+```
 
 # Start the Expo development server
+```bash
 npm start
- 
+```
 # Running the App on an Emulator or Physical Device
  
 ## For iOS:
