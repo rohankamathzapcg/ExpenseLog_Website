@@ -1,37 +1,38 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, Image, StyleSheet } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
-
-// Keep the splash screen visible while we fetch resources
-SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
 
   useEffect(() => {
     async function prepare() {
-      // Simulate a task by waiting for 2 seconds
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      setAppIsReady(true);
+      try {
+        // Displaying for 5 secs
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setAppIsReady(true);
+      }
     }
     prepare();
   }, []);
 
-  const onLayoutRootView = useCallback(async () => {
+  const onLayoutRootView = async () => {
     if (appIsReady) {
       // Hide the splash screen
       await SplashScreen.hideAsync();
     }
-  }, [appIsReady]);
+  };
 
   if (!appIsReady) {
     return (
       <View style={styles.splashContainer}>
         <Image
-          source={require("./assets/welcome.jpg")}
+          source={require("./assets/exp-logo.png")}
           style={styles.splashImage}
         />
-        <Text style={styles.splashText}>Welcome to MyApp!</Text>
       </View>
     );
   }
@@ -41,7 +42,7 @@ export default function App() {
       onLayout={onLayoutRootView}
       style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
     >
-      <Text>Hello World!</Text>
+      <Text>Welcome to Expense Tracker</Text>
     </View>
   );
 }
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff", // Background color for the splash screen
+    backgroundColor: "#012970",
   },
   splashImage: {
     width: 200,
@@ -61,6 +62,7 @@ const styles = StyleSheet.create({
   splashText: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#333",
+    color: "#ffffff",
+    marginTop: 20,
   },
 });
