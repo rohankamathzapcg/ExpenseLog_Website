@@ -6,6 +6,7 @@ namespace ExpenseTracker.Model.DTO
     {
         public int TransactionId { get; set; }
         public DateTime Date { get; set; }
+        public string FormattedDate { get; set; }
         public float Amount { get; set; }
         public float NewBalance { get; set; }
         public string Remarks { get; set; }

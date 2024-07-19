@@ -25,6 +25,7 @@ namespace ExpenseTracker.Repository.Implementation
                 {
                     TransactionId = i.IncomeId,
                     Date = i.IncomeDate,
+                    FormattedDate = i.IncomeDate.ToString("yyyy-MM-dd HH:mm:ss"),
                     Amount = i.Amount,
                     NewBalance = i.NewBalance,
                     Remarks = i.Remarks,
@@ -40,6 +41,7 @@ namespace ExpenseTracker.Repository.Implementation
                 {
                     TransactionId = e.ExpenseId,
                     Date = e.ExpenseDate,
+                    FormattedDate = e.ExpenseDate.ToString("yyyy-MM-dd"),
                     Amount = e.Amount,
                     NewBalance = e.NewBalance,
                     Remarks = e.Remarks,
