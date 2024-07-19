@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, Image, StyleSheet } from "react-native";
+import { Text, View, Image, StyleSheet, StatusBar } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
+
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import DashboardScreen from "./Screens/DashboardScreen";
+import LoginScreen from "./Screens/LoginScreen";
+import RegisterScreen from "./Screens/RegisterScreen";
+
+const Drawer = createDrawerNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [appIsReady, setAppIsReady] = useState(false);
@@ -37,13 +47,34 @@ export default function App() {
     );
   }
 
+  const DrawerNavigator = () => (
+    <Drawer.Navigator>
+      <Drawer.Screen name="Dashboard" component={DashboardScreen} />
+    </Drawer.Navigator>
+  );
   return (
-    <View
-      onLayout={onLayoutRootView}
-      style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-    >
-      <Text>Welcome to Expense Tracker</Text>
-    </View>
+    <>
+      <StatusBar />
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Login">
+          <Stack.Screen
+            name="Main"
+            component={DrawerNavigator}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Login"
+            component={LoginScreen}
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="Register"
+            component={RegisterScreen}
+            options={{ headerShown: false }}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </>
   );
 }
 
@@ -55,14 +86,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#012970",
   },
   splashImage: {
-    width: 200,
-    height: 200,
+    width: 300,
+    height: 300,
     marginBottom: 20,
-  },
-  splashText: {
-    fontSize: 24,
-    fontWeight: "bold",
-    color: "#ffffff",
-    marginTop: 20,
   },
 });
