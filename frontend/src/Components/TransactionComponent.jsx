@@ -29,7 +29,7 @@ const TransactionComponent = (props) => {
                             props.users.map((transactions, index) => (
                                 <tr key={index}>
                                     <th scope="row">T100{transactions.transactionId}</th>
-                                    <td>{transactions.date}</td>
+                                    <td>{transactions.formattedDate}</td>
                                     <td>{transactions.accountNo}</td>
                                     <td>{transactions.amount}</td>
                                     <td>{transactions.remarks}</td>
