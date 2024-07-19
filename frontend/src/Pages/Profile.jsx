@@ -36,6 +36,7 @@ const Profile = () => {
                     setBalance(0)
                 }
             })
+            .catch((err)=>console.log(err))
 
     }, [authUser.emailID])
 
