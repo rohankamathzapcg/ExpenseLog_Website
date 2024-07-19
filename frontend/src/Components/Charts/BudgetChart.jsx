@@ -1,5 +1,4 @@
-import * as echarts from 'echarts';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, CartesianGrid } from 'recharts'
 
 const BudgetChart = () => {

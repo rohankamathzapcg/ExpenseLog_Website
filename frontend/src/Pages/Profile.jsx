@@ -6,7 +6,7 @@ import axios from 'axios';
 
 const Profile = () => {
     const { authUser, setAuthUser } = useAuth();
-    const [image, setImage] = useState("");
+    // const [image, setImage] = useState("");
     const [balance,setBalance]=useState(0);
     const [userDetails, setuserDetails] = useState({
         emailID: "",
