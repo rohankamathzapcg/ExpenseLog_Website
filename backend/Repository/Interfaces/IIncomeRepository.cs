@@ -8,5 +8,8 @@ namespace ExpenseTracker.Repository.Interfaces
         Task<IEnumerable<Income>> GetByEmailAsync(string email);
         Task <IncomeDTO> AddAsync(IncomeDTO income);
         Task<IncomeDTO>UpdateAsync(IncomeDTO income);
+
+        Task<IncomeResponse> GetTotalIncomeByMonthAsync(string email, int year, int month);
+
     }
 }

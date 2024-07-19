@@ -119,5 +119,18 @@ namespace ExpenseTracker.Repository.Implementation
             expenseDto.NewBalance = expense.NewBalance;
             return expenseDto;
         }
+        public async Task<ExpenseResponse> GetTotalExpenseByMonthAsync(string email, int year, int month)
+        {
+            var total = new ExpenseResponse
+            {
+                Amount = await _context.Expenses
+                             .Where(e => e.EmailID == email &&
+                            e.ExpenseDate.Year == year &&
+                            e.ExpenseDate.Month == month)
+                            .SumAsync(e => e.Amount)
+            };
+            return total;
+        }
+       
     }
 }

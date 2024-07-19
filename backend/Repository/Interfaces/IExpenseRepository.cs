@@ -8,6 +8,7 @@ namespace ExpenseTracker.Repository.Interfaces
         Task<IEnumerable<Expense>> GetByEmailAsync(string email);
         Task<ExpenseDTO> AddAsync(ExpenseDTO income);
         Task<ExpenseDTO> UpdateAsync(ExpenseDTO income);
+        Task<ExpenseResponse> GetTotalExpenseByMonthAsync(string email, int year, int month);
     }
 
 }

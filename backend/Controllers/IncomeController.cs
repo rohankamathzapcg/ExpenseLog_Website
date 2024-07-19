@@ -6,6 +6,7 @@ using ExpenseTracker.Data;
 using ExpenseTracker.Model;
 using ExpenseTracker.Model.DTO;
 using ExpenseTracker.Repository.Interfaces;
+using ExpenseTracker.Repository.Implementation;
 
 namespace ExpenseTracker.Controllers
 {
@@ -65,6 +66,25 @@ namespace ExpenseTracker.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+        [HttpGet("total-income")]
+        public async Task<ActionResult<float>> GetTotalIncome(string email, int year, int month)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return BadRequest("Email is required.");
+            }
+
+            try
+            {
+                var totalIncome = await _incomeRepository.GetTotalIncomeByMonthAsync(email, year, month);
+                return Ok(totalIncome);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception (not shown here for brevity)
+                return StatusCode(500, "Internal server error");
             }
         }
     }
