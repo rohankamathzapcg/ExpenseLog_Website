@@ -10,4 +10,8 @@
         public string AccountNo { get; set; }
         public string EmailId { get; set; }
     }
+    public class IncomeResponse
+    {
+        public float Amount;
+    }
 }

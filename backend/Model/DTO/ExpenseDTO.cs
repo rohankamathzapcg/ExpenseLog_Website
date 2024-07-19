@@ -13,4 +13,8 @@ namespace ExpenseTracker.Model.DTO
         public float Amount { get; set; }
         public float NewBalance { get; set; }
     }
+    public class ExpenseResponse
+    { 
+        public float Amount { get; set; }
+    }
 }

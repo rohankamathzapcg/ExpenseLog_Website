@@ -22,6 +22,7 @@ namespace ExpenseTracker.Repository.Implementation
         {
             var istTimeZone = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
 
+            // Retrieve and transform incomes
             var incomes = await _context.Incomes
                 .Where(i => i.EmailID == email)
                 .Join(_context.Accounts,
@@ -30,7 +31,7 @@ namespace ExpenseTracker.Repository.Implementation
                     (income, account) => new TransactionDTO
                     {
                         TransactionId = income.IncomeId,
-                        Date = TimeZoneInfo.ConvertTimeFromUtc(income.IncomeDate, istTimeZone),
+                        Date = income.IncomeDate,
                         FormattedDate = TimeZoneInfo.ConvertTimeFromUtc(income.IncomeDate, istTimeZone).ToString("yyyy-MM-dd"),
                         Amount = income.Amount,
                         NewBalance = income.NewBalance,
@@ -42,6 +43,7 @@ namespace ExpenseTracker.Repository.Implementation
                     })
                 .ToListAsync();
 
+            // Retrieve and transform expenses
             var expenses = await _context.Expenses
                 .Where(e => e.EmailID == email)
                 .Join(_context.Accounts,
@@ -50,7 +52,7 @@ namespace ExpenseTracker.Repository.Implementation
                     (expense, account) => new TransactionDTO
                     {
                         TransactionId = expense.ExpenseId,
-                        Date = TimeZoneInfo.ConvertTimeFromUtc(expense.ExpenseDate, istTimeZone),
+                        Date = expense.ExpenseDate,
                         FormattedDate = TimeZoneInfo.ConvertTimeFromUtc(expense.ExpenseDate, istTimeZone).ToString("yyyy-MM-dd"),
                         Amount = expense.Amount,
                         NewBalance = expense.NewBalance,
@@ -64,11 +66,14 @@ namespace ExpenseTracker.Repository.Implementation
                     })
                 .ToListAsync();
 
+            // Combine and sort transactions in-memory
             var transactions = incomes.Concat(expenses)
-                .OrderBy(t => t.Date)
+                .OrderByDescending(t => t.Date)  // Sort by date, latest first
                 .ToList();
 
             return transactions;
         }
+
+
     }
 }
