@@ -42,7 +42,7 @@ const Main = () => {
                         setBalance(0)
                     }
                 })
-                .catch((err)=>console.log(err))
+                .catch((err) => console.log(err))
 
         }
 
