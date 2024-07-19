@@ -5,10 +5,13 @@ import OverallChart from '../Components/Charts/OverallChart';
 import { ToastContainer } from 'react-toastify';
 import axios from 'axios';
 import { useAuth } from '../Context/AuthContext';
+import { color } from 'echarts';
 
 const Main = () => {
     const [myCategory, setMyCategory] = useState([]);
     const [myRecentTransactions, setMyRecentTransactions] = useState([]);
+    const [balance, setBalance] = useState(0);
+
     const { authUser } = useAuth();
 
     useEffect(() => {
@@ -22,9 +25,27 @@ const Main = () => {
                     }
                 })
                 .catch(err => console.log(err));
-        }
 
-        setMyRecentTransactions([])
+            axios.get(`https://localhost:7026/api/Transaction/${authUser.emailID}`)
+                .then((result) => {
+                    if (result.status === 200) {
+                        setMyRecentTransactions(result.data);
+                    } else if (result.status === 202) {
+                        setMyRecentTransactions([])
+                    }
+                })
+                .catch(err => console.log(err))
+
+            axios.get(`https://localhost:7026/api/Account/balance/${authUser.emailID}`)
+                .then((result) => {
+                    if (result.status === 200) {
+                        setBalance(result.data);
+                    } else if (result.status === 202) {
+                        setBalance(0)
+                    }
+                })
+
+        }
 
     }, [authUser]);
 
@@ -50,8 +71,8 @@ const Main = () => {
                                                 <div className='card-icon rounded-circle d-flex align-items-center justify-content-center'>
                                                     <i className='bi bi-wallet2' />
                                                 </div>
-                                                <div className='ps-3'>
-                                                    <h5 style={{ fontFamily: "Roboto, sans-serif" }}>&#8377;&nbsp;0.00</h5>
+                                                <div className='ps-2'>
+                                                    <h5 style={{ fontFamily: "Roboto, sans-serif" }}>&#8377;{balance}.00</h5>
                                                 </div>
                                             </div>
                                         </div>
@@ -114,7 +135,7 @@ const Main = () => {
                                 <div className='card-body'>
                                     <h5 className='card-title mb-4'>My Expense Categories</h5>
                                     {myCategory.length === 0 ? (
-                                        <p className='text-center' style={{ color: "grey",fontSize: "14px" }}>No Records Found</p>
+                                        <p className='text-center' style={{ color: "grey", fontSize: "14px" }}>No Records Found</p>
                                     ) : (
                                         <div className="row">
                                             <div className="col">
@@ -137,26 +158,14 @@ const Main = () => {
                                             myRecentTransactions.length === 0 ? (
                                                 <p className='text-center' style={{ color: "grey" }}>No Records Found</p>
                                             ) : (
-                                                <>
+                                                myRecentTransactions.slice(0, 5).map((transaction, index) => (
                                                     <div className="activity-item d-flex">
-                                                        <div className='activite-label'>Income</div>
-                                                        <i className='bi bi-circle-fill activity-badge align-self-start'></i>
-                                                        <div className='activity-content'>20000</div>
+                                                        <div className='activite-label'>{transaction.type}</div>
+                                                        <i className='bi bi-circle-fill activity-badge align-self-start' ></i>
+                                                        <div className='activity-content'><span style={{ color: transaction.type === "Expense" ? "red" : "green" }}>&#8377; {transaction.amount}</span> - {transaction.type === "Income" ? <span style={{ color: "grey", fontSize: "12px" }}>{transaction.remarks}</span> : <span style={{ color: "grey", fontSize: "12px" }}>{transaction.categoryName}</span>}</div>
                                                     </div>
-                                                    <div className="activity-item d-flex">
-                                                        <div className='activite-label'>Income</div>
-                                                        <i className='bi bi-circle-fill activity-badge align-self-start'></i>
-                                                        <div className='activity-content'>20000</div>
-                                                    </div>
-                                                    <div className="activity-item d-flex">
-                                                        <div className='activite-label'>Income1</div>
-                                                        <i className='bi bi-circle-fill activity-badge align-self-start'></i>
-                                                        <div className='activity-content'>20000</div>
-                                                    </div>
-                                                </>
-                                            )
-                                        }
-
+                                                ))
+                                            )}
                                     </div>
                                 </div>
                             </div>

@@ -7,6 +7,7 @@ import axios from 'axios';
 const Profile = () => {
     const { authUser, setAuthUser } = useAuth();
     const [image, setImage] = useState("");
+    const [balance,setBalance]=useState(0);
     const [userDetails, setuserDetails] = useState({
         emailID: "",
         fullName: "",
@@ -14,7 +15,7 @@ const Profile = () => {
         occupation: "",
         monthlyIncome: 0,
         photo: "",
-        balance: 0
+        balance: balance
     })
 
     useEffect(() => {
@@ -26,6 +27,16 @@ const Profile = () => {
             .catch((error) => {
                 console.log(error)
             })
+        
+            axios.get(`https://localhost:7026/api/Account/balance/${authUser.emailID}`)
+            .then((result)=>{
+                if (result.status === 200) {
+                    setBalance(result.data);
+                } else if (result.status === 202) {
+                    setBalance(0)
+                }
+            })
+
     }, [authUser.emailID])
 
     const handleEditBtn = () => {
@@ -84,7 +95,7 @@ const Profile = () => {
                                 </div>
                                 <div className="form-group d-flex align-items-center mb-3">
                                     <label className='col-4'>Balance:</label>
-                                    <input type="text" style={{ fontFamily: '"Merriweather", sans-serif', fontSize: "13px" }} className="form-control shadow-none" placeholder='Enter your balance' autoComplete='off' value={userDetails.balance} onChange={(e) => setuserDetails({ ...userDetails, balance: e.target.value })} />
+                                    <input type="text" style={{ fontFamily: '"Merriweather", sans-serif', fontSize: "13px" }} disabled className="form-control shadow-none" placeholder='Enter your balance' autoComplete='off' value={balance} />
                                 </div>
                                 <div className="form-group mb-3">
                                     <button type="button" style={{ marginBottom: "20px", width: "100%", backgroundColor: '#012970', color: 'white', fontFamily: '"Merriweather", sans-serif', fontSize: "12px" }} className="btn" onClick={handleEditBtn}>Update</button>

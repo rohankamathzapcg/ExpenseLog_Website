@@ -1,15 +1,36 @@
 import React, { useEffect, useState } from 'react';
 import TransactionComponent from '../Components/TransactionComponent';
-import { getUsers, getLength } from '../api/users';
+import { getUsers, getLength, fetchUsers } from '../api/users';
 import { returnPaginationRange } from '../utils/paginationUtils';
 import { ToastContainer } from 'react-toastify';
 import AddTransaction from '../Components/AddTransaction';
+import { useAuth } from '../Context/AuthContext';
+import axios from 'axios';
 
 const Transactions = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(5);
+  const [transaction, setTransactions] = useState([])
+  const { authUser } = useAuth();
 
-  let totalPage = Math.ceil(getLength() / limit)
+  // useEffect(() => {
+  //   if (authUser && authUser.emailID) {
+  //     fetchUsers(authUser.emailID).then((data) => {
+  //       setTransactions(data)
+  //     })
+  //   }
+
+  // }, [authUser])
+
+  useEffect(() => {
+    axios.get(`https://localhost:7026/api/Transaction/${authUser.emailID}`)
+      .then((result) => {
+        setTransactions(result.data)
+      })
+      .catch((err) => console.log(err))
+  })
+
+  let totalPage = Math.ceil(transaction.length / limit)
   let arrayPagination = returnPaginationRange(totalPage, page, limit, 1);
   let pageNo;
   if (page <= totalPage) {
@@ -18,6 +39,7 @@ const Transactions = () => {
     setPage(totalPage);
     pageNo = page;
   }
+
   const handlePageChange = (value) => {
     if (value === "&laquo;" || value === "... ") {
       setPage(1);
@@ -35,6 +57,19 @@ const Transactions = () => {
       setPage(value)
     }
   }
+
+  const getCurrentPageTransactions = () => {
+    if (!transaction || transaction.length === 0) {
+      return [];
+    }
+
+    const start = Math.max((page - 1) * limit, 0); // Prevent negative start index
+    const end = Math.min(start + limit, transaction.length); // Ensure end does not exceed transactions length
+    console.log('start', start); // Debugging line
+    console.log('end', end); // Debugging line
+    console.log('jjj', transaction.slice(start, end)); // Debugging line
+    return transaction.slice(start, end);
+  };
   return (
     <>
       <ToastContainer />
@@ -53,7 +88,7 @@ const Transactions = () => {
           </button>
         </div>
 
-        <TransactionComponent users={getUsers(page, limit)} />
+        <TransactionComponent users={getCurrentPageTransactions()} />
         <div className='pagination-container'>
           {/* Setting Page Limit */}
           <select onChange={(e) => setLimit(e.target.value)} className="select">
