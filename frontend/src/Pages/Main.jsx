@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import LineChartReport from '../Components/Charts/LineChartReport';
 import BudgetChart from '../Components/Charts/BudgetChart';
 import OverallChart from '../Components/Charts/OverallChart';
 import { ToastContainer } from 'react-toastify';
 import axios from 'axios';
 import { useAuth } from '../Context/AuthContext';
-import { color } from 'echarts';
 
 const Main = () => {
     const [myCategory, setMyCategory] = useState([]);
@@ -73,7 +71,7 @@ const Main = () => {
                                                     <i className='bi bi-wallet2' />
                                                 </div>
                                                 <div className='ps-2'>
-                                                    <h5 style={{ fontFamily: "Roboto, sans-serif" }}>&#8377;{balance}.00</h5>
+                                                    <h5 style={{ fontFamily: "Roboto, sans-serif" }}>&#8377;{balance}.0</h5>
                                                 </div>
                                             </div>
                                         </div>

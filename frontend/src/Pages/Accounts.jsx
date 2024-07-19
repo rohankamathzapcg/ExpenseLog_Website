@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import AccountCards from '../Components/AccountCards'
 import AddAccount from '../Components/AddAccount'
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import axios from 'axios';
 import { useAuth } from '../Context/AuthContext';
 
