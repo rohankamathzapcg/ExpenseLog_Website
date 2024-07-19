@@ -14,6 +14,7 @@ Custome scrollbar
 ******************/
 ::-webkit-scrollbar {
   width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
@@ -27,7 +28,7 @@ Custome scrollbar
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #0d54d7;
+  background: #012970;
 }
 
 * {
@@ -450,6 +451,9 @@ Card CSS
 
 .dashboard .activity {
   font-size: 14px;
+  max-height: 150px;
+  overflow: scroll;
+  font-family: "Merriweather", sans-serif;
 }
 
 .dashboard .activity .activity-item .activite-label {

@@ -42,6 +42,16 @@ const AddAccount = () => {
         return true;
     };
 
+    const HandleCloseAccount = () => {
+        setErrors({});
+        setUserBankDetails({
+            accountNo: "",
+            bankName: "",
+            branchName: "",
+            balance: 0,
+        })
+    }
+
     const validateAccNo = () => {
         const accoNoError = {};
         const accountNoRegex = /^\d{11,16}$/;
@@ -94,7 +104,7 @@ const AddAccount = () => {
                     <div className="modal-content">
                         <div className="modal-header">
                             <h1 className="modal-title fs-5" id="exampleModalLabel">Add New Account</h1>
-                            <button ref={closeButtonRef} type="button" className="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button ref={closeButtonRef} type="button" className="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close" onClick={HandleCloseAccount}></button>
                         </div>
                         <div className="modal-body">
                             <div className="input-group">

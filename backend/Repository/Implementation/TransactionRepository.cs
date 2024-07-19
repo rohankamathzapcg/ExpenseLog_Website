@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ExpenseTracker.Data;
@@ -20,52 +19,42 @@ namespace ExpenseTracker.Repository.Implementation
 
         public async Task<IEnumerable<TransactionDTO>> GetTransactionsAsync(string email)
         {
-            var istTimeZone = TimeZoneInfo.FindSystemTimeZoneById("India Standard Time");
-
             var incomes = await _context.Incomes
                 .Where(i => i.EmailID == email)
-                .Join(_context.Accounts,
-                    income => income.AccountNo,
-                    account => account.AccountNo,
-                    (income, account) => new TransactionDTO
-                    {
-                        TransactionId = income.IncomeId,
-                        Date = TimeZoneInfo.ConvertTimeFromUtc(income.IncomeDate, istTimeZone),
-                        FormattedDate = TimeZoneInfo.ConvertTimeFromUtc(income.IncomeDate, istTimeZone).ToString("yyyy-MM-dd"),
-                        Amount = income.Amount,
-                        NewBalance = income.NewBalance,
-                        Remarks = income.Remarks,
-                        AccountNo = income.AccountNo,
-                        EmailId = income.EmailID,
-                        Type = "Income",
-                        BankName = account.BankName
-                    })
+                .Select(i => new TransactionDTO
+                {
+                    TransactionId = i.IncomeId,
+                    Date = i.IncomeDate,
+                    FormattedDate = i.IncomeDate.ToString("yyyy-MM-dd"),
+                    Amount = i.Amount,
+                    NewBalance = i.NewBalance,
+                    Remarks = i.Remarks,
+                    AccountNo = i.AccountNo,
+                    EmailId = i.EmailID,
+                    Type = "Income"
+                })
                 .ToListAsync();
 
             var expenses = await _context.Expenses
                 .Where(e => e.EmailID == email)
-                .Join(_context.Accounts,
-                    expense => expense.AccountNo,
-                    account => account.AccountNo,
-                    (expense, account) => new TransactionDTO
-                    {
-                        TransactionId = expense.ExpenseId,
-                        Date = TimeZoneInfo.ConvertTimeFromUtc(expense.ExpenseDate, istTimeZone),
-                        FormattedDate = TimeZoneInfo.ConvertTimeFromUtc(expense.ExpenseDate, istTimeZone).ToString("yyyy-MM-dd"),
-                        Amount = expense.Amount,
-                        NewBalance = expense.NewBalance,
-                        Remarks = expense.Remarks,
-                        AccountNo = expense.AccountNo,
-                        EmailId = expense.EmailID,
-                        Type = "Expense",
-                        CategoryId = expense.CategoryId,
-                        CategoryName = expense.Category.CategoryName,
-                        BankName = account.BankName
-                    })
+                .Select(e => new TransactionDTO
+                {
+                    TransactionId = e.ExpenseId,
+                    Date = e.ExpenseDate,
+                    FormattedDate = e.ExpenseDate.ToString("yyyy-MM-dd"),
+                    Amount = e.Amount,
+                    NewBalance = e.NewBalance,
+                    Remarks = e.Remarks,
+                    AccountNo = e.AccountNo,
+                    EmailId = e.EmailID,
+                    Type = "Expense",
+                    CategoryId = e.CategoryId,
+                    CategoryName = e.Category.CategoryName // Include category name from Expense
+                })
                 .ToListAsync();
 
             var transactions = incomes.Concat(expenses)
-                .OrderBy(t => t.Date)
+                .OrderByDescending(t => t.Date)
                 .ToList();
 
             return transactions;

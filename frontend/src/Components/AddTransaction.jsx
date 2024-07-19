@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import axios from 'axios';
 import { useAuth } from '../Context/AuthContext';
 import { toast } from 'react-toastify';
@@ -16,6 +16,7 @@ const AddTransaction = () => {
     const [errors, setErrors] = useState({});
     const [accounts, setAccounts] = useState([]);
     const [categories, setCategories] = useState([]);
+    const closeButtonRef = useRef(null);
 
     useEffect(() => {
         if (authUser && authUser.emailID) {
@@ -46,8 +47,8 @@ const AddTransaction = () => {
         if (!transactionDetails.transactionDate) {
             newErrors.transactionDate = "* Transaction Date is required";
         }
-        if (transactionDetails.transactionType === "Expense" && !transactionDetails.category) {
-            newErrors.category = "* Category is required for expense mode";
+        if (transactionDetails.transactionType === "Expense" && !transactionDetails.tCategory) {
+            newErrors.tCategory = "* Category is required for expense mode";
         }
         if (!transactionDetails.bAccount) {
             newErrors.bAccount = "* Bank account is required";
@@ -62,6 +63,22 @@ const AddTransaction = () => {
         return Object.keys(newErrors).length === 0;
     };
 
+    const autoCloseClick = () => {
+        closeButtonRef.current.click();
+    }
+
+    const HandleCloseTransaction = () => {
+        setErrors({});
+        setTransactionDetails({
+            transactionType: "",
+            transacionDate: "",
+            tCategory: "",
+            bAccount: "",
+            remarks: "",
+            amount: 0
+        })
+    }
+
     const handleSubmitBtn = () => {
         if (validateForm()) {
             if (transactionDetails.transactionType === "Income") {
@@ -72,7 +89,6 @@ const AddTransaction = () => {
                     accountNo: transactionDetails.bAccount,
                     emailId: authUser.emailID
                 }
-                console.log("hi",transactionDetails)
                 axios.post("https://localhost:7026/api/Income", incomeTransaction)
                     .then((result) => {
                         if (result.status === 201) {
@@ -130,6 +146,7 @@ const AddTransaction = () => {
                     })
                     .catch((err) => console.log(err))
             }
+            autoCloseClick();
         }
     }
     return (
@@ -139,7 +156,7 @@ const AddTransaction = () => {
                     <div className="modal-content">
                         <div className="modal-header">
                             <h1 className="modal-title fs-5" id="addTransactionsModalLabel">Add Transactions</h1>
-                            <button type="button" className="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button ref={closeButtonRef} type="button" className="btn-close shadow-none" data-bs-dismiss="modal" aria-label="Close" onClick={HandleCloseTransaction}></button>
                         </div>
                         <div className="modal-body">
 
@@ -200,7 +217,7 @@ const AddTransaction = () => {
                             </div>
                             {errors.amount && <div className="validations mb-2">{errors.amount}</div>}
 
-                            <div className="input-group mb-2">
+                            <div className="input-group mb-3">
                                 <span className="input-group-text" id="basic-addon1"><i className="bi bi-info-circle-fill"></i></span>
                                 <textarea className="form-control shadow-none" style={{ fontSize: "13px", fontFamily: '"Merriweather", sans-serif' }} placeholder="Leave your remarks here" id="floatingTextarea" value={transactionDetails.remarks} onChange={(e) => setTransactionDetails({ ...transactionDetails, remarks: e.target.value })}></textarea>
                             </div>
