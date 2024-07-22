@@ -12,6 +12,15 @@ import { useCustomFonts } from "./fonts/useCustomFont";
 import AppLoading from "expo-app-loading";
 import CategoriesScreen from "./Screens/CategoriesScreen";
 import TransactionScreen from "./Screens/TransactionScreen";
+import AccountScreen from "./Screens/AccountScreen";
+import AnalyticsScreen from "./Screens/AnalyticsScreen";
+import HelpCenterScreen from "./Screens/HelpCenterScreen";
+import {
+  MaterialCommunityIcons,
+  Entypo,
+  Ionicons,
+  AntDesign,
+} from "@expo/vector-icons";
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -74,18 +83,75 @@ export default function App() {
     >
       <Drawer.Screen
         name="Dashboard"
-        options={{ title: "Dashboard" }}
+        options={{
+          title: "Dashboard",
+          drawerIcon: () => (
+            <MaterialCommunityIcons
+              name="view-dashboard-outline"
+              size={22}
+              color="#012970"
+            />
+          ),
+        }}
         component={DashboardScreen}
       />
       <Drawer.Screen
         name="Categories"
-        options={{ title: "Expense Categories" }}
+        options={{
+          title: "Expense Categories",
+          drawerIcon: () => (
+            <MaterialCommunityIcons
+              name="format-list-checkbox"
+              size={22}
+              color="#012970"
+            />
+          ),
+        }}
         component={CategoriesScreen}
       />
       <Drawer.Screen
         name="Transactions"
-        options={{ title: "Transactions" }}
+        options={{
+          title: "Transactions",
+          drawerIcon: () => (
+            <Entypo name="back-in-time" size={22} color="#012970" />
+          ),
+        }}
         component={TransactionScreen}
+      />
+      <Drawer.Screen
+        name="Accounts"
+        options={{
+          title: "My Accounts",
+          drawerIcon: () => (
+            <MaterialCommunityIcons
+              name="bank-outline"
+              size={22}
+              color="#012970"
+            />
+          ),
+        }}
+        component={AccountScreen}
+      />
+      <Drawer.Screen
+        name="Analytics"
+        options={{
+          title: "Analytics",
+          drawerIcon: () => (
+            <Ionicons name="bar-chart-outline" size={22} color="#012970" />
+          ),
+        }}
+        component={AnalyticsScreen}
+      />
+      <Drawer.Screen
+        name="HelpCenter"
+        options={{
+          title: "Help Center",
+          drawerIcon: () => (
+            <AntDesign name="customerservice" size={22} color="#012970" />
+          ),
+        }}
+        component={HelpCenterScreen}
       />
     </Drawer.Navigator>
   );
