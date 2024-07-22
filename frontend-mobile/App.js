@@ -21,6 +21,7 @@ import {
   Ionicons,
   AntDesign,
 } from "@expo/vector-icons";
+import OnboardingScreen from "./Screens/OnboardingScreen";
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -160,7 +161,12 @@ export default function App() {
     <>
       <StatusBar backgroundColor="#012970" />
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Login">
+        <Stack.Navigator initialRouteName="Onboarding">
+          <Stack.Screen
+            name="Onboarding"
+            component={OnboardingScreen}
+            options={{ headerShown: false }}
+          />
           <Stack.Screen
             name="Main"
             component={DrawerNavigator}
