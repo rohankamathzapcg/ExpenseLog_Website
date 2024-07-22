@@ -741,3 +741,39 @@ Profile CSS
   background-color: white;
   color: black;
 }
+
+.dashboard .filter {
+  position: absolute;
+  right: 0px;
+  top: 15px;
+}
+
+.dashboard .filter .icon {
+  color: #012970;
+  padding-right: 20px;
+  padding-bottom: 5px;
+  transition: 0.3s;
+  font-size: 16px;
+}
+
+.dashboard .filter .dropdown-header {
+  padding: 8px 15px 0 15px;
+}
+
+.dashboard .filter .dropdown-header h6 {
+  padding: 0;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: #012970;
+}
+
+.dashboard .filter .dropdown-item {
+  font-family: "Merriweather", sans-serif;
+  padding: 5px 15px;
+  font-size: 12px;
+}
+
+.dashboard .filter .dropdown-item:hover {
+  color: #012970;
+}

@@ -15,10 +15,8 @@ import facebook from "../assets/facebook-icon.png";
 
 const LoginScreen = ({ navigation }) => {
   const [fontsLoaded] = useCustomFonts();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const [errors, setErrors] = useState({});
 
   if (!fontsLoaded) {
@@ -59,12 +57,6 @@ const LoginScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <Text style={styles.orText}>OR</Text>
-      {/* <TextInput
-        style={styles.input}
-        placeholder="Enter your email-id"
-        value={email}
-        onChangeText={setEmail}
-      /> */}
       <TextInput
         style={[styles.input, errors.emailLogin && styles.errorInput]}
         placeholder="Enter your email-id"
@@ -108,6 +100,7 @@ const LoginScreen = ({ navigation }) => {
 
 export default LoginScreen;
 
+// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
