@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import * as echarts from 'echarts';
-const OverallChart = () => {
-    useEffect(()=>{
+
+const OverallChart = (props) => {
+    useEffect(() => {
         echarts.init(document.querySelector('#overallTracker')).setOption({
             tooltip: {
                 trigger: 'item',
@@ -13,8 +14,8 @@ const OverallChart = () => {
             series: [
                 {
                     name: 'Access From',
-                    type:'pie',
-                    radius: ["50%","70%"],
+                    type: 'pie',
+                    radius: ["50%", "70%"],
                     avoidLabelOverlap: false,
                     label: {
                         show: false,
@@ -32,23 +33,23 @@ const OverallChart = () => {
                     },
                     data: [
                         {
-                            value: 1048,
+                            value: props.expenseValue,
                             name: 'Expense',
                         },
                         {
-                            value: 735,
+                            value: props.incomeValue,
                             name: 'Income',
                         },
                     ],
                 },
             ],
         });
-    }, [])
-  return (
-    <>
-      <div id="overallTracker" className='echart' style={{ minHeight: '312px' }}></div>
-    </>
-  );
+    })
+    return (
+        <>
+            <div id="overallTracker" className='echart' style={{ minHeight: '312px' }}></div>
+        </>
+    );
 }
 
 export default OverallChart;

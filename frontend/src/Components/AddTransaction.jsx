@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 const AddTransaction = () => {
     const [transactionDetails, setTransactionDetails] = useState({
         transactionType: "",
-        transactionDate: "",
+        transactionDate: new Date().toISOString().split('T')[0],
         tCategory: "",
         bAccount: "",
         remarks: "",
