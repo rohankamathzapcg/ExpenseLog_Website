@@ -11,7 +11,6 @@ const Main = () => {
     const [balance, setBalance] = useState(0);
     const [expense, setExpense] = useState(0);
     const [income, setIncome] = useState(0);
-
     const { authUser } = useAuth();
 
     useEffect(() => {
@@ -142,7 +141,7 @@ const Main = () => {
                                 <div className='col-12'>
                                     <div className='card'>
                                         <div className="card-body pb-0">
-                                            <h5 className='card-title mb-4'>Budget Report</h5>
+                                            <h5 className='card-title mb-4'>This Month's Expenses</h5>
                                             <BudgetChart />
                                         </div>
                                     </div>
@@ -197,7 +196,7 @@ const Main = () => {
 
                             <div className='card'>
                                 <div className="card-body pb-0">
-                                    <h5 className='card-title mb-4'>Overall Tracker</h5>
+                                    <h5 className='card-title mb-4'>This Month's Income V/S Expense</h5>
                                     <OverallChart expenseValue={expense} incomeValue={income} />
                                 </div>
                             </div>
