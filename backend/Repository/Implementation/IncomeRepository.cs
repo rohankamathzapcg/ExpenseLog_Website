@@ -103,14 +103,7 @@ namespace ExpenseTracker.Repository.Implementation
             incomeDto.NewBalance = income.NewBalance;
             return incomeDto;
         }
-        public async Task<float> GetTotalIncomeByMonthAsync(string email, int year, int month)
-        {
-            return  await _context.Incomes
-                          .Where(i => i.EmailID == email &&
-                          i.IncomeDate.Year == year &&
-                          i.IncomeDate.Month == month)
-                          .SumAsync(i => i.Amount);
-        }
+     
 
     }
 }

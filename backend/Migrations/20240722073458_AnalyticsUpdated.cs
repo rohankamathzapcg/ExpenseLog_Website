@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ExpenseTracker.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdatedForigenKey : Migration
+    public partial class AnalyticsUpdated : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -68,24 +68,6 @@ namespace ExpenseTracker.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [HttpGet("total-income")]
-        public async Task<ActionResult<float>> GetTotalIncome(string email, int year, int month)
-        {
-            if (string.IsNullOrEmpty(email))
-            {
-                return BadRequest("Email is required.");
-            }
-
-            try
-            {
-                var totalIncome = await _incomeRepository.GetTotalIncomeByMonthAsync(email, year, month);
-                return Ok(totalIncome);
-            }
-            catch (Exception ex)
-            {
-                // Log the exception (not shown here for brevity)
-                return StatusCode(500, "Internal server error");
-            }
-        }
+        
     }
 }
