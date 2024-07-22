@@ -9,10 +9,16 @@ const Main = () => {
     const [myCategory, setMyCategory] = useState([]);
     const [myRecentTransactions, setMyRecentTransactions] = useState([]);
     const [balance, setBalance] = useState(0);
+    const [expense, setExpense] = useState(0);
+    const [income, setIncome] = useState(0);
 
     const { authUser } = useAuth();
 
     useEffect(() => {
+        const date = new Date();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+
         if (authUser && authUser.emailID) {
             axios.get(`https://localhost:7026/api/CatMapUsers/${authUser.emailID}`)
                 .then((result) => {
@@ -44,6 +50,25 @@ const Main = () => {
                 })
                 .catch((err) => console.log(err))
 
+            axios.get(`https://localhost:7026/api/Expense/total-expense?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}&month=${encodeURIComponent(month)}`)
+                .then((result) => {
+                    if (result.status === 200) {
+                        setExpense(result.data);
+                    } else if (result.status === 202) {
+                        setExpense(0);
+                    }
+                })
+                .catch((err) => console.log(err))
+
+            axios.get(`https://localhost:7026/api/Income/total-income?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}&month=${encodeURIComponent(month)}`)
+                .then((result) => {
+                    if (result.status === 200) {
+                        setIncome(result.data);
+                    } else if (result.status === 202) {
+                        setIncome(0);
+                    }
+                })
+                .catch((err) => console.log(err))
         }
 
     }, [authUser]);
@@ -87,8 +112,8 @@ const Main = () => {
                                                 <div className='card-icon rounded-circle d-flex align-items-center justify-content-center'>
                                                     <i className='bi bi-cash-stack' />
                                                 </div>
-                                                <div className='ps-3'>
-                                                    <h5 style={{ fontFamily: "Roboto, sans-serif" }}>&#8377;&nbsp;<span style={{ color: "green" }}>0.00</span></h5>
+                                                <div className='ps-2'>
+                                                    <h5 style={{ fontFamily: "Roboto, sans-serif" }}>&#8377;<span style={{ color: "green" }}>{income}.0</span></h5>
                                                 </div>
                                             </div>
                                         </div>
@@ -104,8 +129,8 @@ const Main = () => {
                                                 <div className='card-icon rounded-circle d-flex align-items-center justify-content-center'>
                                                     <i className='bi bi-cash' />
                                                 </div>
-                                                <div className='ps-3'>
-                                                    <h5 style={{ fontFamily: "Roboto, sans-serif" }}>&#8377;&nbsp;<span style={{ color: "red" }}>0.00</span></h5>
+                                                <div className='ps-2'>
+                                                    <h5 style={{ fontFamily: "Roboto, sans-serif" }}>&#8377;<span style={{ color: "red" }}>{expense}.0</span></h5>
                                                 </div>
                                             </div>
                                         </div>
@@ -173,7 +198,7 @@ const Main = () => {
                             <div className='card'>
                                 <div className="card-body pb-0">
                                     <h5 className='card-title mb-4'>Overall Tracker</h5>
-                                    <OverallChart />
+                                    <OverallChart expenseValue={expense} incomeValue={income} />
                                 </div>
                             </div>
 
