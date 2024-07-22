@@ -9,7 +9,6 @@ namespace ExpenseTracker.Repository.Interfaces
         Task <IncomeDTO> AddAsync(IncomeDTO income);
         Task<IncomeDTO>UpdateAsync(IncomeDTO income);
 
-        Task<float> GetTotalIncomeByMonthAsync(string email, int year, int month);
 
     }
 }

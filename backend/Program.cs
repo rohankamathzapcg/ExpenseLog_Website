@@ -66,6 +66,8 @@ builder.Services.AddScoped<ICatMapUserRepository, CatMapUserRepository>();
 builder.Services.AddScoped<IIncomeRepository, IncomeRepository>();
 builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
+builder.Services.AddScoped<IAnalyticsRepository, AnalyticsRepository>();
+
 
 var app = builder.Build();
 
