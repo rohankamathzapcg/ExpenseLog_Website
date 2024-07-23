@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { ToastContainer } from 'react-toastify';
 import LineChartReport from '../Components/Charts/LineChartReport';
 import BudgetChart from '../Components/Charts/BudgetChart';
@@ -9,23 +9,80 @@ import ChartFilter from '../Components/ChartFilter';
 
 const Analytics = () => {
 
-  const [barFilter, setBarFilter] = useState('Today');
   const [donutFilter, setDonutFilter] = useState('Today');
   const [expense, setExpense] = useState(0);
   const [income, setIncome] = useState(0);
+  const [barFilter, setBarFilter] = useState('Today');
+  const [categoryData, setCategoryData] = useState({})
   const { authUser } = useAuth();
+
   const date = new Date();
+  const day = date.getDate();
   const month = date.getMonth() + 1;
   const year = date.getFullYear();
 
   const handleBarFilterChange = (filter) => {
     setBarFilter(filter)
+
+    if (filter === "Today") {
+
+    } else if (filter === "This Month") {
+
+      axios.get(`https://localhost:7026/api/Analytics/total-expense-by-category-this-month?email=${encodeURIComponent(authUser.emailID)}&month=${encodeURIComponent(month)}&year=${encodeURIComponent(year)}`)
+        .then((result) => {
+          if (result.status === 200) {
+            setCategoryData(result.data);
+          } else if (result.status === 202) {
+            setCategoryData({});
+          }
+        })
+        .catch((err) => console.log(err))
+
+    } else if (filter === "This Year") {
+
+      axios.get(`https://localhost:7026/api/Analytics/total-expense-by-category-this-year?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}`)
+        .then((result) => {
+          if (result.status === 200) {
+            setCategoryData(result.data);
+          } else if (result.status === 202) {
+            setCategoryData({});
+          }
+        })
+        .catch((err) => console.log(err))
+
+    } else if (filter === "This Week") {
+
+    }
+
   }
 
   const handleDonutFilterChange = (filter) => {
     setDonutFilter(filter)
 
-    if (filter === "This Month") {
+    if (filter === "Today") {
+
+      axios.get(`https://localhost:7026/api/Analytics/total-expense-today?email=${encodeURIComponent(authUser.emailID)}&date=${encodeURIComponent(day)}&month=${encodeURIComponent(month)}&year=${encodeURIComponent(year)}`)
+        .then((result) => {
+          if (result.status === 200) {
+            setExpense(result.data);
+          } else if (result.status === 202) {
+            setExpense(0);
+          }
+        })
+        .catch((err) => console.log(err))
+
+      axios.get(`https://localhost:7026/api/Analytics/total-income-today?email=${encodeURIComponent(authUser.emailID)}&date=${encodeURIComponent(day)}&month=${encodeURIComponent(month)}&year=${encodeURIComponent(year)}`)
+        .then((result) => {
+          if (result.status === 200) {
+            setIncome(result.data);
+          } else if (result.status === 202) {
+            setIncome(0);
+          }
+        })
+        .catch((err) => console.log(err))
+
+    } else if (filter === "This Month") {
+
       axios.get(`https://localhost:7026/api/Analytics/total-expense-by-month?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}&month=${encodeURIComponent(month)}`)
         .then((result) => {
           if (result.status === 200) {
@@ -47,6 +104,7 @@ const Analytics = () => {
         .catch((err) => console.log(err))
 
     } else if (filter === "This Year") {
+
       axios.get(`https://localhost:7026/api/Analytics/total-income-this-year?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}`)
         .then((result) => {
           if (result.status === 200) {
@@ -68,43 +126,28 @@ const Analytics = () => {
         .catch((err) => console.log(err))
 
     } else if (filter === "This Week") {
-      axios.get(`https://localhost:7026/api/Analytics/total-income-this-year?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}`)
-        .then((result) => {
-          if (result.status === 200) {
-            setIncome(result.data);
-          } else if (result.status === 202) {
-            setIncome(0);
-          }
-        })
-        .catch((err) => console.log(err))
 
-      axios.get(`https://localhost:7026/api/Analytics/total-expense-this-year?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}`)
-        .then((result) => {
-          if (result.status === 200) {
-            setExpense(result.data);
-          } else if (result.status === 202) {
-            setExpense(0);
-          }
-        })
-        .catch((err) => console.log(err))
+      // axios.get(`https://localhost:7026/api/Analytics/total-income-this-year?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}`)
+      //   .then((result) => {
+      //     if (result.status === 200) {
+      //       setIncome(result.data);
+      //     } else if (result.status === 202) {
+      //       setIncome(0);
+      //     }
+      //   })
+      //   .catch((err) => console.log(err))
+
+      // axios.get(`https://localhost:7026/api/Analytics/total-expense-this-year?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}`)
+      //   .then((result) => {
+      //     if (result.status === 200) {
+      //       setExpense(result.data);
+      //     } else if (result.status === 202) {
+      //       setExpense(0);
+      //     }
+      //   })
+      //   .catch((err) => console.log(err))
     }
   }
-
-
-  // useEffect(() => {
-  // if (authUser && authUser.emailID) {
-
-  // axios.get(`https://localhost:7026/api/CatMapUsers/${authUser.emailID}`)
-  //   .then((result) => {
-  //     if (result.status === 200) {
-  //       setMyCategory(result.data);
-  //     } else if (result.status === 202) {
-  //       setMyCategory([])
-  //     }
-  //   })
-  //   .catch(err => console.log(err));
-
-  // }, [authUser]);
 
   return (
     <>
@@ -133,7 +176,7 @@ const Analytics = () => {
                       <ChartFilter filterChange={handleBarFilterChange} />
                       <div className="card-body pb-0">
                         <h5 className='card-title mb-4'>Expense Report | <span>{barFilter}</span></h5>
-                        <BudgetChart />
+                        <BudgetChart data={categoryData} />
                       </div>
                     </div>
                   </div>
