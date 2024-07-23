@@ -6,6 +6,7 @@ import OverallChart from '../Components/Charts/OverallChart';
 import { useAuth } from '../Context/AuthContext';
 import axios from 'axios';
 import ChartFilter from '../Components/ChartFilter';
+import { useEffect } from 'react';
 
 const Analytics = () => {
 
@@ -17,9 +18,11 @@ const Analytics = () => {
   const { authUser } = useAuth();
 
   const date = new Date();
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
-  const year = date.getFullYear();
+  const adjustedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
+  const year = adjustedDate.getFullYear();
+  const month = String(adjustedDate.getMonth() + 1).padStart(2, '0');
+  const day = String(adjustedDate.getDate()).padStart(2, '0');
+  const formattedDate = `${year}-${month}-${day}T00:00:00`;
 
   const handleBarFilterChange = (filter) => {
     setBarFilter(filter)
@@ -61,17 +64,17 @@ const Analytics = () => {
 
     if (filter === "Today") {
 
-      axios.get(`https://localhost:7026/api/Analytics/total-expense-today?email=${encodeURIComponent(authUser.emailID)}&date=${encodeURIComponent(day)}&month=${encodeURIComponent(month)}&year=${encodeURIComponent(year)}`)
-        .then((result) => {
-          if (result.status === 200) {
-            setExpense(result.data);
-          } else if (result.status === 202) {
-            setExpense(0);
-          }
-        })
-        .catch((err) => console.log(err))
+      // axios.get(`?email=${encodeURIComponent(authUser.emailID)}&date=${encodeURIComponent(day)}&month=${encodeURIComponent(month)}&year=${encodeURIComponent(year)}`)
+      //   .then((result) => {
+      //     if (result.status === 200) {
+      //       setExpense(result.data);
+      //     } else if (result.status === 202) {
+      //       setExpense(0);
+      //     }
+      //   })
+      //   .catch((err) => console.log(err))
 
-      axios.get(`https://localhost:7026/api/Analytics/total-income-today?email=${encodeURIComponent(authUser.emailID)}&date=${encodeURIComponent(day)}&month=${encodeURIComponent(month)}&year=${encodeURIComponent(year)}`)
+      axios.get(`https://localhost:7026/api/Analytics/total-income-today?email=${encodeURIComponent(authUser.emailID)}&date=${encodeURIComponent(formattedDate)}`)
         .then((result) => {
           if (result.status === 200) {
             setIncome(result.data);

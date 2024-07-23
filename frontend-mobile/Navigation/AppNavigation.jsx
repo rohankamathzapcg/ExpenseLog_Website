@@ -44,7 +44,11 @@ const AppNavigation = () => {
         },
         drawerLabelStyle: {
           fontFamily: "merriweather-regular",
+          marginLeft:-25
         },
+        drawerActiveBackgroundColor:"#012970",
+        drawerActiveTintColor: "#fff",
+        drawerInactiveTintColor:'#333'
       }}
       drawerContent={(props) => <CustomDrawer {...props} />}
     >
@@ -52,11 +56,11 @@ const AppNavigation = () => {
         name="Dashboard"
         options={{
           title: "Dashboard",
-          drawerIcon: () => (
+          drawerIcon: ({color}) => (
             <MaterialCommunityIcons
               name="view-dashboard-outline"
               size={22}
-              color="#012970"
+              color={color}
             />
           ),
         }}
@@ -66,11 +70,11 @@ const AppNavigation = () => {
         name="Categories"
         options={{
           title: "Expense Categories",
-          drawerIcon: () => (
+          drawerIcon: ({color}) => (
             <MaterialCommunityIcons
               name="format-list-checkbox"
               size={22}
-              color="#012970"
+              color={color}
             />
           ),
         }}
@@ -80,8 +84,8 @@ const AppNavigation = () => {
         name="Transactions"
         options={{
           title: "Transactions",
-          drawerIcon: () => (
-            <Entypo name="back-in-time" size={22} color="#012970" />
+          drawerIcon: ({color}) => (
+            <Entypo name="back-in-time" size={22} color={color} />
           ),
         }}
         component={TransactionScreen}
@@ -90,11 +94,11 @@ const AppNavigation = () => {
         name="Accounts"
         options={{
           title: "My Accounts",
-          drawerIcon: () => (
+          drawerIcon: ({color}) => (
             <MaterialCommunityIcons
               name="bank-outline"
               size={22}
-              color="#012970"
+              color={color}
             />
           ),
         }}
@@ -104,8 +108,8 @@ const AppNavigation = () => {
         name="Analytics"
         options={{
           title: "Analytics",
-          drawerIcon: () => (
-            <Ionicons name="bar-chart-outline" size={22} color="#012970" />
+          drawerIcon: ({color}) => (
+            <Ionicons name="bar-chart-outline" size={22} color={color} />
           ),
         }}
         component={AnalyticsScreen}
@@ -114,8 +118,8 @@ const AppNavigation = () => {
         name="HelpCenter"
         options={{
           title: "Help Center",
-          drawerIcon: () => (
-            <AntDesign name="customerservice" size={22} color="#012970" />
+          drawerIcon: ({color}) => (
+            <AntDesign name="customerservice" size={22} color={color} />
           ),
         }}
         component={HelpCenterScreen}
