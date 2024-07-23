@@ -5,15 +5,14 @@ const ChartFilter = (props) => {
         <>
             <div className="filter">
                 <a className='icon' href='#icon' data-bs-toggle="dropdown">
-                    <i className="bi bi-three-dots"></i>
+                    <i className="bi bi-funnel"></i>&nbsp;Filters
                 </a>
                 <ul className='dropdown-menu dropdown-menu-end dropdown-menu-arrow'>
-                    <li className='dropdown-header text-start'>
-                        <h6>Filter</h6>
-                    </li>
-                    <hr />
                     <li>
-                        <a href="#today" className='dropdown-item' onClick={() => props.filterChange('Today')}>Today</a>
+                        <a href="#Today" className='dropdown-item' onClick={() => props.filterChange('Today')}>Today</a>
+                    </li>
+                    <li>
+                        <a href="#Week" className='dropdown-item' onClick={() => props.filterChange('This Week')}>This Week</a>
                     </li>
                     <li>
                         <a href="#Month" className='dropdown-item' onClick={() => props.filterChange('This Month')} >This Month</a>

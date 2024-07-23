@@ -26,7 +26,7 @@ const Analytics = () => {
     setDonutFilter(filter)
 
     if (filter === "This Month") {
-      axios.get(`https://localhost:7026/api/Expense/total-expense?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}&month=${encodeURIComponent(month)}`)
+      axios.get(`https://localhost:7026/api/Analytics/total-expense-by-month?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}&month=${encodeURIComponent(month)}`)
         .then((result) => {
           if (result.status === 200) {
             setExpense(result.data);
@@ -36,12 +36,54 @@ const Analytics = () => {
         })
         .catch((err) => console.log(err))
 
-      axios.get(`https://localhost:7026/api/Income/total-income?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}&month=${encodeURIComponent(month)}`)
+      axios.get(`https://localhost:7026/api/Analytics/total-income-by-month?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}&month=${encodeURIComponent(month)}`)
         .then((result) => {
           if (result.status === 200) {
             setIncome(result.data);
           } else if (result.status === 202) {
             setIncome(0);
+          }
+        })
+        .catch((err) => console.log(err))
+
+    } else if (filter === "This Year") {
+      axios.get(`https://localhost:7026/api/Analytics/total-income-this-year?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}`)
+        .then((result) => {
+          if (result.status === 200) {
+            setIncome(result.data);
+          } else if (result.status === 202) {
+            setIncome(0);
+          }
+        })
+        .catch((err) => console.log(err))
+
+      axios.get(`https://localhost:7026/api/Analytics/total-expense-this-year?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}`)
+        .then((result) => {
+          if (result.status === 200) {
+            setExpense(result.data);
+          } else if (result.status === 202) {
+            setExpense(0);
+          }
+        })
+        .catch((err) => console.log(err))
+
+    } else if (filter === "This Week") {
+      axios.get(`https://localhost:7026/api/Analytics/total-income-this-year?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}`)
+        .then((result) => {
+          if (result.status === 200) {
+            setIncome(result.data);
+          } else if (result.status === 202) {
+            setIncome(0);
+          }
+        })
+        .catch((err) => console.log(err))
+
+      axios.get(`https://localhost:7026/api/Analytics/total-expense-this-year?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}`)
+        .then((result) => {
+          if (result.status === 200) {
+            setExpense(result.data);
+          } else if (result.status === 202) {
+            setExpense(0);
           }
         })
         .catch((err) => console.log(err))

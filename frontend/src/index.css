@@ -744,16 +744,18 @@ Profile CSS
 
 .dashboard .filter {
   position: absolute;
-  right: 0px;
+  right: 5px;
   top: 15px;
 }
 
 .dashboard .filter .icon {
+  text-decoration: none;
+  font-family: "Merriweather", sans-serif;
   color: #012970;
   padding-right: 20px;
   padding-bottom: 5px;
   transition: 0.3s;
-  font-size: 16px;
+  font-size: 14px;
 }
 
 .dashboard .filter .dropdown-header {

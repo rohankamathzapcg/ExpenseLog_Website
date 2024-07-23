@@ -49,7 +49,7 @@ const Main = () => {
                 })
                 .catch((err) => console.log(err))
 
-            axios.get(`https://localhost:7026/api/Expense/total-expense?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}&month=${encodeURIComponent(month)}`)
+            axios.get(`https://localhost:7026/api/Analytics/total-expense-by-month?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}&month=${encodeURIComponent(month)}`)
                 .then((result) => {
                     if (result.status === 200) {
                         setExpense(result.data);
@@ -59,7 +59,7 @@ const Main = () => {
                 })
                 .catch((err) => console.log(err))
 
-            axios.get(`https://localhost:7026/api/Income/total-income?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}&month=${encodeURIComponent(month)}`)
+            axios.get(`https://localhost:7026/api/Analytics/total-income-by-month?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}&month=${encodeURIComponent(month)}`)
                 .then((result) => {
                     if (result.status === 200) {
                         setIncome(result.data);
