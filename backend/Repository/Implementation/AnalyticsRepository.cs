@@ -1,142 +1,130 @@
 ﻿using ExpenseTracker.Data;
 using ExpenseTracker.Repository.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace ExpenseTracker.Repository.Implementation
+namespace ExpenseTracker.Repository
 {
-    public class AnalyticsRepository:IAnalyticsRepository
+    public class AnalyticsRepository : IAnalyticsRepository
     {
-
         private readonly ExpenseTrackerDbContext _context;
 
         public AnalyticsRepository(ExpenseTrackerDbContext context)
         {
             _context = context;
         }
-        public async Task<float> GetTotalExpenseTodayAsync(string email)
+
+        public async Task<float> GetTotalExpenseTodayAsync(string email, int date, int month, int year)
         {
-            var today = DateTime.Today;
             return await _context.Expenses
-                             .Where(e => e.EmailID == email &&
-                                         e.ExpenseDate.Date == today)
-                             .SumAsync(e => e.Amount);
+                .Where(e => e.EmailID == email && e.ExpenseDate.Day == date && e.ExpenseDate.Month == month && e.ExpenseDate.Year == year)
+                .SumAsync(e => e.Amount);
         }
 
-        public async Task<float> GetTotalIncomeTodayAsync(string email)
+        public async Task<float> GetTotalIncomeTodayAsync(string email, int date, int month, int year)
         {
-            var today = DateTime.Today;
             return await _context.Incomes
-                          .Where(i => i.EmailID == email &&
-                                      i.IncomeDate.Date == today)
-                          .SumAsync(i => i.Amount);
+                .Where(i => i.EmailID == email && i.IncomeDate.Day == date && i.IncomeDate.Month == month && i.IncomeDate.Year == year)
+                .SumAsync(i => i.Amount);
         }
-        public async Task<float> GetTotalExpenseThisWeekAsync(string email)
+
+        public async Task<float> GetTotalExpenseThisWeekAsync(string email, int date, int month, int year)
         {
-            var today = DateTime.Today;
-            var startOfWeek = today.AddDays(-(int)today.DayOfWeek);
-            var endOfWeek = startOfWeek.AddDays(7);
+            var startDate = new DateTime(year, month, date).StartOfWeek(DayOfWeek.Monday);
+            var endDate = startDate.AddDays(7);
 
             return await _context.Expenses
-                             .Where(e => e.EmailID == email &&
-                                         e.ExpenseDate >= startOfWeek &&
-                                         e.ExpenseDate < endOfWeek)
-                             .SumAsync(e => e.Amount);
+                .Where(e => e.EmailID == email && e.ExpenseDate >= startDate && e.ExpenseDate < endDate)
+                .SumAsync(e => e.Amount);
         }
 
-        public async Task<float> GetTotalIncomeThisWeekAsync(string email)
+        public async Task<float> GetTotalIncomeThisWeekAsync(string email, int date, int month, int year)
         {
-            var today = DateTime.Today;
-            var startOfWeek = today.AddDays(-(int)today.DayOfWeek);
-            var endOfWeek = startOfWeek.AddDays(7);
+            var startDate = new DateTime(year, month, date).StartOfWeek(DayOfWeek.Monday);
+            var endDate = startDate.AddDays(7);
 
             return await _context.Incomes
-                          .Where(i => i.EmailID == email &&
-                                      i.IncomeDate >= startOfWeek &&
-                                      i.IncomeDate < endOfWeek)
-                          .SumAsync(i => i.Amount);
+                .Where(i => i.EmailID == email && i.IncomeDate >= startDate && i.IncomeDate < endDate)
+                .SumAsync(i => i.Amount);
         }
 
         public async Task<float> GetTotalExpenseByMonthAsync(string email, int year, int month)
         {
             return await _context.Expenses
-                             .Where(e => e.EmailID == email &&
-                            e.ExpenseDate.Year == year &&
-                            e.ExpenseDate.Month == month)
-                            .SumAsync(e => e.Amount);
-
+                .Where(e => e.EmailID == email && e.ExpenseDate.Year == year && e.ExpenseDate.Month == month)
+                .SumAsync(e => e.Amount);
         }
+
         public async Task<float> GetTotalIncomeByMonthAsync(string email, int year, int month)
         {
             return await _context.Incomes
-                          .Where(i => i.EmailID == email &&
-                          i.IncomeDate.Year == year &&
-                          i.IncomeDate.Month == month)
-                          .SumAsync(i => i.Amount);
-        }
-       
-        public async Task<float> GetTotalExpenseThisYearAsync(string email)
-        {
-            var thisYear = DateTime.Today.Year;
-            return await _context.Expenses
-                             .Where(e => e.EmailID == email &&
-                                         e.ExpenseDate.Year == thisYear)
-                             .SumAsync(e => e.Amount);
+                .Where(i => i.EmailID == email && i.IncomeDate.Year == year && i.IncomeDate.Month == month)
+                .SumAsync(i => i.Amount);
         }
 
-        public async Task<float> GetTotalIncomeThisYearAsync(string email)
+        public async Task<float> GetTotalExpenseThisYearAsync(string email, int year)
         {
-            var thisYear = DateTime.Today.Year;
+            return await _context.Expenses
+                .Where(e => e.EmailID == email && e.ExpenseDate.Year == year)
+                .SumAsync(e => e.Amount);
+        }
+
+        public async Task<float> GetTotalIncomeThisYearAsync(string email, int year)
+        {
             return await _context.Incomes
-                          .Where(i => i.EmailID == email &&
-                                      i.IncomeDate.Year == thisYear)
-                          .SumAsync(i => i.Amount);
+                .Where(i => i.EmailID == email && i.IncomeDate.Year == year)
+                .SumAsync(i => i.Amount);
         }
 
-        public async Task<IEnumerable<KeyValuePair<string, float>>> GetTotalExpenseByCategoryTodayAsync(string email)
+        public async Task<IEnumerable<KeyValuePair<string, float>>> GetTotalExpenseByCategoryTodayAsync(string email, int date, int month, int year)
         {
-            var today = DateTime.Today;
             return await _context.Expenses
-                .Where(e => e.EmailID == email && e.ExpenseDate.Date == today)
+                .Where(e => e.EmailID == email && e.ExpenseDate.Day == date && e.ExpenseDate.Month == month && e.ExpenseDate.Year == year)
                 .GroupBy(e => e.Category.CategoryName)
                 .Select(g => new KeyValuePair<string, float>(g.Key, g.Sum(e => e.Amount)))
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<KeyValuePair<string, float>>> GetTotalExpenseByCategoryThisWeekAsync(string email)
+        public async Task<IEnumerable<KeyValuePair<string, float>>> GetTotalExpenseByCategoryThisWeekAsync(string email, int date, int month, int year)
         {
-            var today = DateTime.Today;
-            var startOfWeek = today.AddDays(-(int)today.DayOfWeek);
-            var endOfWeek = startOfWeek.AddDays(7);
+            var startDate = new DateTime(year, month, date).StartOfWeek(DayOfWeek.Monday);
+            var endDate = startDate.AddDays(7);
 
             return await _context.Expenses
-                .Where(e => e.EmailID == email && e.ExpenseDate >= startOfWeek && e.ExpenseDate < endOfWeek)
+                .Where(e => e.EmailID == email && e.ExpenseDate >= startDate && e.ExpenseDate < endDate)
                 .GroupBy(e => e.Category.CategoryName)
                 .Select(g => new KeyValuePair<string, float>(g.Key, g.Sum(e => e.Amount)))
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<KeyValuePair<string, float>>> GetTotalExpenseByCategoryThisMonthAsync(string email)
+        public async Task<IEnumerable<KeyValuePair<string, float>>> GetTotalExpenseByCategoryThisMonthAsync(string email, int month, int year)
         {
-            var today = DateTime.Today;
-            var year = today.Year;
-            var month = today.Month;
-
             return await _context.Expenses
-                .Where(e => e.EmailID == email && e.ExpenseDate.Year == year && e.ExpenseDate.Month == month)
+                .Where(e => e.EmailID == email && e.ExpenseDate.Month == month && e.ExpenseDate.Year == year)
                 .GroupBy(e => e.Category.CategoryName)
                 .Select(g => new KeyValuePair<string, float>(g.Key, g.Sum(e => e.Amount)))
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<KeyValuePair<string, float>>> GetTotalExpenseByCategoryThisYearAsync(string email)
+        public async Task<IEnumerable<KeyValuePair<string, float>>> GetTotalExpenseByCategoryThisYearAsync(string email, int year)
         {
-            var year = DateTime.Today.Year;
-
             return await _context.Expenses
                 .Where(e => e.EmailID == email && e.ExpenseDate.Year == year)
                 .GroupBy(e => e.Category.CategoryName)
                 .Select(g => new KeyValuePair<string, float>(g.Key, g.Sum(e => e.Amount)))
                 .ToListAsync();
+        }
+    }
+
+    public static class DateTimeExtensions
+    {
+        public static DateTime StartOfWeek(this DateTime dt, DayOfWeek startOfWeek)
+        {
+            int diff = (7 + (dt.DayOfWeek - startOfWeek)) % 7;
+            return dt.AddDays(-1 * diff).Date;
         }
     }
 }

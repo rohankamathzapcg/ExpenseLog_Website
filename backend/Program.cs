@@ -1,5 +1,6 @@
 using DotNetEnv;
 using ExpenseTracker.Data;
+using ExpenseTracker.Repository;
 using ExpenseTracker.Repository.Implementation;
 using ExpenseTracker.Repository.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
