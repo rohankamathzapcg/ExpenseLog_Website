@@ -12,6 +12,7 @@ const Main = () => {
     const [expense, setExpense] = useState(0);
     const [income, setIncome] = useState(0);
     const { authUser } = useAuth();
+    const [categoryData,setCategoryData]=useState({})
 
     useEffect(() => {
         const date = new Date();
@@ -66,6 +67,16 @@ const Main = () => {
                     } else if (result.status === 202) {
                         setIncome(0);
                     }
+                })
+                .catch((err) => console.log(err))
+            
+                axios.get(`https://localhost:7026/api/Analytics/total-expense-by-category-this-month?email=${encodeURIComponent(authUser.emailID)}&month=${encodeURIComponent(month)}&year=${encodeURIComponent(year)}`)
+                .then((result) => {
+                  if (result.status === 200) {
+                    setCategoryData(result.data);
+                  } else if (result.status === 202) {
+                    setCategoryData({});
+                  }
                 })
                 .catch((err) => console.log(err))
         }
@@ -142,7 +153,7 @@ const Main = () => {
                                     <div className='card'>
                                         <div className="card-body pb-0">
                                             <h5 className='card-title mb-4'>This Month's Expenses</h5>
-                                            <BudgetChart />
+                                            <BudgetChart data={categoryData} />
                                         </div>
                                     </div>
                                 </div>
