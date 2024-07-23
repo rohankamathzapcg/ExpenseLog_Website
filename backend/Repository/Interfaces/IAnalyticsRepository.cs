@@ -6,7 +6,7 @@ namespace ExpenseTracker.Repository.Interfaces
     public interface IAnalyticsRepository
     {
         Task<float> GetTotalExpenseTodayAsync(string email,int date, int month, int year);
-        Task<float> GetTotalIncomeTodayAsync(string email, int date, int month, int year);
+        Task<float> GetTotalIncomeTodayAsync(string email, DateTime date);
         Task<float> GetTotalExpenseThisWeekAsync(string email,int date,int month,int year);
         Task<float> GetTotalIncomeThisWeekAsync(string email, int date,int month,int year);
         Task<float> GetTotalExpenseByMonthAsync(string email, int year, int month);

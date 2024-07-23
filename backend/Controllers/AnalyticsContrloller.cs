@@ -25,9 +25,9 @@ namespace ExpenseTracker.Controllers
         }
 
         [HttpGet("total-income-today")]
-        public async Task<IActionResult> GetTotalIncomeToday([FromQuery] string email, [FromQuery] int date, [FromQuery] int month, [FromQuery] int year)
+        public async Task<IActionResult> GetTotalIncomeToday([FromQuery] string email, [FromQuery] DateTime date)
         {
-            var result = await _analyticsRepository.GetTotalIncomeTodayAsync(email, date, month, year);
+            var result = await _analyticsRepository.GetTotalIncomeTodayAsync(email, date);
             return Ok(result);
         }
 
