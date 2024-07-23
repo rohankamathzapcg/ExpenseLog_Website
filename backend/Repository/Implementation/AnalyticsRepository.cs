@@ -24,10 +24,10 @@ namespace ExpenseTracker.Repository
                 .SumAsync(e => e.Amount);
         }
 
-        public async Task<float> GetTotalIncomeTodayAsync(string email, int date, int month, int year)
+        public async Task<float> GetTotalIncomeTodayAsync(string email, DateTime date)
         {
             return await _context.Incomes
-                .Where(i => i.EmailID == email && i.IncomeDate.Day == date && i.IncomeDate.Month == month && i.IncomeDate.Year == year)
+                .Where(i => i.EmailID == email && i.IncomeDate==date.ToUniversalTime())
                 .SumAsync(i => i.Amount);
         }
 
