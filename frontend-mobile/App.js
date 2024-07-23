@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Text, View, Image, StyleSheet, StatusBar } from "react-native";
+import { Text, View, Image, StyleSheet, StatusBar, LogBox } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import { NavigationContainer } from "@react-navigation/native";
 import AppNavigation from "./Navigation/AppNavigation";
 
 export default function App() {
+  LogBox.ignoreAllLogs(true);
   const [appIsReady, setAppIsReady] = useState(false);
 
   useEffect(() => {
-
     /* Splash Screen Code Starts */
     async function prepare() {
       try {
@@ -24,11 +24,9 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-
     if (appIsReady) {
       SplashScreen.hideAsync();
     }
-
   }, [appIsReady]);
 
   /* Splash Screen Section Starts */
