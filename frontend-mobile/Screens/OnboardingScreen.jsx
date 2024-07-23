@@ -26,19 +26,11 @@ export default function OnboardingScreen() {
     );
   };
 
-  //   const donebutton = ({ ...props }) => {
-  //     return (
-  //       <TouchableOpacity style={styles.donebtn}>
-  //         <Text>Done</Text>
-  //       </TouchableOpacity>
-  //     );
-  //   };
   return (
     <View style={styles.container}>
       <Onboarding
         onDone={handleDone}
         onSkip={handleDone}
-        //DoneButtonComponent={donebutton}
         bottomBarHighlight={false}
         containerStyles={{ paddingHorizontal: 15 }}
         pages={[
@@ -113,7 +105,5 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderTopLeftRadius: 40,
     borderBottomLeftRadius: 40,
-    // borderTopLeftRadius:'100%',
-    // borderBottomLeftRadius:'100%',
   },
 });
