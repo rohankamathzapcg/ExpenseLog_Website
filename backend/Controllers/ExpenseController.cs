@@ -42,6 +42,10 @@ namespace ExpenseTracker.Controllers
             try
             {
                 var createdExpense = await _expenseRepository.AddAsync(expenseDto);
+                if(createdExpense==null)
+                {
+                    return Accepted("application/json","Amount greater than Balance");
+                }
                 return CreatedAtAction(nameof(GetExpensesByEmail), new { email = createdExpense.EmailId }, createdExpense);
             }
             catch (Exception ex)

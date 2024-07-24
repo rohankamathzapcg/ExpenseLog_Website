@@ -28,7 +28,7 @@ namespace ExpenseTracker.Repository
         public async Task<float> GetTotalIncomeTodayAsync(string email, DateTime date)
         {
             return await _context.Incomes
-                .Where(i => i.EmailID == email && i.IncomeDate==date.ToUniversalTime())
+                .Where(i => i.EmailID == email && i.IncomeDate == date.ToUniversalTime())
                 .SumAsync(i => i.Amount);
         }
 
@@ -118,8 +118,38 @@ namespace ExpenseTracker.Repository
                 .Select(g => new KeyValuePair<string, float>(g.Key, g.Sum(e => e.Amount)))
                 .ToListAsync();
         }
-    }
+        public async Task<(List<float> incomes, List<float> expenses, List<float> balances,List<DateTime> dates)> GetWeeklyReportAsync(string email, DateTime date)
+        {
+            var startDate = date.ToUniversalTime().StartOfWeek(DayOfWeek.Monday);
+            var endDate = startDate.AddDays(7);
+            var currentBalance = 0.0f;
 
+            var incomes = new List<float>();
+            var expenses = new List<float>();
+            var balances = new List<float>();
+            var dates = new List<DateTime>();
+
+            for (var day = startDate; day < endDate; day = day.AddDays(1))
+            {
+                var dailyIncome = await _context.Incomes
+                    .Where(i => i.EmailID == email && i.IncomeDate.Date == day.Date)
+                    .SumAsync(i => i.Amount);
+
+                var dailyExpense = await _context.Expenses
+                    .Where(e => e.EmailID == email && e.ExpenseDate.Date == day.Date)
+                    .SumAsync(e => e.Amount);
+                dates.Add(day.Date);
+                incomes.Add(dailyIncome);
+                expenses.Add(dailyExpense);
+
+                currentBalance += dailyIncome - dailyExpense;
+                balances.Add(currentBalance);
+            }
+
+            return (incomes, expenses, balances,dates);
+        }
+       
+    }
     public static class DateTimeExtensions
     {
         public static DateTime StartOfWeek(this DateTime dt, DayOfWeek startOfWeek)
@@ -129,3 +159,8 @@ namespace ExpenseTracker.Repository
         }
     }
 }
+
+
+
+  
+

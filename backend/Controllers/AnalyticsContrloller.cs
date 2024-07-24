@@ -1,4 +1,5 @@
 ﻿using ExpenseTracker.Repository.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -101,5 +102,27 @@ namespace ExpenseTracker.Controllers
             var result = await _analyticsRepository.GetTotalExpenseByCategoryThisYearAsync(email, year);
             return Ok(result);
         }
+        [HttpGet("weekly-report")]
+        [Authorize]
+        public async Task<IActionResult> GetWeeklyReport([FromQuery] string email, [FromQuery] DateTime date)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return BadRequest("Email is required");
+            }
+
+            var (incomes, expenses, balances,dates) = await _analyticsRepository.GetWeeklyReportAsync(email, date);
+
+            var report = new
+            {
+                Incomes = incomes,
+                Expenses = expenses,
+                Balances = balances,
+                Dates = dates
+            };
+
+            return Ok(report);
+        }
     }
 }
+
