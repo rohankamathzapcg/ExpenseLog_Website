@@ -52,7 +52,7 @@ const HelpCenter = () => {
                     <h1>Help Center</h1>
                 </div>
                 <div className="profilesetting container col-12 mt-4 mx-0 p-4 rounded shadow-sm border">
-                    <h2 className="h4 h-sm-5">FAQ</h2>
+                    <h2 className="h4 h-sm-5">FAQs</h2>
                     <div className="accordion" id="accordionExample">
                         {
                             FAQ.map((items, index) => (

@@ -12,7 +12,7 @@ const Main = () => {
     const [expense, setExpense] = useState(0);
     const [income, setIncome] = useState(0);
     const { authUser } = useAuth();
-    const [categoryData,setCategoryData]=useState({})
+    const [categoryData, setCategoryData] = useState({})
 
     useEffect(() => {
         const date = new Date();
@@ -69,14 +69,14 @@ const Main = () => {
                     }
                 })
                 .catch((err) => console.log(err))
-            
-                axios.get(`https://localhost:7026/api/Analytics/total-expense-by-category-this-month?email=${encodeURIComponent(authUser.emailID)}&month=${encodeURIComponent(month)}&year=${encodeURIComponent(year)}`)
+
+            axios.get(`https://localhost:7026/api/Analytics/total-expense-by-category-this-month?email=${encodeURIComponent(authUser.emailID)}&month=${encodeURIComponent(month)}&year=${encodeURIComponent(year)}`)
                 .then((result) => {
-                  if (result.status === 200) {
-                    setCategoryData(result.data);
-                  } else if (result.status === 202) {
-                    setCategoryData({});
-                  }
+                    if (result.status === 200) {
+                        setCategoryData(result.data);
+                    } else if (result.status === 202) {
+                        setCategoryData({});
+                    }
                 })
                 .catch((err) => console.log(err))
         }
@@ -148,15 +148,22 @@ const Main = () => {
                                 </div>
                                 {/* Overall Card Amounts Ends */}
 
-                                {/* Line Chart Ends */}
+                                {/* Bar Chart Starts */}
                                 <div className='col-12'>
                                     <div className='card'>
                                         <div className="card-body pb-0">
                                             <h5 className='card-title mb-4'>This Month's Expenses</h5>
-                                            <BudgetChart data={categoryData} />
+                                            {
+                                                categoryData && categoryData.length > 0 ? (
+                                                    <BudgetChart data={categoryData} />
+                                                ) : (
+                                                    <p className='text-center' style={{ color: "grey", fontSize: "14px" }}>No Records Found</p>
+                                                )
+                                            }
                                         </div>
                                     </div>
                                 </div>
+                                {/* Bar Chart Ends */}
                             </div>
                         </div>
                         {/* Left Side Ends */}
@@ -208,7 +215,13 @@ const Main = () => {
                             <div className='card'>
                                 <div className="card-body pb-0">
                                     <h5 className='card-title mb-4'>This Month's Income V/S Expense</h5>
-                                    <OverallChart expenseValue={expense} incomeValue={income} />
+                                    {
+                                        expense === 0 && income === 0 ? (
+                                            <p className='text-center' style={{ color: "grey", fontSize: "14px" }}>No Records Found</p>
+                                        ) : (
+                                            <OverallChart expenseValue={expense} incomeValue={income} />
+                                        )
+                                    }
                                 </div>
                             </div>
 

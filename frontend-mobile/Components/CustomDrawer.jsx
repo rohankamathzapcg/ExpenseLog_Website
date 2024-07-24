@@ -6,7 +6,7 @@ import {
 } from "@react-navigation/drawer";
 import { useCustomFonts } from "../fonts/useCustomFont";
 import AppLoading from "expo-app-loading";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, Entypo, Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
 const CustomDrawer = (props) => {
@@ -49,12 +49,23 @@ const CustomDrawer = (props) => {
                         </View>
                     </TouchableOpacity>
                 </View>
-                <View style={{flex:1,backgroundColor:"#fff",paddingTop:10}}>
+                <View style={{ flex: 1, backgroundColor: "#fff", paddingTop: 10 }}>
                     <DrawerItemList {...props} />
                 </View>
             </DrawerContentScrollView>
             <View style={styles.Footer}>
-                <Text></Text>
+                <TouchableOpacity onPress={() => { }} style={{ paddingVertical: 15 }}>
+                    <View style={{ flexDirection: "row", alignItems: 'center' }}>
+                        <Entypo name="share" size={20} color="#012970" />
+                        <Text style={{ fontSize: 13, fontFamily: "merriweather-regular", marginLeft: 5 }}>Share this app</Text>
+                    </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => { }} style={{ paddingVertical: 15 }}>
+                    <View style={{ flexDirection: "row", alignItems: 'center' }}>
+                        <Ionicons name="exit-outline" size={20} color="#012970" />
+                        <Text style={{ fontSize: 13, fontFamily: "merriweather-regular", marginLeft: 5 }}>Sign Out</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
         </View>
     );
@@ -77,4 +88,9 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontFamily: "merriweather-bold",
     },
+    Footer: {
+        padding: 20,
+        borderTopWidth: 1,
+        borderTopColor: "#ccc"
+    }
 });
