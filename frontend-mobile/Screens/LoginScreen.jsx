@@ -7,6 +7,7 @@ import {
   Image,
 } from "react-native";
 import React, { useState } from "react";
+import { CommonActions } from "@react-navigation/native";
 import { useCustomFonts } from "../fonts/useCustomFont";
 import AppLoading from "expo-app-loading";
 import google from "../assets/google.png";
@@ -34,10 +35,26 @@ const LoginScreen = ({ navigation }) => {
     return !newEmailErrors.emailLogin;
   };
 
+  const validateLoginPassword = (password) => {
+    const passwordErrors = {};
+
+    if (!password) {
+      passwordErrors.passwordLogin = "Password Field is required";
+    }
+    setErrors(passwordErrors);
+    return !passwordErrors.passwordLogin;
+  };
+
   const handleLogin = () => {
-    if (validateLoginEmail(email)) {
+    if (validateLoginEmail(email) && validateLoginPassword(password)) {
       // Proceed with login
-      navigation.navigate("Main");
+      // navigation.navigate("Main");
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: "Main" }],
+        })
+      );
     }
   };
 
@@ -64,12 +81,8 @@ const LoginScreen = ({ navigation }) => {
         value={email}
         onChangeText={setEmail}
       />
-      {/* {errors.emailLogin && (
-        <Text style={styles.validationText}>{errors.emailLogin}</Text>
-      )} */}
-      {/* {!email ? <Text>Enter email</Text> : ""} */}
       <TextInput
-        style={styles.input}
+        style={[styles.input, errors.passwordLogin && styles.errorInput]}
         placeholder="Enter your password"
         secureTextEntry
         value={password}
