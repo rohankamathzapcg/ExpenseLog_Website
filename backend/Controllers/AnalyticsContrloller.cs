@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ExpenseTracker.Controllers
 {
@@ -18,9 +19,9 @@ namespace ExpenseTracker.Controllers
         }
 
         [HttpGet("total-expense-today")]
-        public async Task<IActionResult> GetTotalExpenseToday([FromQuery] string email, [FromQuery] int date, [FromQuery] int month, [FromQuery] int year)
+        public async Task<IActionResult> GetTotalExpenseToday([FromQuery] string email, [FromQuery] DateTime date)
         {
-            var result = await _analyticsRepository.GetTotalExpenseTodayAsync(email, date, month, year);
+            var result = await _analyticsRepository.GetTotalExpenseTodayAsync(email, date);
             return Ok(result);
         }
 
@@ -32,16 +33,16 @@ namespace ExpenseTracker.Controllers
         }
 
         [HttpGet("total-expense-this-week")]
-        public async Task<IActionResult> GetTotalExpenseThisWeek([FromQuery] string email, [FromQuery] int date, [FromQuery] int month, [FromQuery] int year)
+        public async Task<IActionResult> GetTotalExpenseThisWeek([FromQuery] string email, [FromQuery] DateTime date)
         {
-            var result = await _analyticsRepository.GetTotalExpenseThisWeekAsync(email, date, month, year);
+            var result = await _analyticsRepository.GetTotalExpenseThisWeekAsync(email, date);
             return Ok(result);
         }
 
         [HttpGet("total-income-this-week")]
-        public async Task<IActionResult> GetTotalIncomeThisWeek([FromQuery] string email, [FromQuery] int date, [FromQuery] int month, [FromQuery] int year)
+        public async Task<IActionResult> GetTotalIncomeThisWeek([FromQuery] string email, [FromQuery] DateTime date)
         {
-            var result = await _analyticsRepository.GetTotalIncomeThisWeekAsync(email, date, month, year);
+            var result = await _analyticsRepository.GetTotalIncomeThisWeekAsync(email, date);
             return Ok(result);
         }
 
@@ -74,16 +75,16 @@ namespace ExpenseTracker.Controllers
         }
 
         [HttpGet("total-expense-by-category-today")]
-        public async Task<IActionResult> GetTotalExpenseByCategoryToday([FromQuery] string email, [FromQuery] int date, [FromQuery] int month, [FromQuery] int year)
+        public async Task<IActionResult> GetTotalExpenseByCategoryToday([FromQuery] string email, [FromQuery] DateTime date)
         {
-            var result = await _analyticsRepository.GetTotalExpenseByCategoryTodayAsync(email, date, month, year);
+            var result = await _analyticsRepository.GetTotalExpenseByCategoryTodayAsync(email, date);
             return Ok(result);
         }
 
         [HttpGet("total-expense-by-category-this-week")]
-        public async Task<IActionResult> GetTotalExpenseByCategoryThisWeek([FromQuery] string email, [FromQuery] int date, [FromQuery] int month, [FromQuery] int year)
+        public async Task<IActionResult> GetTotalExpenseByCategoryThisWeek([FromQuery] string email, [FromQuery] DateTime date)
         {
-            var result = await _analyticsRepository.GetTotalExpenseByCategoryThisWeekAsync(email, date, month, year);
+            var result = await _analyticsRepository.GetTotalExpenseByCategoryThisWeekAsync(email, date);
             return Ok(result);
         }
 
