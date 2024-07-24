@@ -14,6 +14,7 @@ import AppLoading from "expo-app-loading";
 import google from "../assets/google.png";
 import microsoft from "../assets/microsoft.png";
 import facebook from "../assets/facebook-icon.png";
+import axios from "axios";
 
 const RegisterScreen = ({ navigation }) => {
   const [fontsLoaded] = useCustomFonts();
@@ -23,6 +24,7 @@ const RegisterScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [cpassword, setCpassword] = useState("");
   const [occupation, setOccupation] = useState("");
+
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -43,8 +45,7 @@ const RegisterScreen = ({ navigation }) => {
   };
 
   const validatePassword = (password) => {
-    const passwordPattern =
-      /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+    const passwordPattern = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
     if (!password) {
       return "";
     } else if (!passwordPattern.test(password)) {
@@ -98,15 +99,54 @@ const RegisterScreen = ({ navigation }) => {
     setErrors(allErrors);
 
     if (Object.values(allErrors).every((error) => error === null)) {
-      Toast.show({
-        type: "success",
-        text1: "Registered Successfullyy!!",
-        position: "top",
-        visibilityTime: 1000,
-      });
-      setTimeout(() => {
-        navigation.navigate("Login");
-      }, 1000);
+
+      const userRegisterData = {
+        fullName: fname,
+        emailID: email,
+        password: password,
+        occupation: occupation
+      }
+      console.log(userRegisterData)
+      
+      axios.post("https://localhost:7026/api/UserAuth/register", userRegisterData)
+        .then((result) => {
+          console.log(result.status)
+          if (result.status === 201) {
+            Toast.show({
+              type: "success",
+              text1: "Registered Successfully",
+              position: "top",
+              visibilityTime: 2000,
+            });
+            setEmail("");
+            setFname("");
+            setPassword("");
+            setCpassword("");
+            setOccupation("");
+
+            setTimeout(() => {
+              navigation.navigate("Login");
+            }, 2000);
+
+          } else if (result.status === 200) {
+            Toast.show({
+              type: "error",
+              text1: "An error occurred during registration",
+              position: "top",
+              visibilityTime: 2000,
+            });
+          }
+        })
+        .catch((error) => {
+          console.log(error)
+          Toast.show({
+            type: "error",
+            text1: "Contact Administrator",
+            position: "top",
+            visibilityTime: 2000,
+          });
+        })
+
     }
   };
 
@@ -163,7 +203,7 @@ const RegisterScreen = ({ navigation }) => {
               errors.password === "" ? styles.error : null,
             ]}
             placeholder="Enter your password"
-            secureTextEntry={!showPassword} // Toggle password visibility
+            secureTextEntry={!showPassword}
             value={password}
             onChangeText={(text) => {
               setPassword(text);
@@ -176,10 +216,10 @@ const RegisterScreen = ({ navigation }) => {
           />
           <TouchableOpacity
             style={styles.eyeIconContainer}
-            onPress={() => setShowPassword(!showPassword)} // Toggle eye icon and password visibility
+            onPress={() => setShowPassword(!showPassword)}
           >
             <Entypo
-              name={showPassword ? "eye-with-line" : "eye"} // Change icon based on visibility state
+              name={showPassword ? "eye-with-line" : "eye"}
               size={22}
               color="gray"
             />
@@ -196,7 +236,7 @@ const RegisterScreen = ({ navigation }) => {
               errors.confirmPassword === "" ? styles.error : null,
             ]}
             placeholder="Enter confirm password"
-            secureTextEntry={!showConfirmPassword} // Toggle confirm password visibility
+            secureTextEntry={!showConfirmPassword}
             value={cpassword}
             onChangeText={(text) => {
               setCpassword(text);
@@ -208,7 +248,7 @@ const RegisterScreen = ({ navigation }) => {
           />
           <TouchableOpacity
             style={styles.eyeIconContainer}
-            onPress={() => setShowConfirmPassword(!showConfirmPassword)} // Toggle eye icon and confirm password visibility
+            onPress={() => setShowConfirmPassword(!showConfirmPassword)}
           >
             <Entypo
               name={showConfirmPassword ? "eye-with-line" : "eye"}
