@@ -47,8 +47,12 @@ namespace ExpenseTracker.Repository.Implementation
             {
                 throw new Exception("Invalid CategoryId");
             }
+            if (account.Balance < expenseDto.Amount)
+            {
+                return null;
+            }
 
-            var expense = new Expense
+                var expense = new Expense
             {
                 ExpenseDate = expenseDto.ExpenseDate.ToUniversalTime(),
                 Amount = expenseDto.Amount,
