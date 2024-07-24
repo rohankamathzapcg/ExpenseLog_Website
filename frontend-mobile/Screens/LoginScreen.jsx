@@ -7,6 +7,7 @@ import {
   Image,
 } from "react-native";
 import React, { useState } from "react";
+import { Entypo } from "@expo/vector-icons";
 import { CommonActions } from "@react-navigation/native";
 import { useCustomFonts } from "../fonts/useCustomFont";
 import AppLoading from "expo-app-loading";
@@ -19,6 +20,7 @@ const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
 
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -80,13 +82,29 @@ const LoginScreen = ({ navigation }) => {
         value={email}
         onChangeText={setEmail}
       />
-      <TextInput
-        style={[styles.input, errors.passwordLogin && styles.errorInput]}
-        placeholder="Enter your password"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
+      <View style={styles.passwordContainer}>
+        <TextInput
+          style={[
+            styles.input,
+            styles.passwordInput,
+            errors.passwordLogin && styles.errorInput,
+          ]}
+          placeholder="Enter your password"
+          secureTextEntry={!showPassword} // Toggle password visibility
+          value={password}
+          onChangeText={setPassword}
+        />
+        <TouchableOpacity
+          style={styles.eyeIconContainer}
+          onPress={() => setShowPassword(!showPassword)} // Toggle eye icon and password visibility
+        >
+          <Entypo
+            name={showPassword ? "eye-with-line" : "eye"} // Change icon based on visibility state
+            size={22}
+            color="gray"
+          />
+        </TouchableOpacity>
+      </View>
       <View style={styles.forgotPasswordContainer}>
         <Text
           // onPress={() => navigation.navigate("Register")}
@@ -174,6 +192,26 @@ const styles = StyleSheet.create({
   validationText: {
     color: "red",
     marginTop: 4,
+  },
+  passwordContainer: {
+    width: "80%",
+
+    position: "relative",
+  },
+  passwordInput: {
+    width: "100%",
+    height: 40,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    fontFamily: "merriweather-regular",
+    paddingRight: 40,
+  },
+  eyeIconContainer: {
+    position: "absolute",
+    right: 10,
+    top: 20,
   },
   forgotPasswordContainer: {
     width: "75%",

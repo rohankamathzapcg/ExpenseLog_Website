@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import Toast from "react-native-toast-message";
+import { Entypo } from "@expo/vector-icons";
 import { useCustomFonts } from "../fonts/useCustomFont";
 import AppLoading from "expo-app-loading";
 import google from "../assets/google.png";
@@ -23,6 +24,8 @@ const RegisterScreen = ({ navigation }) => {
   const [cpassword, setCpassword] = useState("");
   const [occupation, setOccupation] = useState("");
   const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -152,39 +155,68 @@ const RegisterScreen = ({ navigation }) => {
           }}
         />
         {errors.email && <Text style={styles.errorText}>{errors.email}</Text>}
-        <TextInput
-          style={[styles.input, errors.password === "" ? styles.error : null]}
-          placeholder="Enter your password"
-          secureTextEntry
-          value={password}
-          onChangeText={(text) => {
-            setPassword(text);
-            setErrors((prevErrors) => ({
-              ...prevErrors,
-              password: validatePassword(text),
-              confirmPassword: validateConfirmPassword(text, cpassword),
-            }));
-          }}
-        />
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={[
+              styles.input,
+              errors.password === "" ? styles.error : null,
+              styles.passwordInput,
+            ]}
+            placeholder="Enter your password"
+            secureTextEntry={!showPassword} // Toggle password visibility
+            value={password}
+            onChangeText={(text) => {
+              setPassword(text);
+              setErrors((prevErrors) => ({
+                ...prevErrors,
+                password: validatePassword(text),
+                confirmPassword: validateConfirmPassword(text, cpassword),
+              }));
+            }}
+          />
+          <TouchableOpacity
+            style={styles.eyeIconContainer}
+            onPress={() => setShowPassword(!showPassword)} // Toggle eye icon and password visibility
+          >
+            <Entypo
+              name={showPassword ? "eye-with-line" : "eye"} // Change icon based on visibility state
+              size={22}
+              color="gray"
+            />
+          </TouchableOpacity>
+        </View>
         {errors.password && (
           <Text style={styles.errorText}>{errors.password}</Text>
         )}
-        <TextInput
-          style={[
-            styles.input,
-            errors.confirmPassword === "" ? styles.error : null,
-          ]}
-          placeholder="Enter confirm password"
-          secureTextEntry
-          value={cpassword}
-          onChangeText={(text) => {
-            setCpassword(text);
-            setErrors((prevErrors) => ({
-              ...prevErrors,
-              confirmPassword: validateConfirmPassword(password, text),
-            }));
-          }}
-        />
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={[
+              styles.input,
+              errors.confirmPassword === "" ? styles.error : null,
+              styles.passwordInput,
+            ]}
+            placeholder="Enter confirm password"
+            secureTextEntry={!showConfirmPassword} // Toggle confirm password visibility
+            value={cpassword}
+            onChangeText={(text) => {
+              setCpassword(text);
+              setErrors((prevErrors) => ({
+                ...prevErrors,
+                confirmPassword: validateConfirmPassword(password, text),
+              }));
+            }}
+          />
+          <TouchableOpacity
+            style={styles.eyeIconContainer}
+            onPress={() => setShowConfirmPassword(!showConfirmPassword)} // Toggle eye icon and confirm password visibility
+          >
+            <Entypo
+              name={showConfirmPassword ? "eye-with-line" : "eye"}
+              size={22}
+              color="gray"
+            />
+          </TouchableOpacity>
+        </View>
         {errors.confirmPassword && (
           <Text style={styles.errorText}>{errors.confirmPassword}</Text>
         )}
@@ -285,6 +317,25 @@ const styles = StyleSheet.create({
     width: "80%",
     textAlign: "left",
     fontFamily: "merriweather-regular",
+  },
+  passwordContainer: {
+    width: "80%",
+    position: "relative",
+  },
+  passwordInput: {
+    width: "100%",
+    height: 40,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 5,
+    paddingHorizontal: 10,
+    fontFamily: "merriweather-regular",
+    paddingRight: 40,
+  },
+  eyeIconContainer: {
+    position: "absolute",
+    right: 10,
+    top: 20,
   },
   button: {
     width: "80%",
