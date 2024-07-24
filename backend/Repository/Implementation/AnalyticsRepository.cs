@@ -1,5 +1,6 @@
 ﻿using ExpenseTracker.Data;
 using ExpenseTracker.Repository.Interfaces;
+using Humanizer;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -17,10 +18,10 @@ namespace ExpenseTracker.Repository
             _context = context;
         }
 
-        public async Task<float> GetTotalExpenseTodayAsync(string email, int date, int month, int year)
+        public async Task<float> GetTotalExpenseTodayAsync(string email, DateTime date)
         {
             return await _context.Expenses
-                .Where(e => e.EmailID == email && e.ExpenseDate.Day == date && e.ExpenseDate.Month == month && e.ExpenseDate.Year == year)
+                .Where(e => e.EmailID == email && e.ExpenseDate == date.ToUniversalTime())
                 .SumAsync(e => e.Amount);
         }
 
@@ -31,9 +32,9 @@ namespace ExpenseTracker.Repository
                 .SumAsync(i => i.Amount);
         }
 
-        public async Task<float> GetTotalExpenseThisWeekAsync(string email, int date, int month, int year)
+        public async Task<float> GetTotalExpenseThisWeekAsync(string email, DateTime date)
         {
-            var startDate = new DateTime(year, month, date).StartOfWeek(DayOfWeek.Monday);
+            var startDate = date.ToUniversalTime().StartOfWeek(DayOfWeek.Monday);
             var endDate = startDate.AddDays(7);
 
             return await _context.Expenses
@@ -41,9 +42,9 @@ namespace ExpenseTracker.Repository
                 .SumAsync(e => e.Amount);
         }
 
-        public async Task<float> GetTotalIncomeThisWeekAsync(string email, int date, int month, int year)
+        public async Task<float> GetTotalIncomeThisWeekAsync(string email, DateTime date)
         {
-            var startDate = new DateTime(year, month, date).StartOfWeek(DayOfWeek.Monday);
+            var startDate = date.ToUniversalTime().StartOfWeek(DayOfWeek.Monday);
             var endDate = startDate.AddDays(7);
 
             return await _context.Incomes
@@ -79,18 +80,18 @@ namespace ExpenseTracker.Repository
                 .SumAsync(i => i.Amount);
         }
 
-        public async Task<IEnumerable<KeyValuePair<string, float>>> GetTotalExpenseByCategoryTodayAsync(string email, int date, int month, int year)
+        public async Task<IEnumerable<KeyValuePair<string, float>>> GetTotalExpenseByCategoryTodayAsync(string email, DateTime date)
         {
             return await _context.Expenses
-                .Where(e => e.EmailID == email && e.ExpenseDate.Day == date && e.ExpenseDate.Month == month && e.ExpenseDate.Year == year)
+                .Where(e => e.EmailID == email && e.ExpenseDate == date.ToUniversalTime())
                 .GroupBy(e => e.Category.CategoryName)
                 .Select(g => new KeyValuePair<string, float>(g.Key, g.Sum(e => e.Amount)))
                 .ToListAsync();
         }
 
-        public async Task<IEnumerable<KeyValuePair<string, float>>> GetTotalExpenseByCategoryThisWeekAsync(string email, int date, int month, int year)
+        public async Task<IEnumerable<KeyValuePair<string, float>>> GetTotalExpenseByCategoryThisWeekAsync(string email, DateTime date)
         {
-            var startDate = new DateTime(year, month, date).StartOfWeek(DayOfWeek.Monday);
+            var startDate = date.ToUniversalTime().StartOfWeek(DayOfWeek.Monday);
             var endDate = startDate.AddDays(7);
 
             return await _context.Expenses
