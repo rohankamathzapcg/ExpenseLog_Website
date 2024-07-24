@@ -48,7 +48,6 @@ const LoginScreen = ({ navigation }) => {
   const handleLogin = () => {
     if (validateLoginEmail(email) && validateLoginPassword(password)) {
       // Proceed with login
-      // navigation.navigate("Main");
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
@@ -88,6 +87,15 @@ const LoginScreen = ({ navigation }) => {
         value={password}
         onChangeText={setPassword}
       />
+      <View style={styles.forgotPasswordContainer}>
+        <Text
+          // onPress={() => navigation.navigate("Register")}
+          style={styles.forgotPasswordText}
+        >
+          {" "}
+          Forgot Password?
+        </Text>
+      </View>
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
@@ -104,7 +112,7 @@ const LoginScreen = ({ navigation }) => {
           style={{ color: "blue" }}
         >
           {" "}
-          Register!
+          Register
         </Text>
       </Text>
     </View>
@@ -166,6 +174,16 @@ const styles = StyleSheet.create({
   validationText: {
     color: "red",
     marginTop: 4,
+  },
+  forgotPasswordContainer: {
+    width: "75%",
+    alignItems: "flex-end",
+    marginBottom: 10,
+  },
+  forgotPasswordText: {
+    color: "blue",
+    fontFamily: "merriweather-regular",
+    fontSize: 11,
   },
   button: {
     width: "80%",
