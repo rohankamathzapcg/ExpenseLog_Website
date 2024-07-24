@@ -49,7 +49,7 @@ const AppNavigation = () => {
         },
         drawerActiveBackgroundColor: "#012970",
         drawerActiveTintColor: "#fff",
-        drawerInactiveTintColor: "#333",
+        drawerInactiveTintColor: "#012970",
       }}
       drawerContent={(props) => <CustomDrawer {...props} />}
     >
