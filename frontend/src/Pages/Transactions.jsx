@@ -18,7 +18,7 @@ const Transactions = () => {
         setTransactions(result.data)
       })
       .catch((err) => console.log(err))
-  },[])
+  })
 
   let totalPage = Math.ceil(transaction.length / limit)
   let arrayPagination = returnPaginationRange(totalPage, page, limit, 1);

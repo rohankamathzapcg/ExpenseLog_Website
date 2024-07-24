@@ -309,7 +309,7 @@ const Login = () => {
                                     </div>
                                     <div className="form-group mb-3">
                                         <input type="text" className={`form-control shadow-none ${errors.email ? 'error' : ''}`} id="email" placeholder='Enter your email-id' autoComplete='off' value={userData.email} onChange={(e) => { handleInputChange(e); validateEmail(e.target.value); }} />
-                                        {errors.emailRegister === "Email Field is required" ? "" : <div className="validations">{errors.emailRegister}</div>}
+                                        {errors.email === "Email Field is required" ? "" : <div className="validations">{errors.email}</div>}
                                     </div>
                                     <div className="form-group mb-3">
                                         <div className="input-group">

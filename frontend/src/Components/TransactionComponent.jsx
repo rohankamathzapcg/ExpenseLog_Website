@@ -20,20 +20,26 @@ const TransactionComponent = (props) => {
                     </thead>
                     <tbody>
                         {
-                            props.users.map((transactions, index) => (
-                                <tr key={index}>
-                                    <th scope="row">T100{transactions.transactionId}</th>
-                                    <td>{transactions.formattedDate}</td>
-                                    <td>{transactions.accountNo}</td>
-                                    <td>{transactions.amount}</td>
-                                    <td>{transactions.type}</td>
-                                    <td>
-                                        {transactions.type === "Expense" ? transactions.categoryName : "N/A"}
-                                    </td>
-                                    <td>{transactions.remarks}</td>
-                                    <td>{transactions.newBalance}</td>
+                            props.users.length === 0 ? (
+                                <tr>
+                                    <td colSpan="8" className="text-center" style={{ color: "grey", fontSize: "14px" }}>No Records Found</td>
                                 </tr>
-                            ))
+                            ) : (
+                                props.users.map((transactions, index) => (
+                                    <tr key={index}>
+                                        <th scope="row">T100{transactions.transactionId}</th>
+                                        <td>{transactions.formattedDate}</td>
+                                        <td>{transactions.accountNo}</td>
+                                        <td>{transactions.amount}</td>
+                                        <td>{transactions.type}</td>
+                                        <td>
+                                            {transactions.type === "Expense" ? transactions.categoryName : "N/A"}
+                                        </td>
+                                        <td>{transactions.remarks}</td>
+                                        <td>{transactions.newBalance}</td>
+                                    </tr>
+                                ))
+                            )
                         }
                     </tbody>
                 </table>
