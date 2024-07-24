@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View, StatusBar } from "react-native";
 import React from "react";
+
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import DashboardScreen from "../Screens/DashboardScreen";
@@ -44,11 +45,11 @@ const AppNavigation = () => {
         },
         drawerLabelStyle: {
           fontFamily: "merriweather-regular",
-          marginLeft:-25
+          marginLeft: -25,
         },
-        drawerActiveBackgroundColor:"#012970",
+        drawerActiveBackgroundColor: "#012970",
         drawerActiveTintColor: "#fff",
-        drawerInactiveTintColor:'#333'
+        drawerInactiveTintColor: "#333",
       }}
       drawerContent={(props) => <CustomDrawer {...props} />}
     >
@@ -56,7 +57,7 @@ const AppNavigation = () => {
         name="Dashboard"
         options={{
           title: "Dashboard",
-          drawerIcon: ({color}) => (
+          drawerIcon: ({ color }) => (
             <MaterialCommunityIcons
               name="view-dashboard-outline"
               size={22}
@@ -70,7 +71,7 @@ const AppNavigation = () => {
         name="Categories"
         options={{
           title: "Expense Categories",
-          drawerIcon: ({color}) => (
+          drawerIcon: ({ color }) => (
             <MaterialCommunityIcons
               name="format-list-checkbox"
               size={22}
@@ -84,7 +85,7 @@ const AppNavigation = () => {
         name="Transactions"
         options={{
           title: "Transactions",
-          drawerIcon: ({color}) => (
+          drawerIcon: ({ color }) => (
             <Entypo name="back-in-time" size={22} color={color} />
           ),
         }}
@@ -94,7 +95,7 @@ const AppNavigation = () => {
         name="Accounts"
         options={{
           title: "My Accounts",
-          drawerIcon: ({color}) => (
+          drawerIcon: ({ color }) => (
             <MaterialCommunityIcons
               name="bank-outline"
               size={22}
@@ -108,7 +109,7 @@ const AppNavigation = () => {
         name="Analytics"
         options={{
           title: "Analytics",
-          drawerIcon: ({color}) => (
+          drawerIcon: ({ color }) => (
             <Ionicons name="bar-chart-outline" size={22} color={color} />
           ),
         }}
@@ -118,7 +119,7 @@ const AppNavigation = () => {
         name="HelpCenter"
         options={{
           title: "Help Center",
-          drawerIcon: ({color}) => (
+          drawerIcon: ({ color }) => (
             <AntDesign name="customerservice" size={22} color={color} />
           ),
         }}
