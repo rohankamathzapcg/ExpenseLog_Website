@@ -159,8 +159,8 @@ const RegisterScreen = ({ navigation }) => {
           <TextInput
             style={[
               styles.input,
-              errors.password === "" ? styles.error : null,
               styles.passwordInput,
+              errors.password === "" ? styles.error : null,
             ]}
             placeholder="Enter your password"
             secureTextEntry={!showPassword} // Toggle password visibility
@@ -192,8 +192,8 @@ const RegisterScreen = ({ navigation }) => {
           <TextInput
             style={[
               styles.input,
-              errors.confirmPassword === "" ? styles.error : null,
               styles.passwordInput,
+              errors.confirmPassword === "" ? styles.error : null,
             ]}
             placeholder="Enter confirm password"
             secureTextEntry={!showConfirmPassword} // Toggle confirm password visibility
