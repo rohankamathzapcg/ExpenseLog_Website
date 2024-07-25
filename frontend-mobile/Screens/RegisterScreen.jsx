@@ -11,9 +11,6 @@ import Toast from "react-native-toast-message";
 import { Entypo } from "@expo/vector-icons";
 import { useCustomFonts } from "../fonts/useCustomFont";
 import AppLoading from "expo-app-loading";
-import google from "../assets/google.png";
-import microsoft from "../assets/microsoft.png";
-import facebook from "../assets/facebook-icon.png";
 import axios from "axios";
 
 const RegisterScreen = ({ navigation }) => {
@@ -45,7 +42,8 @@ const RegisterScreen = ({ navigation }) => {
   };
 
   const validatePassword = (password) => {
-    const passwordPattern = /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
+    const passwordPattern =
+      /^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$/;
     if (!password) {
       return "";
     } else if (!passwordPattern.test(password)) {
@@ -99,18 +97,17 @@ const RegisterScreen = ({ navigation }) => {
     setErrors(allErrors);
 
     if (Object.values(allErrors).every((error) => error === null)) {
-
       const userRegisterData = {
         fullName: fname,
         emailID: email,
         password: password,
-        occupation: occupation
-      }
-      console.log(userRegisterData)
-      
-      axios.post("https://localhost:7026/api/UserAuth/register", userRegisterData)
+        occupation: occupation,
+      };
+      console.log(userRegisterData);
+
+      axios
+        .post("http://10.0.2.2:7026/api/UserAuth/register", userRegisterData)
         .then((result) => {
-          console.log(result.status)
           if (result.status === 201) {
             Toast.show({
               type: "success",
@@ -126,27 +123,25 @@ const RegisterScreen = ({ navigation }) => {
 
             setTimeout(() => {
               navigation.navigate("Login");
-            }, 2000);
-
+            }, 4000);
           } else if (result.status === 200) {
             Toast.show({
               type: "error",
               text1: "An error occurred during registration",
               position: "top",
-              visibilityTime: 2000,
+              visibilityTime: 4000,
             });
           }
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error);
           Toast.show({
             type: "error",
             text1: "Contact Administrator",
             position: "top",
-            visibilityTime: 2000,
+            visibilityTime: 4000,
           });
-        })
-
+        });
     }
   };
 
@@ -154,19 +149,6 @@ const RegisterScreen = ({ navigation }) => {
     <>
       <View style={styles.container}>
         <Text style={styles.signInText}>Sign Up</Text>
-        <Text style={styles.socialText}>with your social network</Text>
-        <View style={styles.socialButtons}>
-          <TouchableOpacity>
-            <Image source={google} alt="Google" style={styles.icon} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image source={microsoft} alt="Microsoft" style={styles.icon} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Image source={facebook} alt="Facebook" style={styles.icon} />
-          </TouchableOpacity>
-        </View>
-        <Text style={styles.orText}>OR</Text>
         <TextInput
           style={[styles.input, errors.fullname === "" ? styles.error : null]}
           placeholder="Enter your full name"
@@ -316,27 +298,6 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     fontFamily: "merriweather-bold",
     color: "#012970",
-  },
-  socialText: {
-    fontSize: 16,
-    marginVertical: 10,
-    fontFamily: "merriweather-regular",
-    color: "gray",
-  },
-  socialButtons: {
-    flexDirection: "row",
-    justifyContent: "space-evenly",
-    marginBottom: 10,
-  },
-  icon: {
-    marginHorizontal: 10,
-    width: 38,
-    height: 38,
-  },
-  orText: {
-    fontSize: 16,
-    marginVertical: 10,
-    fontFamily: "merriweather-regular",
   },
   input: {
     width: "80%",
