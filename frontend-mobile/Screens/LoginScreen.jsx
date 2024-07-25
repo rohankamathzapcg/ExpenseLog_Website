@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
+
 import React, { useState } from "react";
 import { Entypo } from "@expo/vector-icons";
 import { CommonActions } from "@react-navigation/native";
@@ -14,6 +15,8 @@ import AppLoading from "expo-app-loading";
 import google from "../assets/google.png";
 import microsoft from "../assets/microsoft.png";
 import facebook from "../assets/facebook-icon.png";
+import Toast from "react-native-toast-message";
+import axios from "axios";
 
 const LoginScreen = ({ navigation }) => {
   const [fontsLoaded] = useCustomFonts();
@@ -28,18 +31,15 @@ const LoginScreen = ({ navigation }) => {
 
   const validateLoginEmail = (email) => {
     const newEmailErrors = {};
-
     if (!email) {
       newEmailErrors.emailLogin = "Email Field is required";
     }
-
     setErrors(newEmailErrors);
     return !newEmailErrors.emailLogin;
   };
 
   const validateLoginPassword = (password) => {
     const passwordErrors = {};
-
     if (!password) {
       passwordErrors.passwordLogin = "Password Field is required";
     }
@@ -49,91 +49,137 @@ const LoginScreen = ({ navigation }) => {
 
   const handleLogin = () => {
     if (validateLoginEmail(email) && validateLoginPassword(password)) {
-      // Proceed with login
-      navigation.dispatch(
-        CommonActions.reset({
-          index: 0,
-          routes: [{ name: "Main" }],
+      const loginUser = {
+        emailID: email,
+        password: password,
+      };
+      axios
+        .post("http://10.0.2.2:7026/api/UserAuth/login", loginUser)
+        .then((result) => {
+          console.log(result);
+          if (result.status === 200) {
+            Toast.show({
+              type: "success",
+              text1: "Logged In Successfully",
+              position: "top",
+              visibilityTime: 4000,
+            });
+            setEmail("");
+            setPassword("");
+            setTimeout(() => {
+              navigation.dispatch(
+                CommonActions.reset(
+                  {
+                    index: 0,
+                    routes: [{ name: "Main" }],
+                  },
+                  4000
+                )
+              );
+            });
+          } else if (result.status === 202) {
+            Toast.show({
+              type: "error",
+              text1: result.data,
+              position: "top",
+              visibilityTime: 2000,
+            });
+          }
         })
-      );
+        .catch((err) => {
+          Toast.show({
+            type: "success",
+            text1: err.response.data,
+            position: "top",
+            visibilityTime: 2000,
+          });
+        });
     }
   };
 
+  const handleGoogleLogin = () => {};
+
+  const handleFaceBookLogin = () => {};
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.signInText}>Sign In</Text>
-      <Text style={styles.socialText}>with your social network</Text>
-      <View style={styles.socialButtons}>
-        <TouchableOpacity>
-          <Image source={google} alt="Google" style={styles.icon} />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Image source={microsoft} alt="Microsoft" style={styles.icon} />
-        </TouchableOpacity>
-        <TouchableOpacity>
-          <Image source={facebook} alt="Facebook" style={styles.icon} />
-        </TouchableOpacity>
-      </View>
-      <Text style={styles.orText}>OR</Text>
-      <TextInput
-        style={[styles.input, errors.emailLogin && styles.errorInput]}
-        placeholder="Enter your email-id"
-        autoCompleteType="off"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <View style={styles.passwordContainer}>
+    <>
+      <View style={styles.container}>
+        <Text style={styles.signInText}>Sign In</Text>
+        <Text style={styles.socialText}>with your social network</Text>
+        <View style={styles.socialButtons}>
+          <TouchableOpacity onPress={handleGoogleLogin}>
+            <Image source={google} alt="Google" style={styles.icon} />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Image source={microsoft} alt="Microsoft" style={styles.icon} />
+          </TouchableOpacity>
+          <TouchableOpacity>
+            <Image source={facebook} alt="Facebook" style={styles.icon} />
+          </TouchableOpacity>
+        </View>
+        <Text style={styles.orText}>OR</Text>
         <TextInput
-          style={[
-            styles.input,
-            styles.passwordInput,
-            errors.passwordLogin && styles.errorInput,
-          ]}
-          placeholder="Enter your password"
-          secureTextEntry={!showPassword} // Toggle password visibility
-          value={password}
-          onChangeText={setPassword}
+          style={[styles.input, errors.emailLogin && styles.errorInput]}
+          placeholder="Enter your email-id"
+          autoCompleteType="off"
+          value={email}
+          onChangeText={setEmail}
         />
-        <TouchableOpacity
-          style={styles.eyeIconContainer}
-          onPress={() => setShowPassword(!showPassword)} // Toggle eye icon and password visibility
-        >
-          <Entypo
-            name={showPassword ? "eye-with-line" : "eye"} // Change icon based on visibility state
-            size={22}
-            color="gray"
+        <View style={styles.passwordContainer}>
+          <TextInput
+            style={[
+              styles.input,
+              styles.passwordInput,
+              errors.passwordLogin && styles.errorInput,
+            ]}
+            placeholder="Enter your password"
+            secureTextEntry={!showPassword} // Toggle password visibility
+            value={password}
+            onChangeText={setPassword}
           />
+          <TouchableOpacity
+            style={styles.eyeIconContainer}
+            onPress={() => setShowPassword(!showPassword)} // Toggle eye icon and password visibility
+          >
+            <Entypo
+              name={showPassword ? "eye-with-line" : "eye"} // Change icon based on visibility state
+              size={22}
+              color="gray"
+            />
+          </TouchableOpacity>
+        </View>
+        <View style={styles.forgotPasswordContainer}>
+          <Text
+            // onPress={() => navigation.navigate("Register")}
+            style={styles.forgotPasswordText}
+          >
+            {" "}
+            Forgot Password?
+          </Text>
+        </View>
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
-      </View>
-      <View style={styles.forgotPasswordContainer}>
         <Text
-          // onPress={() => navigation.navigate("Register")}
-          style={styles.forgotPasswordText}
+          style={{
+            marginTop: 10,
+            fontFamily: "merriweather-regular",
+            fontSize: 14,
+          }}
         >
-          {" "}
-          Forgot Password?
+          Don't have an account?
+          <Text
+            onPress={() => navigation.navigate("Register")}
+            style={{ color: "blue" }}
+          >
+            {" "}
+            Register
+          </Text>
         </Text>
       </View>
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
-      <Text
-        style={{
-          marginTop: 10,
-          fontFamily: "merriweather-regular",
-          fontSize: 14,
-        }}
-      >
-        Don't have an account?
-        <Text
-          onPress={() => navigation.navigate("Register")}
-          style={{ color: "blue" }}
-        >
-          {" "}
-          Register
-        </Text>
-      </Text>
-    </View>
+      {/* Toast message component */}
+      <Toast ref={(ref) => Toast.setRef(ref)} />
+    </>
   );
 };
 
