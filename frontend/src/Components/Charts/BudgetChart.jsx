@@ -4,12 +4,12 @@ import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, Cart
 const BudgetChart = (props) => {
     return (
         <>
-            <div className='echart'>
+            <div className='p-4'>
                 <ResponsiveContainer width="100%" height={400}>
                     <BarChart data={props.data}>
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="key" />
-                        <YAxis label={{ value: "Amount (₹)", angle: -90, position: 'insideLeft' }} />
+                        <XAxis dataKey="key" tick={{ fontFamily: '"Merriweather", sans-serif' }} />
+                        <YAxis tick={{ fontFamily: '"Merriweather", sans-serif' }} label={{ value: "Amount (₹)", angle: -90, position: 'insideLeft',style: { fontFamily: '"Merriweather", sans-serif'  } }} />
                         <Tooltip />
                         <Bar dataKey="value" fill="#82ca9d" />
                     </BarChart>

@@ -73,7 +73,7 @@ const AddAccount = () => {
         if (!validateBankName() || !validateAccNo() || !validateBranchName()) {
             return;
         }
-        axios.post("https://localhost:7026/api/Account/", userBankDetails)
+        axios.post("http://localhost:7026/api/Account/", userBankDetails)
             .then((result) => {
                 if (result.status === 200) {
                     toast.success("Account added successfully", {

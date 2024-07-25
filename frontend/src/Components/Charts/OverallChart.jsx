@@ -6,10 +6,16 @@ const OverallChart = (props) => {
         echarts.init(document.querySelector('#overallTracker')).setOption({
             tooltip: {
                 trigger: 'item',
+                textStyle: {
+                    fontFamily: '"Merriweather", sans-serif'
+                },
             },
             legend: {
                 top: '5%',
                 left: 'center',
+                textStyle: {
+                    fontFamily: '"Merriweather", sans-serif'
+                },
             },
             series: [
                 {
@@ -20,12 +26,18 @@ const OverallChart = (props) => {
                     label: {
                         show: false,
                         position: "center",
+                        textStyle: {
+                            fontFamily: '"Merriweather", sans-serif'
+                        },
                     },
                     emphasis: {
                         label: {
                             show: true,
                             fontSize: "10",
                             fontWeight: 'bold',
+                            textStyle: {
+                                fontFamily: '"Merriweather", sans-serif'
+                            },
                         },
                     },
                     labelLine: {

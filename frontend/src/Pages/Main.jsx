@@ -20,7 +20,7 @@ const Main = () => {
         const year = date.getFullYear();
 
         if (authUser && authUser.emailID) {
-            axios.get(`https://localhost:7026/api/CatMapUsers/${authUser.emailID}`)
+            axios.get(`http://localhost:7026/api/CatMapUsers/${authUser.emailID}`)
                 .then((result) => {
                     if (result.status === 200) {
                         setMyCategory(result.data);
@@ -30,7 +30,7 @@ const Main = () => {
                 })
                 .catch(err => console.log(err));
 
-            axios.get(`https://localhost:7026/api/Transaction/${authUser.emailID}`)
+            axios.get(`http://localhost:7026/api/Transaction/${authUser.emailID}`)
                 .then((result) => {
                     if (result.status === 200) {
                         setMyRecentTransactions(result.data);
@@ -40,7 +40,7 @@ const Main = () => {
                 })
                 .catch(err => console.log(err))
 
-            axios.get(`https://localhost:7026/api/Account/balance/${authUser.emailID}`)
+            axios.get(`http://localhost:7026/api/Account/balance/${authUser.emailID}`)
                 .then((result) => {
                     if (result.status === 200) {
                         setBalance(result.data);
@@ -50,7 +50,7 @@ const Main = () => {
                 })
                 .catch((err) => console.log(err))
 
-            axios.get(`https://localhost:7026/api/Analytics/total-expense-by-month?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}&month=${encodeURIComponent(month)}`)
+            axios.get(`http://localhost:7026/api/Analytics/total-expense-by-month?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}&month=${encodeURIComponent(month)}`)
                 .then((result) => {
                     if (result.status === 200) {
                         setExpense(result.data);
@@ -60,7 +60,7 @@ const Main = () => {
                 })
                 .catch((err) => console.log(err))
 
-            axios.get(`https://localhost:7026/api/Analytics/total-income-by-month?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}&month=${encodeURIComponent(month)}`)
+            axios.get(`http://localhost:7026/api/Analytics/total-income-by-month?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}&month=${encodeURIComponent(month)}`)
                 .then((result) => {
                     if (result.status === 200) {
                         setIncome(result.data);
@@ -70,7 +70,7 @@ const Main = () => {
                 })
                 .catch((err) => console.log(err))
 
-            axios.get(`https://localhost:7026/api/Analytics/total-expense-by-category-this-month?email=${encodeURIComponent(authUser.emailID)}&month=${encodeURIComponent(month)}&year=${encodeURIComponent(year)}`)
+            axios.get(`http://localhost:7026/api/Analytics/total-expense-by-category-this-month?email=${encodeURIComponent(authUser.emailID)}&month=${encodeURIComponent(month)}&year=${encodeURIComponent(year)}`)
                 .then((result) => {
                     if (result.status === 200) {
                         setCategoryData(result.data);

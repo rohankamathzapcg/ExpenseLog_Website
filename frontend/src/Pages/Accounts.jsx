@@ -10,7 +10,7 @@ const Accounts = () => {
     const [myAccount, setMyAccount] = useState([]);
 
     useEffect(() => {
-        axios.get(`https://localhost:7026/api/Account/AllAccounts?EmailId=${encodeURIComponent(authUser.emailID)}`)
+        axios.get(`http://localhost:7026/api/Account/AllAccounts?EmailId=${encodeURIComponent(authUser.emailID)}`)
             .then((result) => {
                 setMyAccount(result.data)
             })

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ToastContainer } from 'react-toastify';
 import LineChartReport from '../Components/Charts/LineChartReport';
 import BudgetChart from '../Components/Charts/BudgetChart';
@@ -6,7 +6,6 @@ import OverallChart from '../Components/Charts/OverallChart';
 import { useAuth } from '../Context/AuthContext';
 import axios from 'axios';
 import ChartFilter from '../Components/ChartFilter';
-import { useEffect } from 'react';
 
 const Analytics = () => {
 
@@ -24,14 +23,29 @@ const Analytics = () => {
   const day = String(adjustedDate.getDate()).padStart(2, '0');
   const formattedDate = `${year}-${month}-${day}T00:00:00`;
 
+  useEffect(() => {
+    handleBarFilterChange('Today');
+    handleDonutFilterChange('Today');
+  }, []);
+
   const handleBarFilterChange = (filter) => {
     setBarFilter(filter)
 
     if (filter === "Today") {
 
+      axios.get(`http://localhost:7026/api/Analytics/total-expense-by-category-today?email=${encodeURIComponent(authUser.emailID)}&date=${encodeURIComponent(formattedDate)}`)
+        .then((result) => {
+          if (result.status === 200) {
+            setCategoryData(result.data);
+          } else if (result.status === 202) {
+            setCategoryData({});
+          }
+        })
+        .catch((err) => console.log(err))
+
     } else if (filter === "This Month") {
 
-      axios.get(`https://localhost:7026/api/Analytics/total-expense-by-category-this-month?email=${encodeURIComponent(authUser.emailID)}&month=${encodeURIComponent(month)}&year=${encodeURIComponent(year)}`)
+      axios.get(`http://localhost:7026/api/Analytics/total-expense-by-category-this-month?email=${encodeURIComponent(authUser.emailID)}&month=${encodeURIComponent(month)}&year=${encodeURIComponent(year)}`)
         .then((result) => {
           if (result.status === 200) {
             setCategoryData(result.data);
@@ -43,7 +57,7 @@ const Analytics = () => {
 
     } else if (filter === "This Year") {
 
-      axios.get(`https://localhost:7026/api/Analytics/total-expense-by-category-this-year?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}`)
+      axios.get(`http://localhost:7026/api/Analytics/total-expense-by-category-this-year?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}`)
         .then((result) => {
           if (result.status === 200) {
             setCategoryData(result.data);
@@ -55,26 +69,33 @@ const Analytics = () => {
 
     } else if (filter === "This Week") {
 
+      axios.get(`http://localhost:7026/api/Analytics/total-expense-by-category-this-week?email=${encodeURIComponent(authUser.emailID)}&date=${encodeURIComponent(formattedDate)}`)
+        .then((result) => {
+          if (result.status === 200) {
+            setCategoryData(result.data);
+          } else if (result.status === 202) {
+            setCategoryData({});
+          }
+        })
+        .catch((err) => console.log(err))
     }
-
   }
 
   const handleDonutFilterChange = (filter) => {
     setDonutFilter(filter)
-
     if (filter === "Today") {
 
-      // axios.get(`?email=${encodeURIComponent(authUser.emailID)}&date=${encodeURIComponent(day)}&month=${encodeURIComponent(month)}&year=${encodeURIComponent(year)}`)
-      //   .then((result) => {
-      //     if (result.status === 200) {
-      //       setExpense(result.data);
-      //     } else if (result.status === 202) {
-      //       setExpense(0);
-      //     }
-      //   })
-      //   .catch((err) => console.log(err))
+      axios.get(`http://localhost:7026/api/Analytics/total-expense-today?email=${encodeURIComponent(authUser.emailID)}&date=${encodeURIComponent(formattedDate)}`)
+        .then((result) => {
+          if (result.status === 200) {
+            setExpense(result.data);
+          } else if (result.status === 202) {
+            setExpense(0);
+          }
+        })
+        .catch((err) => console.log(err))
 
-      axios.get(`https://localhost:7026/api/Analytics/total-income-today?email=${encodeURIComponent(authUser.emailID)}&date=${encodeURIComponent(formattedDate)}`)
+      axios.get(`http://localhost:7026/api/Analytics/total-income-today?email=${encodeURIComponent(authUser.emailID)}&date=${encodeURIComponent(formattedDate)}`)
         .then((result) => {
           if (result.status === 200) {
             setIncome(result.data);
@@ -86,7 +107,7 @@ const Analytics = () => {
 
     } else if (filter === "This Month") {
 
-      axios.get(`https://localhost:7026/api/Analytics/total-expense-by-month?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}&month=${encodeURIComponent(month)}`)
+      axios.get(`http://localhost:7026/api/Analytics/total-expense-by-month?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}&month=${encodeURIComponent(month)}`)
         .then((result) => {
           if (result.status === 200) {
             setExpense(result.data);
@@ -96,7 +117,7 @@ const Analytics = () => {
         })
         .catch((err) => console.log(err))
 
-      axios.get(`https://localhost:7026/api/Analytics/total-income-by-month?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}&month=${encodeURIComponent(month)}`)
+      axios.get(`http://localhost:7026/api/Analytics/total-income-by-month?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}&month=${encodeURIComponent(month)}`)
         .then((result) => {
           if (result.status === 200) {
             setIncome(result.data);
@@ -108,7 +129,7 @@ const Analytics = () => {
 
     } else if (filter === "This Year") {
 
-      axios.get(`https://localhost:7026/api/Analytics/total-income-this-year?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}`)
+      axios.get(`http://localhost:7026/api/Analytics/total-income-this-year?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}`)
         .then((result) => {
           if (result.status === 200) {
             setIncome(result.data);
@@ -118,7 +139,7 @@ const Analytics = () => {
         })
         .catch((err) => console.log(err))
 
-      axios.get(`https://localhost:7026/api/Analytics/total-expense-this-year?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}`)
+      axios.get(`http://localhost:7026/api/Analytics/total-expense-this-year?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}`)
         .then((result) => {
           if (result.status === 200) {
             setExpense(result.data);
@@ -130,25 +151,25 @@ const Analytics = () => {
 
     } else if (filter === "This Week") {
 
-      // axios.get(`https://localhost:7026/api/Analytics/total-income-this-year?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}`)
-      //   .then((result) => {
-      //     if (result.status === 200) {
-      //       setIncome(result.data);
-      //     } else if (result.status === 202) {
-      //       setIncome(0);
-      //     }
-      //   })
-      //   .catch((err) => console.log(err))
+      axios.get(`http://localhost:7026/api/Analytics/total-income-this-week?email=${encodeURIComponent(authUser.emailID)}&date=${encodeURIComponent(formattedDate)}`)
+        .then((result) => {
+          if (result.status === 200) {
+            setIncome(result.data);
+          } else if (result.status === 202) {
+            setIncome(0);
+          }
+        })
+        .catch((err) => console.log(err))
 
-      // axios.get(`https://localhost:7026/api/Analytics/total-expense-this-year?email=${encodeURIComponent(authUser.emailID)}&year=${encodeURIComponent(year)}`)
-      //   .then((result) => {
-      //     if (result.status === 200) {
-      //       setExpense(result.data);
-      //     } else if (result.status === 202) {
-      //       setExpense(0);
-      //     }
-      //   })
-      //   .catch((err) => console.log(err))
+      axios.get(`http://localhost:7026/api/Analytics/total-expense-this-week?email=${encodeURIComponent(authUser.emailID)}&date=${encodeURIComponent(formattedDate)}`)
+        .then((result) => {
+          if (result.status === 200) {
+            setExpense(result.data);
+          } else if (result.status === 202) {
+            setExpense(0);
+          }
+        })
+        .catch((err) => console.log(err))
     }
   }
 
