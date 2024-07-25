@@ -20,7 +20,7 @@ const Categories = () => {
     };
 
     useEffect(() => {
-        axios.get("https://localhost:7026/api/Category")
+        axios.get("http://localhost:7026/api/Category")
             .then((result) => {
                 setCategories(result.data);
             })
@@ -28,7 +28,7 @@ const Categories = () => {
     })
 
     useEffect(() => {
-        axios.get(`https://localhost:7026/api/CatMapUsers/${authUser.emailID}`)
+        axios.get(`http://localhost:7026/api/CatMapUsers/${authUser.emailID}`)
             .then((result) => {
                 if (result.status === 200) {
                     setMyCategory(result.data);
@@ -41,7 +41,7 @@ const Categories = () => {
 
     const handleSaveMyCategory = () => {
 
-        axios.put("https://localhost:7026/api/CatMapUsers", updateCategory)
+        axios.put("http://localhost:7026/api/CatMapUsers", updateCategory)
             .then((result) => {
                 if (result.status === 200) {
                     toast.success("Category Saved successfully", {

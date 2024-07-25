@@ -20,7 +20,7 @@ const Profile = () => {
 
     useEffect(() => {
 
-        axios.get(`https://localhost:7026/api/UserAuth/${authUser.emailID}`)
+        axios.get(`http://localhost:7026/api/UserAuth/${authUser.emailID}`)
             .then((result) => {
                 setuserDetails(result.data)
             })
@@ -28,7 +28,7 @@ const Profile = () => {
                 console.log(error)
             })
         
-            axios.get(`https://localhost:7026/api/Account/balance/${authUser.emailID}`)
+            axios.get(`http://localhost:7026/api/Account/balance/${authUser.emailID}`)
             .then((result)=>{
                 if (result.status === 200) {
                     setBalance(result.data);
@@ -41,7 +41,7 @@ const Profile = () => {
     }, [authUser.emailID])
 
     const handleEditBtn = () => {
-        axios.put(`https://localhost:7026/api/UserAuth/${authUser.emailID}`, userDetails)
+        axios.put(`http://localhost:7026/api/UserAuth/${authUser.emailID}`, userDetails)
             .then((result) => {
                 if (result.status === 204) {
                     toast.success("Profile Updated Successfully", {

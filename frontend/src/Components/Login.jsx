@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import { useAuth } from '../Context/AuthContext';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
+import ForgotPassword from './ForgotPassword';
 
 const Login = () => {
     const { setIsLoggedIn, setAuthUser } = useAuth();
@@ -128,7 +129,7 @@ const Login = () => {
                 emailID: loginData.email,
                 password: loginData.password
             }
-            axios.post("https://localhost:7026/api/UserAuth/login", loginUser)
+            axios.post("http://localhost:7026/api/UserAuth/login", loginUser)
                 .then((result) => {
                     if (result.status === 200) {
                         toast.success("Logged In Successfully", {
@@ -180,7 +181,7 @@ const Login = () => {
                     password: userData.password,
                     occupation: userData.occupation
                 }
-                axios.post("https://localhost:7026/api/UserAuth/register", userRegisterData)
+                axios.post("http://localhost:7026/api/UserAuth/register", userRegisterData)
                     .then((result) => {
                         if (result.status === 201) {
                             toast.success("Registered Successfully", {
@@ -236,16 +237,16 @@ const Login = () => {
     }
 
     const handleGoogleLogin = () => {
-        window.location.href = "https://localhost:7026/api/SocialAuth/google-login";
+        window.location.href = "http://localhost:7026/api/SocialAuth/google-login";
     }
 
     const handleFaceBookLogin = () => {
-        window.location.href = "https://localhost:7026/api/SocialAuth/signin-facebook";
+        window.location.href = "http://localhost:7026/api/SocialAuth/signin-facebook";
     }
     return (
         <>
             <div className="modal fade square-modal" id="loginSignupModal" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="loginSignupModalLabel" aria-hidden="true">
-                <div className="modal-dialog">
+                <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
                         <div className="modal-body signin_modal" style={{ padding: 0 }}>
                             <ul className="nav nav-tabs" id="myTab" role="tablist">
@@ -285,7 +286,7 @@ const Login = () => {
                                         <input type="text" className={`form-control shadow-none ${errors.emailLogin ? 'error' : ''}`} id="userLoginEmail" placeholder='Enter your email-id' autoComplete='off' value={loginData.email} onChange={(e) => setLoginData({ ...loginData, email: e.target.value })} />
                                         {errors.emailLogin === "Email Field is required" ? "" : <div className="validations">{errors.emailLogin}</div>}
                                     </div>
-                                    <div className="form-group mb-3">
+                                    <div className="form-group mb-2">
                                         <div className="input-group">
                                             <input type={loginData.showPassword ? "text" : "password"} className={`form-control shadow-none ${errors.passwordLogin ? 'error' : ''}`} id="userLoginPassword" placeholder='Enter your password' autoComplete='off' value={loginData.password} onChange={(e) => setLoginData({ ...loginData, password: e.target.value })} />
                                             <span className="input-group-text" style={{ cursor: "pointer", fontSize: "13px" }} onClick={toggleLoginPasswordVisibility}>
@@ -297,6 +298,11 @@ const Login = () => {
                                             </span>
                                         </div>
                                         {errors.passwordLogin === "Password Field is required" ? "" : <div className="validations">{errors.passwordLogin}</div>}
+                                    </div>
+                                    <div className='mb-3 d-flex justify-content-end'>
+                                        <a className="forgot-pass" href='#forgotpass' data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                            Forgot Password?
+                                        </a>
                                     </div>
                                     <div className="form-group mb-3">
                                         <button type="button" style={{ marginBottom: "20px", width: "100%", backgroundColor: '#012970', color: 'white', fontFamily: '"Merriweather", sans-serif', fontSize: "12px" }} className="btn" onClick={handleLoginBtn}>Login</button>
@@ -315,7 +321,7 @@ const Login = () => {
                                         <div className="input-group">
                                             <input type={userData.showPassword ? "text" : "password"} className={`form-control shadow-none ${errors.password ? 'error' : ''}`} id="password" placeholder='Enter your password' autoComplete='off' value={userData.password} onChange={(e) => { handleInputChange(e); validatePassword(e.target.value); }} />
                                             <span className="input-group-text" onClick={toggleRegisterPasswordVisibility} style={{ cursor: "pointer", fontSize: "13px" }}>
-                                            {userData.showPassword ? (
+                                                {userData.showPassword ? (
                                                     <i className="bi bi-eye-slash-fill"></i>
                                                 ) : (
                                                     <i className="bi bi-eye-fill"></i>
@@ -349,6 +355,7 @@ const Login = () => {
                     </div>
                 </div>
             </div>
+            <ForgotPassword />
 
         </>
     )

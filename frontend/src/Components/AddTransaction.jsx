@@ -20,7 +20,7 @@ const AddTransaction = () => {
 
     useEffect(() => {
         if (authUser && authUser.emailID) {
-            axios.get(`https://localhost:7026/api/CatMapUsers/${authUser.emailID}`)
+            axios.get(`http://localhost:7026/api/CatMapUsers/${authUser.emailID}`)
                 .then((result) => {
                     if (result.status === 200) {
                         setCategories(result.data);
@@ -30,7 +30,7 @@ const AddTransaction = () => {
                 })
                 .catch(err => console.log(err));
 
-            axios.get(`https://localhost:7026/api/Account/AllAccounts?EmailId=${encodeURIComponent(authUser.emailID)}`)
+            axios.get(`http://localhost:7026/api/Account/AllAccounts?EmailId=${encodeURIComponent(authUser.emailID)}`)
                 .then((result) => {
                     setAccounts(result.data)
                 })
@@ -89,7 +89,7 @@ const AddTransaction = () => {
                     accountNo: transactionDetails.bAccount,
                     emailId: authUser.emailID
                 }
-                axios.post("https://localhost:7026/api/Income", incomeTransaction)
+                axios.post("http://localhost:7026/api/Income", incomeTransaction)
                     .then((result) => {
                         if (result.status === 201) {
                             toast.success("Income Transaction Added Successfully", {
@@ -122,7 +122,7 @@ const AddTransaction = () => {
                     emailId: authUser.emailID
                 }
 
-                axios.post("https://localhost:7026/api/Expense", expenseTransaction)
+                axios.post("http://localhost:7026/api/Expense", expenseTransaction)
                     .then((result) => {
                         if (result.status === 201) {
                             toast.success("Expense Transaction Added Successfully", {
@@ -137,7 +137,8 @@ const AddTransaction = () => {
                                 remarks: "",
                                 amount: 0
                             })
-                        } else if (result.status === 200) {
+                            autoCloseClick();
+                        } else {
                             toast.error(result.data, {
                                 theme: "dark",
                                 autoClose: 1000,
@@ -146,7 +147,6 @@ const AddTransaction = () => {
                     })
                     .catch((err) => console.log(err))
             }
-            autoCloseClick();
         }
     }
     return (

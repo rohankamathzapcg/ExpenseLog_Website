@@ -13,7 +13,7 @@ const Transactions = () => {
   const { authUser } = useAuth();
 
   useEffect(() => {
-    axios.get(`https://localhost:7026/api/Transaction/${authUser.emailID}`)
+    axios.get(`http://localhost:7026/api/Transaction/${authUser.emailID}`)
       .then((result) => {
         setTransactions(result.data)
       })

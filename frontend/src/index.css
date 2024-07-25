@@ -779,3 +779,21 @@ Profile CSS
 .dashboard .filter .dropdown-item:hover {
   color: #012970;
 }
+
+.dashboard .filter .dropdown-item:hover,
+.dashboard .filter .dropdown-item.active {
+  color: #012970;
+  background-color: #f8f9fa;
+  font-weight: bold;
+}
+
+.forgot-pass {
+  font-size: 12px;
+  color: #012970;
+  font-family: "Merriweather", sans-serif;
+  text-decoration: none;
+}
+
+.forgot-pass:hover {
+  color: #012970;
+}

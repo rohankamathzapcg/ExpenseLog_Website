@@ -36,7 +36,7 @@ const AddCategory = () => {
             return;
         }
         autoCloseClick();
-        axios.post("https://localhost:7026/api/Category/Add", newCategory)
+        axios.post("http://localhost:7026/api/Category/Add", newCategory)
             .then((result) => {
                 if (result.status === 201) {
                     toast.success("New Category added successfully", {
