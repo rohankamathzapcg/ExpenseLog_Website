@@ -11,7 +11,7 @@ const BudgetChart = (props) => {
                         <XAxis dataKey="key" tick={{ fontFamily: '"Merriweather", sans-serif' }} />
                         <YAxis tick={{ fontFamily: '"Merriweather", sans-serif' }} label={{ value: "Amount (₹)", angle: -90, position: 'insideLeft',style: { fontFamily: '"Merriweather", sans-serif'  } }} />
                         <Tooltip />
-                        <Bar dataKey="value" fill="#82ca9d" />
+                        <Bar dataKey="value" fill="#00C49F" />
                     </BarChart>
                 </ResponsiveContainer>
             </div>

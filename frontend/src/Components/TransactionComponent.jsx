@@ -1,5 +1,6 @@
 
 import React from 'react'
+import EditTransactions from './EditTransactions'
 
 const TransactionComponent = (props) => {
     return (
@@ -16,6 +17,7 @@ const TransactionComponent = (props) => {
                             <th scope="col">Category</th>
                             <th scope="col">Remarks</th>
                             <th scope="col">Balance</th>
+                            <th scope="col">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -37,6 +39,7 @@ const TransactionComponent = (props) => {
                                         </td>
                                         <td>{transactions.remarks}</td>
                                         <td>{transactions.newBalance}</td>
+                                        <td><div data-bs-toggle="modal" data-bs-target="#editTransactions"><i className="bi bi-pencil-square" style={{ cursor: "pointer",color:"#012970" }}></i></div></td>
                                     </tr>
                                 ))
                             )
@@ -44,6 +47,7 @@ const TransactionComponent = (props) => {
                     </tbody>
                 </table>
             </div>
+            <EditTransactions />
         </>
     )
 }
