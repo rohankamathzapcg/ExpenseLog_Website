@@ -26,7 +26,7 @@ const Analytics = () => {
   useEffect(() => {
     handleBarFilterChange('Today');
     handleDonutFilterChange('Today');
-  }, []);
+  },[]);
 
   const handleBarFilterChange = (filter) => {
     setBarFilter(filter)
