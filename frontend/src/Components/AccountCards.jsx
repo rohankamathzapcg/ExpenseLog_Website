@@ -1,6 +1,10 @@
 import React from 'react'
+import EditAccount from '../Components/EditAccount';
+import { useAuth } from '../Context/AuthContext';
 
 const AccountCards = ({account}) => {
+
+    const { authUser } = useAuth();
 
     const maskAccountNumber = (accountNo) => {
         const lastFourDigits = accountNo.slice(-4);
@@ -20,10 +24,11 @@ const AccountCards = ({account}) => {
                     <h6 className="card-subtitle mb-2 text-muted">{account.branchName}</h6>
                     <h5 className="card-subtitle mb-2 text-muted">Balance: ₹ {account.balance}</h5>
                 </div>
-                <div style={{ padding: "0 10px 10px 15px" }} className="d-flex justify-content-end">
+                <div data-bs-toggle="modal" data-bs-target="#editAccounts" style={{ padding: "0 10px 10px 15px" }} className="d-flex justify-content-end">
                     <i className="bi bi-pencil-square me-2" style={{ cursor: "pointer" }}></i>
                 </div>
             </div>
+            <EditAccount userEmail={authUser.emailID} accountNumber={account.accountNo} />
         </>
     )
 }

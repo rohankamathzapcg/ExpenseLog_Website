@@ -4,6 +4,7 @@ import OverallChart from '../Components/Charts/OverallChart';
 import { ToastContainer } from 'react-toastify';
 import axios from 'axios';
 import { useAuth } from '../Context/AuthContext';
+import PieChartReport from '../Components/Charts/PieChartReport';
 
 const Main = () => {
     const [myCategory, setMyCategory] = useState([]);
@@ -106,7 +107,7 @@ const Main = () => {
                                                     <i className='bi bi-wallet2' />
                                                 </div>
                                                 <div className='ps-2'>
-                                                    <h5 style={{ fontFamily: "Roboto, sans-serif" }}>&#8377;{balance}.0</h5>
+                                                    <h5 style={{ fontFamily: "Roboto, sans-serif" }}>&#8377; {balance}.0</h5>
                                                 </div>
                                             </div>
                                         </div>
@@ -123,7 +124,7 @@ const Main = () => {
                                                     <i className='bi bi-cash-stack' />
                                                 </div>
                                                 <div className='ps-2'>
-                                                    <h5 style={{ fontFamily: "Roboto, sans-serif" }}>&#8377;<span style={{ color: "green" }}>{income}.0</span></h5>
+                                                    <h5 style={{ fontFamily: "Roboto, sans-serif" }}>&#8377;<span style={{ color: "green" }}> {income}.0</span></h5>
                                                 </div>
                                             </div>
                                         </div>
@@ -140,7 +141,7 @@ const Main = () => {
                                                     <i className='bi bi-cash' />
                                                 </div>
                                                 <div className='ps-2'>
-                                                    <h5 style={{ fontFamily: "Roboto, sans-serif" }}>&#8377;<span style={{ color: "red" }}>{expense}.0</span></h5>
+                                                    <h5 style={{ fontFamily: "Roboto, sans-serif" }}>&#8377;<span style={{ color: "red" }}> {expense}.0</span></h5>
                                                 </div>
                                             </div>
                                         </div>
@@ -214,12 +215,12 @@ const Main = () => {
 
                             <div className='card'>
                                 <div className="card-body pb-0">
-                                    <h5 className='card-title mb-4'>This Month's Income V/S Expense</h5>
+                                    <h5 className='card-title mb-4'>This Month's Overall Report</h5>
                                     {
                                         expense === 0 && income === 0 ? (
                                             <p className='text-center' style={{ color: "grey", fontSize: "14px" }}>No Records Found</p>
                                         ) : (
-                                            <OverallChart expenseValue={expense} incomeValue={income} />
+                                            <PieChartReport balanceValue={balance} expenseValue={expense} incomeValue={income} />
                                         )
                                     }
                                 </div>

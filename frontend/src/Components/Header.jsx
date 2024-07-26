@@ -6,6 +6,7 @@ const Header = () => {
     const { authUser } = useAuth();
 
     const loginButtonRef = useRef();
+    
     const autoOpenClick = () => {
         loginButtonRef.current.click();
     }

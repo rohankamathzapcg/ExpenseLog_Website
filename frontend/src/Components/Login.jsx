@@ -355,8 +355,7 @@ const Login = () => {
                     </div>
                 </div>
             </div>
-            <ForgotPassword />
-
+            <ForgotPassword  />
         </>
     )
 }
