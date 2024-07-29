@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useAuth } from '../Context/AuthContext';
+import { useForm, ValidationError } from '@formspree/react';
+import { ToastContainer, toast } from 'react-toastify';
 
 const HelpCenter = () => {
     const { authUser } = useAuth();
+    const [state, handleSubmit] = useForm("xqazpoej");
     const FAQ = [
         {
             question: "How can I categorize my expenses?",
@@ -45,6 +48,15 @@ const HelpCenter = () => {
             answer: "No, the application does not support importing or exporting transaction data for backup or analysis in other tools. Similarly, the application does not support syncing transaction data across multiple devices. If you need assistance with accessing your data on different devices or managing your data, please contact the admin. You can send an email using the \"Contact Us\" section in the app for further assistance."
         }
     ]
+
+    useEffect(() => {
+        if (state.succeeded) {
+            toast.success("Thanks for contacting us! We will get back to you shortly.", {
+                theme: "dark",
+                autoClose: 1000,
+            });
+        }
+    }, [state.succeeded]);
     return (
         <>
             <main id="main" className='main'>
@@ -70,7 +82,6 @@ const HelpCenter = () => {
                                 </div>
                             ))
                         }
-
                     </div>
                     <h2 className="h4 h-sm-5 mt-5">Still have any questions? Contact us to get your answer!</h2>
                     <div className="row mt-5">
@@ -79,28 +90,66 @@ const HelpCenter = () => {
                         </div>
                         <div className="col-md-8">
                             <div className="p-3 formInput">
-                                <div className="form-group d-flex align-items-center mb-3">
-                                    <label className='col-4'>Full Name:</label>
-                                    <input type="text" style={{ fontFamily: '"Merriweather", sans-serif', fontSize: "13px" }} className="form-control shadow-none" placeholder='Enter your full name' value={authUser.fullName} autoComplete='off' />
-                                </div>
-                                <div className="form-group d-flex align-items-center mb-3">
-                                    <label className='col-4'>Email-Id:</label>
-                                    <input type="text" style={{ fontFamily: '"Merriweather", sans-serif', fontSize: "13px" }} disabled className="form-control shadow-none" placeholder='Enter your email-id' value={authUser.emailID} autoComplete='off' />
-                                </div>
-
-                                <div className="form-group d-flex align-items-center mb-3">
-                                    <label className='col-4'>Message:</label>
-                                    <textarea rows={7} className="form-control shadow-none" style={{ fontSize: "13px", fontFamily: '"Merriweather", sans-serif' }} placeholder="Leave your queries here" id="floatingTextarea"></textarea>
-                                </div>
-
-                                <div className="form-group mb-3">
-                                    <button type="button" style={{ marginBottom: "20px", width: "100%", backgroundColor: '#012970', color: 'white', fontFamily: '"Merriweather", sans-serif', fontSize: "12px" }} className="btn" >Send</button>
-                                </div>
+                                <form onSubmit={handleSubmit}>
+                                    <div className="form-group d-flex align-items-center mb-3">
+                                        <label className='col-4'>Full Name:</label>
+                                        <input
+                                            type="text"
+                                            style={{ fontFamily: '"Merriweather", sans-serif', fontSize: "13px" }}
+                                            className="form-control shadow-none"
+                                            placeholder='Enter your full name'
+                                            value={authUser.fullName}
+                                            autoComplete='off'
+                                            name="name"
+                                        />
+                                    </div>
+                                    <div className="form-group d-flex align-items-center mb-3">
+                                        <label className='col-4'>Email-Id:</label>
+                                        <input
+                                            type="text"
+                                            style={{ fontFamily: '"Merriweather", sans-serif', fontSize: "13px" }}
+                                            disabled
+                                            className="form-control shadow-none"
+                                            placeholder='Enter your email-id'
+                                            value={authUser.emailID}
+                                            autoComplete='off'
+                                            name="email"
+                                        />
+                                    </div>
+                                    <div className="form-group d-flex align-items-center mb-3">
+                                        <label className='col-4'>Message:</label>
+                                        <textarea
+                                            rows={7}
+                                            className="form-control shadow-none"
+                                            style={{ fontSize: "13px", fontFamily: '"Merriweather", sans-serif' }}
+                                            placeholder="Leave your queries here"
+                                            id="floatingTextarea"
+                                            name="message"
+                                            required
+                                        ></textarea>
+                                        <ValidationError
+                                            prefix="Message"
+                                            field="message"
+                                            errors={state.errors}
+                                        />
+                                    </div>
+                                    <div className="form-group mb-3">
+                                        <button
+                                            type="submit"
+                                            style={{ marginBottom: "20px", width: "100%", backgroundColor: '#012970', color: 'white', fontFamily: '"Merriweather", sans-serif', fontSize: "12px" }}
+                                            className="btn"
+                                            disabled={state.submitting}
+                                        >
+                                            Send message
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
                 </div>
             </main>
+            <ToastContainer />
         </>
     )
 }
