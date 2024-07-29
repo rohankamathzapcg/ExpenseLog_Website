@@ -15,6 +15,11 @@ const Analytics = () => {
   const [barFilter, setBarFilter] = useState('Today');
   const [categoryData, setCategoryData] = useState({})
   const { authUser } = useAuth();
+  const [lineChartData, setLineChartData] = useState({
+    incomes: [],
+    expenses: [],
+    dates: []
+  });
 
   const date = new Date();
   const adjustedDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0);
@@ -26,7 +31,25 @@ const Analytics = () => {
   useEffect(() => {
     handleBarFilterChange('Today');
     handleDonutFilterChange('Today');
-  },[]);
+    fetchLineChartData();
+  }, []);
+
+  const fetchLineChartData = () => {
+    axios.get(`http://localhost:7026/api/Analytics/weekly-report?email=${encodeURIComponent(authUser.emailID)}&date=${encodeURIComponent(formattedDate)}`)
+      .then((result) => {
+        if (result.status === 200) {
+          setLineChartData(result.data);
+          console.log(result.data)
+        } else if (result.status === 202) {
+          setLineChartData({
+            incomes: [],
+            expenses: [],
+            dates: []
+          });
+        }
+      })
+      .catch((err) => console.log(err))
+  }
 
   const handleBarFilterChange = (filter) => {
     setBarFilter(filter)
@@ -189,7 +212,7 @@ const Analytics = () => {
                     <div className='card'>
                       <div className='card-body'>
                         <h5 className='card-title mb-4'>Reports | <span>This Week</span></h5>
-                        <LineChartReport />
+                        <LineChartReport dataContents={lineChartData} />
                       </div>
                     </div>
                   </div>

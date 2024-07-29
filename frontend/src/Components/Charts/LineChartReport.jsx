@@ -1,20 +1,16 @@
-import React, { useState } from 'react';
-import Chart from 'react-apexcharts'
+import React, { useEffect, useState } from 'react';
+import Chart from 'react-apexcharts';
 
-const LineChartReport = () => {
-    const [data, setData] = useState({
+const LineChartReport = ({ dataContents }) => {
+    const [chartData, setChartData] = useState({
         series: [
             {
-                name: 'Sales',
-                data: [31, 40, 28, 51, 42, 82, 56],
+                name: 'Income',
+                data: [],
             },
             {
-                name: 'Revenue',
-                data: [11, 32, 45, 32, 34, 52, 41],
-            },
-            {
-                name: "Customers",
-                data: [15, 11, 32, 18, 9, 24, 11],
+                name: 'Expenses',
+                data: [],
             },
         ],
         options: {
@@ -28,7 +24,7 @@ const LineChartReport = () => {
             markers: {
                 size: 4,
             },
-            colors: ['#012970', 'green', 'red'],
+            colors: ['#012970', 'green'],
             fill: {
                 type: 'gradient',
                 gradient: {
@@ -47,15 +43,7 @@ const LineChartReport = () => {
             },
             xaxis: {
                 type: 'datetime',
-                categories: [
-                    '2018-09-19T00:00:00.000Z',
-                    '2018-09-20T00:00:00.000Z',
-                    '2018-09-21T00:00:00.000Z',
-                    '2018-09-22T00:00:00.000Z',
-                    '2018-09-23T00:00:00.000Z',
-                    '2018-09-24T00:00:00.000Z',
-                    '2018-09-25T00:00:00.000Z',
-                ],
+                categories: [],
             },
             tooltip: {
                 x: {
@@ -65,12 +53,34 @@ const LineChartReport = () => {
         }
     });
 
+    useEffect(() => {
+        setChartData({
+            series: [
+                {
+                    name: 'Income',
+                    data: dataContents.incomes || [],
+                },
+                {
+                    name: 'Expenses',
+                    data: dataContents.expenses || [],
+                },
+            ],
+            options: {
+                ...chartData.options,
+                xaxis: {
+                    ...chartData.options.xaxis,
+                    categories: dataContents.dates || [],
+                },
+            }
+        });
+    }, [dataContents]);
+
     return (
-       <Chart 
-            options={data.options}
-            series={data.series}
-            type={data.options.chart.type}
-            height={data.options.chart.height}
+        <Chart
+            options={chartData.options}
+            series={chartData.series}
+            type={chartData.options.chart.type}
+            height={chartData.options.chart.height}
         />
     );
 }
