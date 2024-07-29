@@ -6,12 +6,13 @@ import {
   ScrollView,
   FlatList,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { useCustomFonts } from "../fonts/useCustomFont";
 import AppLoading from "expo-app-loading";
 import { BarChart, PieChart } from "react-native-chart-kit";
 import DashCard from "../Components/DashCard";
 import Carousel from "react-native-reanimated-carousel"; // Import Carousel
+import PaginationDots from "../Components/PaginationDots"; // Import PaginationDots
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -84,12 +85,16 @@ const messagesData = [];
 
 const DashboardScreen = () => {
   const [fontsLoaded] = useCustomFonts();
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   if (!fontsLoaded) {
     return <AppLoading />;
   }
 
-  // Render list or "No records to display" message
+  const handleSnapToItem = (index) => {
+    setCurrentIndex(index);
+  };
+
   const renderListOrMessage = (data, type) => {
     if (data.length === 0) {
       return <Text style={styles.cardBody}>No records to display</Text>;
@@ -115,10 +120,11 @@ const DashboardScreen = () => {
           <Carousel
             loop
             autoPlay
-            autoPlayInterval={2000}
+            autoPlayInterval={3000}
             width={screenWidth}
             height={150} // Adjust the height as needed
             data={cardData}
+            layout="parallax-horizontal"
             renderItem={({ item }) => (
               <DashCard
                 title={item.title}
@@ -127,7 +133,9 @@ const DashboardScreen = () => {
                 style={styles.dashCard}
               />
             )}
+            onSnapToItem={handleSnapToItem}
           />
+          <PaginationDots currentIndex={currentIndex} data={cardData} />
         </View>
         <View style={styles.additionalCardsContainer}>
           <View style={styles.additionalCard}>
@@ -192,6 +200,7 @@ const styles = StyleSheet.create({
   },
   carouselContainer: {
     marginBottom: 20,
+    alignItems: "center", // Center pagination dots horizontally
   },
   additionalCardsContainer: {
     flexDirection: "row",
