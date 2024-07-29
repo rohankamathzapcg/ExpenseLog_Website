@@ -127,7 +127,7 @@ namespace ExpenseTracker.Repository
             var expenses = new List<float>();
             var dates = new List<DateTime>();
 
-            for (var day = startDate; day < endDate; day = day.AddDays(1))
+            for (var day = startDate; day <= endDate; day = day.AddDays(1))
             {
                 var dailyIncome = await _context.Incomes
                     .Where(i => i.EmailID == email && i.IncomeDate.Date == day.Date)
