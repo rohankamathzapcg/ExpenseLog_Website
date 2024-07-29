@@ -22,6 +22,7 @@ import {
 import OnboardingScreen from "../Screens/OnboardingScreen";
 import CustomDrawer from "../Components/CustomDrawer";
 import MyProfileScreen from "../Screens/MyProfileScreen";
+import AddAccountScreen from "../Screens/AddAccountScreen";
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -158,6 +159,21 @@ const AppNavigation = () => {
           // options={{ headerShown: false }}
           options={{
             title: "My Profile",
+            headerStyle: {
+              backgroundColor: "#012970",
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              fontFamily: "merriweather-bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="AddAccount"
+          component={AddAccountScreen}
+          // options={{ headerShown: false }}
+          options={{
+            title: "Add New Account",
             headerStyle: {
               backgroundColor: "#012970",
             },
