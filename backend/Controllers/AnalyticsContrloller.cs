@@ -102,8 +102,8 @@ namespace ExpenseTracker.Controllers
             var result = await _analyticsRepository.GetTotalExpenseByCategoryThisYearAsync(email, year);
             return Ok(result);
         }
+
         [HttpGet("weekly-report")]
-        [Authorize]
         public async Task<IActionResult> GetWeeklyReport([FromQuery] string email, [FromQuery] DateTime date)
         {
             if (string.IsNullOrEmpty(email))
@@ -111,16 +111,15 @@ namespace ExpenseTracker.Controllers
                 return BadRequest("Email is required");
             }
 
-            var (incomes, expenses, balances,dates) = await _analyticsRepository.GetWeeklyReportAsync(email, date);
+            var (incomes, expenses,dates) = await _analyticsRepository.GetWeeklyReportAsync(email, date);
 
             var report = new
             {
                 Incomes = incomes,
                 Expenses = expenses,
-                Balances = balances,
                 Dates = dates
             };
-
+            Console.WriteLine(report);
             return Ok(report);
         }
     }

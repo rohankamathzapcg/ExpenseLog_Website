@@ -18,7 +18,7 @@ namespace ExpenseTracker.Repository.Interfaces
         Task<IEnumerable<KeyValuePair<string, float>>> GetTotalExpenseByCategoryThisWeekAsync(string email, DateTime date);
         Task<IEnumerable<KeyValuePair<string, float>>> GetTotalExpenseByCategoryThisMonthAsync(string email, int month, int year);
         Task<IEnumerable<KeyValuePair<string, float>>> GetTotalExpenseByCategoryThisYearAsync(string email,int year);
-        Task<(List<float> incomes, List<float> expenses, List<float> balances, List<DateTime> dates)> GetWeeklyReportAsync(string email, DateTime date);
+        Task<(List<float> incomes, List<float> expenses, List<DateTime> dates)> GetWeeklyReportAsync(string email, DateTime date);
 
     }
 }

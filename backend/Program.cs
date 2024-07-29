@@ -35,6 +35,7 @@ builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
     options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 })
 .AddCookie()
 .AddGoogle(options =>
@@ -52,7 +53,7 @@ builder.Services.AddAuthentication(options =>
     options.Fields.Add("name");
     options.Fields.Add("email");
     options.Fields.Add("picture");
-    options.CallbackPath = new PathString("/localhost:7026/api/auth/facebook-response"); // Ensure this matches the redirect URI
+    options.CallbackPath = new PathString("/api/auth/facebook-response"); // Ensure this matches the redirect URI
 });
 
 // Add DbContext
@@ -69,7 +70,6 @@ builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IAnalyticsRepository, AnalyticsRepository>();
 
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -83,11 +83,11 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 // Serve static files from the Images folder
-//app.UseStaticFiles(new StaticFileOptions
-//{
-//    FileProvider = new PhysicalFileProvider(Path.Combine(app.Environment.ContentRootPath, "Images")),
-//    RequestPath = "/Images"
-//});
+// app.UseStaticFiles(new StaticFileOptions
+// {
+//     FileProvider = new PhysicalFileProvider(Path.Combine(app.Environment.ContentRootPath, "Images")),
+//     RequestPath = "/Images"
+// });
 
 // Use CORS Policy
 app.UseCors("corspolicy");
