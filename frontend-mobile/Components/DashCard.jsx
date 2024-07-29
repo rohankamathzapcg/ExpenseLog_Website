@@ -1,8 +1,15 @@
 import React from "react";
+import { useCustomFonts } from "../fonts/useCustomFont";
+import AppLoading from "expo-app-loading";
 import { View, Text, StyleSheet } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const DashCard = ({ title, balance, icon }) => {
+  const [fontsLoaded] = useCustomFonts();
+
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
   return (
     <View style={styles.card}>
       <View style={styles.cardBody}>
@@ -25,6 +32,7 @@ const styles = StyleSheet.create({
     width: 180,
     height: 120,
     marginRight: 10,
+    marginLeft: 90,
     backgroundColor: "#fff",
     borderRadius: 10,
     elevation: 4, // For Android shadow
@@ -38,9 +46,9 @@ const styles = StyleSheet.create({
     padding: 2,
   },
   cardTitle: {
-    fontSize: 15,
-    fontWeight: "bold",
+    fontSize: 14,
     marginBottom: 10,
+    fontFamily: "merriweather-bold",
   },
   cardContent: {
     flexDirection: "row",
