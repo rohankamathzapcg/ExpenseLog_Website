@@ -25,12 +25,12 @@ namespace ExpenseTracker.Controllers
         [HttpGet("Account")]
         public async Task<ActionResult<Account>> GetAccount(string accountNo, string EmailId) 
         {
-            var existingAccount=  await _repository.GetAsync(accountNo, EmailId);
+            var existingAccount=  await _repository.GetAsync(EmailId, accountNo);
             if (existingAccount != null)
             {
-                return Ok("Account does not exist");
+                return Ok(existingAccount); 
             }
-            return Ok(existingAccount);
+            return Accepted("application/json", "Account does not exist");
         }
         [HttpGet("AllAccounts")]
         public async Task<ActionResult<IEnumerable<Account>>> GetAllAccounts(string EmailId)
