@@ -1,5 +1,6 @@
 ﻿using ExpenseTracker.Data;
 using ExpenseTracker.Model;
+using ExpenseTracker.Model.DTO;
 using ExpenseTracker.Repository.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -105,13 +106,13 @@ namespace ExpenseTracker.Repository.Implementation
                 return null;
             }
         }
-        public async Task<User> UpdatePassword(string emailId,string password)
+        public async Task<User> UpdatePassword(UserDTO user)
         {
-            var user=_context.Users.Find(emailId);
-            user.Password= BCrypt.Net.BCrypt.HashPassword(password);
-            _context.Entry(user).State = EntityState.Modified;
+            var existingUser=_context.Users.Find(user.emailId);
+            existingUser.Password= BCrypt.Net.BCrypt.HashPassword(user.password);
+            _context.Entry(existingUser).State = EntityState.Modified;
             await _context.SaveChangesAsync();
-            return user;
+            return existingUser;
 
         }
     }

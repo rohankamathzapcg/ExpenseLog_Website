@@ -1,4 +1,5 @@
 ﻿using ExpenseTracker.Model;
+using ExpenseTracker.Model.DTO;
 
 namespace ExpenseTracker.Repository.Interfaces
 {
@@ -14,7 +15,7 @@ namespace ExpenseTracker.Repository.Interfaces
         Task<User> AddSocialAsync(User user);
         Task<User> UploadProfileImageAsync(string emailId, string imageName);
 
-        Task<User> UpdatePassword(string emailId,string password);
+        Task<User> UpdatePassword(UserDTO user);
     }
 }
 
