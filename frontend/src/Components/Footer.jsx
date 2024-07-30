@@ -6,7 +6,7 @@ const Footer = () => {
       <div className='copy-right'>
         Copyright &copy; 2024 
         <strong>
-            <span> Expense Tracker </span>
+            <span> WalletWise </span>
         </strong>
         .All Rights Reserved
       </div>
