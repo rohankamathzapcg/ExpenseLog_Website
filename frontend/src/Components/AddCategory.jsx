@@ -56,7 +56,7 @@ const AddCategory = () => {
     return (
         <>
             <div className="modal fade" id="addCategoryModal" data-bs-backdrop="static" tabIndex="-1" aria-labelledby="categoryModalLabel" aria-hidden="true">
-                <div className="modal-dialog">
+                <div className="modal-dialog modal-dialog-centered">
                     <div className="modal-content">
                         <div className="modal-header">
                             <h1 className="modal-title fs-5" id="categoryModalLabel">Add New Category</h1>

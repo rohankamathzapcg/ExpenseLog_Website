@@ -32,7 +32,7 @@ const Header = () => {
                 <div className='d-flex align-items-center justify-content-between'>
                     <i className='bi bi-list toggle-sidebar-btn pe-5' onClick={handleToggleSideBar}></i>
                     <a href='/' className='logo d-flex align-items-center'>
-                        <span className='d-none d-lg-block'>ExpenseTracker</span>
+                        <span className='d-none d-lg-block'>Wallet<span style={{color:"red"}}>Wise.</span></span>
                     </a>
                 </div>
 
