@@ -9,6 +9,7 @@ using ExpenseTracker.Data;
 using ExpenseTracker.Model;
 using ExpenseTracker.Repository.Interfaces;
 using ExpenseTracker.Repository.Implementation;
+using Humanizer;
 
 namespace ExpenseTracker.Controllers
 {
@@ -135,6 +136,28 @@ namespace ExpenseTracker.Controllers
             {
                 return NotFound(); // Handle not found scenario
             }
+        }
+        [HttpPut("{id}/{password}")]
+        public async Task<IActionResult> PutPassword(string id,string password)
+        {
+
+            try
+            {
+                await _repository.UpdatePassword(id,password);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (await _repository.GetByIdAsync(id) == null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
         }
     }
 }

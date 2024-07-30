@@ -13,6 +13,8 @@ namespace ExpenseTracker.Repository.Interfaces
         Task<User> PostUserForLogin(User login);
         Task<User> AddSocialAsync(User user);
         Task<User> UploadProfileImageAsync(string emailId, string imageName);
+
+        Task<User> UpdatePassword(string emailId,string password);
     }
 }
 
