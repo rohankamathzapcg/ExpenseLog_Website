@@ -62,14 +62,21 @@ function ForgotPassword() {
             setMessage({ text: 'Password fields cannot be empty!', type: 'error' });
             return;
         }
-        axios.put(`http://localhost:7026/api/UserAuth/${email}/${newPassword}`,)
+        const updatedPassword = {
+            emailId: email,
+            password: newPassword
+        }
+        axios.put("http://localhost:7026/api/UserAuth/ChangePassword",updatedPassword)
             .then((result) => {
-                if (result.status === 200) {
+                if (result.status === 202) {
                     toast.success("password updated Successfully", {
                         theme: "dark",
                         autoClose: 1000,
                     });
-                    // window.location.href = "/";
+                    setTimeout(()=>{
+                        window.location.href = "/";
+                    },2000)
+
                 }
             })
             .catch((err) => console.log(err))

@@ -10,6 +10,7 @@ using ExpenseTracker.Model;
 using ExpenseTracker.Repository.Interfaces;
 using ExpenseTracker.Repository.Implementation;
 using Humanizer;
+using ExpenseTracker.Model.DTO;
 
 namespace ExpenseTracker.Controllers
 {
@@ -137,17 +138,26 @@ namespace ExpenseTracker.Controllers
                 return NotFound(); // Handle not found scenario
             }
         }
-        [HttpPut("{id}/{password}")]
-        public async Task<IActionResult> PutPassword(string id,string password)
+        [HttpPut("ChangePassword")]
+        public async Task<IActionResult> PutPassword(UserDTO user)
         {
 
             try
             {
-                await _repository.UpdatePassword(id,password);
+               var existingUser= await _repository.UpdatePassword(user);
+                if (existingUser != null)
+                {
+                    return Accepted("application/json", "Password Changed Sucessfully");
+                }
+                else
+                {
+                    return Accepted("application/json", "Error Occured");
+                }
+
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (await _repository.GetByIdAsync(id) == null)
+                if (await _repository.GetByIdAsync(user.emailId) == null)
                 {
                     return NotFound();
                 }
