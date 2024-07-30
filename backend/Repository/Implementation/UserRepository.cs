@@ -105,6 +105,15 @@ namespace ExpenseTracker.Repository.Implementation
                 return null;
             }
         }
+        public async Task<User> UpdatePassword(string emailId,string password)
+        {
+            var user=_context.Users.Find(emailId);
+            user.Password= BCrypt.Net.BCrypt.HashPassword(password);
+            _context.Entry(user).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return user;
+
+        }
     }
 
 }

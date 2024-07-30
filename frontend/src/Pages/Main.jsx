@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import BudgetChart from '../Components/Charts/BudgetChart';
-import OverallChart from '../Components/Charts/OverallChart';
 import { ToastContainer } from 'react-toastify';
 import axios from 'axios';
 import { useAuth } from '../Context/AuthContext';
