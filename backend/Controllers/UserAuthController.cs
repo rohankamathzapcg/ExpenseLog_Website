@@ -58,33 +58,28 @@ namespace ExpenseTracker.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(string id, User user)
+        public async Task<IActionResult> UpdateUser(string id, [FromForm] UserDTO userDTO, IFormFile imageFile)
         {
-            if (id != user.EmailID)
+            var existingUser = await _repository.GetByIdAsync(id);
+            if (existingUser == null)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            try
-            {
-                await _repository.UpdateAsync(user);
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (await _repository.GetByIdAsync(id) == null)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            // Map the DTO to the User entity
+            existingUser.FullName = userDTO.FullName;
+            existingUser.Occupation = userDTO.Occupation;
+            existingUser.MonthlyIncome = userDTO.MonthlyIncome;
+            // Other properties you want to update...
 
-            return NoContent();
+            // Update the user and handle the image file if provided
+            var updatedUser = await _repository.UpdateAsync(existingUser, imageFile);
+
+            return Ok(updatedUser);
         }
+   
 
-        [HttpDelete("{id}")]
+    [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUser(string id)
         {
             var user = await _repository.GetByIdAsync(id);

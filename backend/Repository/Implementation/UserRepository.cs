@@ -66,11 +66,32 @@ namespace ExpenseTracker.Repository.Implementation
             await _context.SaveChangesAsync();
             return user;
         }
-        public async Task<User> UpdateAsync(User user)
+        public async Task<User> UpdateAsync(User user, IFormFile imageFile)
         {
+            // Update user details
             user.FullName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(user.FullName.ToLower());
+
+            // Handle image upload if a new file is provided
+            if (imageFile != null && imageFile.Length > 0)
+            {
+                string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "Data", "img");
+                Directory.CreateDirectory(uploadsFolder); // Ensure directory exists
+                string uniqueFileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
+                string filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var fileStream = new FileStream(filePath, FileMode.Create))
+                {
+                    await imageFile.CopyToAsync(fileStream);
+                }
+
+                // Update user's image name
+                user.ImageName = uniqueFileName;
+            }
+
+            // Update user record in the database
             _context.Entry(user).State = EntityState.Modified;
             await _context.SaveChangesAsync();
+
             return user;
         }
 
