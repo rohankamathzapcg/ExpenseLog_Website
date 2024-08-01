@@ -1,10 +1,10 @@
-import React, { useEffect, useRef } from 'react';
-import profile from '../Assets/PP.jpg';
+import React, { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../Context/AuthContext';
+import axios from 'axios';
 
 const Header = () => {
     const { authUser } = useAuth();
-
+    const [profilePhoto, setProfilePhoto] = useState('');
     const loginButtonRef = useRef();
     
     const autoOpenClick = () => {
@@ -15,6 +15,14 @@ const Header = () => {
     useEffect(() => {
         if (authUser !== null) {
             console.log("Already Logged In")
+            axios.get(`http://localhost:7026/api/UserAuth/${authUser.emailID}`)
+                .then((response) => {
+                    setProfilePhoto(response.data.imageName); // Set the profile photo URL
+                })
+                .catch((error) => {
+                    console.error('Error fetching profile photo:', error);
+                });
+
         }
         else {
             autoOpenClick();
@@ -49,7 +57,7 @@ const Header = () => {
                             ) : (
                                 <li className="nav-item dropdown pe-3">
                                     <a className='nav-link nav-profile d-flex align-items-center pe-0' href="/" data-bs-toggle="dropdown">
-                                        <img src={profile} alt="Profile" className='rounded-circle' />
+                                        <img src={profilePhoto} alt="Profile" style={{width: "38px",height: "50px", borderRadius: "50%",objectFit: "cover"}} />
                                         <span className="d-none d-md-block dropdown-toggle ps-2">Hey, {authUser.fullName}</span>
                                     </a>
 
