@@ -36,7 +36,7 @@ export default function App() {
         <StatusBar backgroundColor="#012970" />
         <View style={styles.splashContainer}>
           <Image
-            source={require("./assets/exp-logo.png")}
+            source={require("./assets/wallet-logo.png")}
             style={styles.splashImage}
           />
         </View>
@@ -60,8 +60,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#012970",
   },
   splashImage: {
-    width: 300,
-    height: 300,
+    width: 400,
+    height: 400,
     marginBottom: 20,
   },
 });
