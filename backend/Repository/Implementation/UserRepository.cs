@@ -2,19 +2,26 @@
 using ExpenseTracker.Model;
 using ExpenseTracker.Model.DTO;
 using ExpenseTracker.Repository.Interfaces;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
+
 
 namespace ExpenseTracker.Repository.Implementation
 {
     public class UserRepository : IUserRepository
     {
         private readonly ExpenseTrackerDbContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public UserRepository(ExpenseTrackerDbContext context)
+        public UserRepository(ExpenseTrackerDbContext context, IWebHostEnvironment webHostEnvironment, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IEnumerable<User>> GetAllAsync()
@@ -74,18 +81,40 @@ namespace ExpenseTracker.Repository.Implementation
             // Handle image upload if a new file is provided
             if (imageFile != null && imageFile.Length > 0)
             {
-                string uploadsFolder = Path.Combine(Directory.GetCurrentDirectory(), "Data", "img");
-                Directory.CreateDirectory(uploadsFolder); // Ensure directory exists
-                string uniqueFileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
+                // Ensure _webHostEnvironment and ContentRootPath are not null
+                if (_webHostEnvironment == null || string.IsNullOrEmpty(_webHostEnvironment.ContentRootPath))
+                {
+                    throw new InvalidOperationException("ContentRootPath is not configured properly.");
+                }
+
+                // Define the directory and file path for the image
+                string uploadsFolder = Path.Combine(_webHostEnvironment.ContentRootPath, "Images");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                // Create a unique file name and file path
+                string uniqueFileName = $"{Guid.NewGuid()}_{imageFile.FileName}";
                 string filePath = Path.Combine(uploadsFolder, uniqueFileName);
 
+                // Copy the file to the specified path
                 using (var fileStream = new FileStream(filePath, FileMode.Create))
                 {
                     await imageFile.CopyToAsync(fileStream);
                 }
 
-                // Update user's image name
-                user.ImageName = uniqueFileName;
+                // Construct the URL for the uploaded image
+                var request = _httpContextAccessor?.HttpContext?.Request;
+                if (request == null)
+                {
+                    throw new InvalidOperationException("HTTP context or request is not available.");
+                }
+
+                string imageUrl = $"{request.Scheme}://{request.Host}{request.PathBase}/Images/{uniqueFileName}";
+
+                // Update user's image name with the URL
+                user.ImageName = imageUrl;
             }
 
             // Update user record in the database
@@ -94,6 +123,7 @@ namespace ExpenseTracker.Repository.Implementation
 
             return user;
         }
+
 
         public async Task DeleteAsync(string id)
         {

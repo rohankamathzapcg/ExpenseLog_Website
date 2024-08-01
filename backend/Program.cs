@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.Http;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,6 +63,8 @@ builder.Services.AddDbContext<ExpenseTrackerDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("ExpenseTrackerCon")));
 
 // Map repositories
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAccountRepository, AccountRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
@@ -69,6 +73,7 @@ builder.Services.AddScoped<IIncomeRepository, IncomeRepository>();
 builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
 builder.Services.AddScoped<ITransactionRepository, TransactionRepository>();
 builder.Services.AddScoped<IAnalyticsRepository, AnalyticsRepository>();
+
 
 var app = builder.Build();
 
@@ -89,12 +94,18 @@ app.UseHttpsRedirection();
 //     RequestPath = "/Images"
 // });
 
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(app.Environment.ContentRootPath, "Images")),
+    RequestPath = "/Images"
+});
+
 // Use CORS Policy
 app.UseCors("corspolicy");
 
 app.UseAuthentication(); // Add authentication middleware
 app.UseAuthorization();
-
+app.UseStaticFiles();
 app.MapControllers();
 
 app.Run();
