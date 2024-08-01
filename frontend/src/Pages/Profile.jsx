@@ -1,60 +1,83 @@
-import React, { useEffect, useState } from 'react'
-import profile from '../Assets/PP.jpg';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../Context/AuthContext';
 import { toast, ToastContainer } from 'react-toastify';
 import axios from 'axios';
 
 const Profile = () => {
     const { authUser, setAuthUser } = useAuth();
-    // const [image, setImage] = useState("");
-    const [balance,setBalance]=useState(0);
-    const [userDetails, setuserDetails] = useState({
-        emailID: "",
-        fullName: "",
-        password: "",
-        occupation: "",
-        monthlyIncome: 0,
-        photo: "",
-        balance: balance
-    })
+    const [balance, setBalance] = useState(0);
+    const [userDetails, setUserDetails] = useState({
+        emailID: "rkamath391@gmail.com",
+        fullName: "Rohan S Kamath",
+        password: "$2a$11$EAQGDhq8sCE3SJ6jPC9ddeGztlbfU7UJGrmA0K6xIsqzWdXMZct0u",
+        occupation: "IT",
+        monthlyIncome: 25000,
+        imageName: "",
+        balance: balance,
+        imageFile: null // Field for the image file
+    });
+    const [imagePreview, setImagePreview] = useState(''); // State for image preview
 
     useEffect(() => {
-
         axios.get(`http://localhost:7026/api/UserAuth/${authUser.emailID}`)
             .then((result) => {
-                setuserDetails(result.data)
+                setUserDetails(result.data);
+                setImagePreview(result.data.imageName); // Set the preview URL
             })
             .catch((error) => {
-                console.log(error)
-            })
-        
-            axios.get(`http://localhost:7026/api/Account/balance/${authUser.emailID}`)
-            .then((result)=>{
+                console.log(error);
+            });
+
+        axios.get(`http://localhost:7026/api/Account/balance/${authUser.emailID}`)
+            .then((result) => {
                 if (result.status === 200) {
                     setBalance(result.data);
                 } else if (result.status === 202) {
-                    setBalance(0)
+                    setBalance(0);
                 }
             })
-            .catch((err)=>console.log(err))
-
-    }, [authUser.emailID])
+            .catch((err) => console.log(err));
+    }, [authUser.emailID]);
 
     const handleEditBtn = () => {
-        axios.put(`http://localhost:7026/api/UserAuth/${authUser.emailID}`, userDetails)
+        const formData = new FormData();
+        formData.append('emailID', userDetails.emailID);
+        formData.append('fullName', userDetails.fullName);
+        formData.append('password', userDetails.password);
+        formData.append('occupation', userDetails.occupation);
+        formData.append('monthlyIncome', userDetails.monthlyIncome);
+        if (userDetails.imageFile) {
+            formData.append('imageFile', userDetails.imageFile); // Append the image file only if it exists
+        }
+
+        axios.put(`http://localhost:7026/api/UserAuth/${authUser.emailID}`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
             .then((result) => {
-                if (result.status === 204) {
+                if (result.status === 200) {
                     toast.success("Profile Updated Successfully", {
                         theme: "dark",
                         autoClose: 1000,
                     });
-                    setAuthUser(userDetails)
+                    setAuthUser(userDetails);
+                    // Refresh the image preview
+                    setImagePreview(result.data.imageName); 
                 }
             })
             .catch((err) => {
-                console.log(err)
-            })
-    }
+                console.log(err);
+            });
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setUserDetails({ ...userDetails, imageFile: file });
+            setImagePreview(URL.createObjectURL(file));
+        }
+    };
 
     return (
         <>
@@ -66,11 +89,13 @@ const Profile = () => {
                 <div className="profilesetting container col-12 mt-4 mx-0 p-4 rounded shadow-sm border">
                     <div className="row">
                         <div className="col-md-4 d-flex flex-column align-items-center">
-                            <img src={profile} alt="Profile" className='rounded-circle' style={{ width: "200px" }} />
+                            <div className='profile-img-container'>
+                                <img src={imagePreview || userDetails.imageName} alt="Profile" className='profile-img' />
+                            </div>
                             <label htmlFor='fileUpload' className="plus-icon-badge rounded-circle d-flex justify-content-center align-items-center text-white">
                                 <i className="bi bi-plus"></i>
                             </label>
-                            <input type='file' className='visually-hidden' id="fileUpload" />
+                            <input type='file' className='visually-hidden' id="fileUpload" onChange={handleFileChange} />
                             <div className="profiledetails">
                                 <span className="d-block fw-bolder">{userDetails.fullName}</span>
                                 <span className="d-block text-muted">{userDetails.emailID}</span>
@@ -80,19 +105,19 @@ const Profile = () => {
                             <div className="p-3 formInput">
                                 <div className="form-group d-flex align-items-center mb-3">
                                     <label className='col-4'>Full Name:</label>
-                                    <input type="text" style={{ fontFamily: '"Merriweather", sans-serif', fontSize: "13px" }} className="form-control shadow-none" placeholder='Enter your full name' autoComplete='off' value={userDetails.fullName} onChange={(e) => setuserDetails({ ...userDetails, fullName: e.target.value })} />
+                                    <input type="text" style={{ fontFamily: '"Merriweather", sans-serif', fontSize: "13px" }} className="form-control shadow-none" placeholder='Enter your full name' autoComplete='off' value={userDetails.fullName} onChange={(e) => setUserDetails({ ...userDetails, fullName: e.target.value })} />
                                 </div>
                                 <div className="form-group d-flex align-items-center mb-3">
                                     <label className='col-4'>Email-Id:</label>
-                                    <input type="text" style={{ fontFamily: '"Merriweather", sans-serif', fontSize: "13px" }} disabled className="form-control shadow-none" placeholder='Enter your email-id' autoComplete='off' value={userDetails.emailID} onChange={(e) => setuserDetails({ ...userDetails, emailID: e.target.value })} />
+                                    <input type="text" style={{ fontFamily: '"Merriweather", sans-serif', fontSize: "13px" }} disabled className="form-control shadow-none" placeholder='Enter your email-id' autoComplete='off' value={userDetails.emailID} onChange={(e) => setUserDetails({ ...userDetails, emailID: e.target.value })} />
                                 </div>
                                 <div className="form-group d-flex align-items-center mb-3">
                                     <label className='col-4'>Occupation:</label>
-                                    <input type="text" style={{ fontFamily: '"Merriweather", sans-serif', fontSize: "13px" }} className="form-control shadow-none" placeholder='Enter your occupation' autoComplete='off' value={userDetails.occupation} onChange={(e) => setuserDetails({ ...userDetails, occupation: e.target.value })} />
+                                    <input type="text" style={{ fontFamily: '"Merriweather", sans-serif', fontSize: "13px" }} className="form-control shadow-none" placeholder='Enter your occupation' autoComplete='off' value={userDetails.occupation} onChange={(e) => setUserDetails({ ...userDetails, occupation: e.target.value })} />
                                 </div>
                                 <div className="form-group d-flex align-items-center mb-3">
-                                    <label className='col-4'>Monthly Icome:</label>
-                                    <input type="text" style={{ fontFamily: '"Merriweather", sans-serif', fontSize: "13px" }} className="form-control shadow-none" placeholder='Enter your monthly income' autoComplete='off' value={userDetails.monthlyIncome} onChange={(e) => setuserDetails({ ...userDetails, monthlyIncome: e.target.value })} />
+                                    <label className='col-4'>Monthly Income:</label>
+                                    <input type="text" style={{ fontFamily: '"Merriweather", sans-serif', fontSize: "13px" }} className="form-control shadow-none" placeholder='Enter your monthly income' autoComplete='off' value={userDetails.monthlyIncome} onChange={(e) => setUserDetails({ ...userDetails, monthlyIncome: e.target.value })} />
                                 </div>
                                 <div className="form-group d-flex align-items-center mb-3">
                                     <label className='col-4'>Balance:</label>
@@ -107,9 +132,8 @@ const Profile = () => {
                 </div>
 
             </main >
-
         </>
-    )
-}
+    );
+};
 
-export default Profile
+export default Profile;
