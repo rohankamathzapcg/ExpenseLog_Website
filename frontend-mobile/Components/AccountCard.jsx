@@ -6,7 +6,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 
-const AccountCard = ({ account }) => {
+const AccountCard = ({ account, navigation }) => {
   const maskAccountNumber = (accountNo) => {
     const lastFourDigits = accountNo.slice(-4);
     const maskedPart = accountNo.slice(0, -4).replace(/./g, "x");
@@ -32,7 +32,12 @@ const AccountCard = ({ account }) => {
         <Text style={styles.branchName}>{account.branchName}</Text>
         <Text style={styles.balance}>Balance: ₹ {account.balance}</Text>
       </View>
-      <TouchableOpacity style={styles.editIconContainer}>
+      <TouchableOpacity
+        style={styles.editIconContainer}
+        onPress={() =>
+          navigation.navigate("EditAccount", { accountData: account })
+        }
+      >
         <Feather
           name="edit"
           size={20}

@@ -6,31 +6,37 @@ import {
   ScrollView,
   TouchableOpacity,
 } from "react-native";
+import { useAuth } from "../Context/AuthContext";
+import axios from "axios";
 import AccountCard from "../Components/AccountCard";
 
 const AccountScreen = ({ navigation }) => {
-  // const { authUser } = useAuth();
-  const [myAccount, setMyAccount] = useState([
-    {
-      accountNo: "123456789012",
-      bankName: "Bank of America",
-      branchName: "New York",
-      balance: "5000",
-    },
-    {
-      accountNo: "987654321098",
-      bankName: "Chase Bank",
-      branchName: "Los Angeles",
-      balance: "7500",
-    },
-  ]);
+  const { authUser } = useAuth();
+  const [myAccount, setMyAccount] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(
+        `http://localhost:7026/api/Account/AllAccounts?EmailId=${encodeURIComponent(
+          authUser.emailID
+        )}`
+      )
+      .then((result) => {
+        setMyAccount(result.data);
+      })
+      .catch((err) => console.log(err));
+  });
 
   return (
     <>
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.cardContainer}>
           {myAccount.map((account, index) => (
-            <AccountCard key={index} account={account} />
+            <AccountCard
+              key={index}
+              account={account}
+              navigation={navigation}
+            />
           ))}
           <TouchableOpacity
             style={styles.addCard}

@@ -8,6 +8,7 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
 } from "react-native";
+import Toast from "react-native-toast-message";
 import { useCustomFonts } from "../fonts/useCustomFont";
 import AppLoading from "expo-app-loading";
 import {
@@ -95,11 +96,15 @@ const AddAccountScreen = ({ navigation }) => {
     ) {
       return;
     }
-    // Simulate successful account addition
-    // toast.success("Account added successfully", {
-    //   theme: "dark",
-    //   autoClose: 1000,
-    // });
+    Toast.show({
+      type: "success",
+      text1: "Account Added Successfully",
+      position: "top",
+      visibilityTime: 2000,
+      onHide: () => {
+        navigation.goBack();
+      },
+    });
     setUserBankDetails({
       accountNo: "",
       bankName: "",
@@ -107,91 +112,94 @@ const AddAccountScreen = ({ navigation }) => {
       balance: "",
       //   emailID: authUser.emailID,
     });
-    navigation.goBack();
   };
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
-        <View style={styles.inputContainer}>
-          <MaterialCommunityIcons
-            name="bank-outline"
-            size={20}
-            style={styles.icon}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Enter bank name"
-            value={userBankDetails.bankName}
-            onChangeText={(text) =>
-              setUserBankDetails({ ...userBankDetails, bankName: text })
-            }
-            onBlur={validateBankName}
-          />
-        </View>
-        {errors.bankErrMsg && (
-          <Text style={styles.error}>{errors.bankErrMsg}</Text>
-        )}
+    <>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <View style={styles.container}>
+          <View style={styles.inputContainer}>
+            <MaterialCommunityIcons
+              name="bank-outline"
+              size={20}
+              style={styles.icon}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Enter bank name"
+              value={userBankDetails.bankName}
+              onChangeText={(text) =>
+                setUserBankDetails({ ...userBankDetails, bankName: text })
+              }
+              onBlur={validateBankName}
+            />
+          </View>
+          {errors.bankErrMsg && (
+            <Text style={styles.error}>{errors.bankErrMsg}</Text>
+          )}
 
-        <View style={styles.inputContainer}>
-          <FontAwesome name="id-card-o" size={20} style={styles.icon} />
-          <TextInput
-            style={styles.input}
-            placeholder="Enter account number"
-            value={userBankDetails.accountNo}
-            onChangeText={(text) =>
-              setUserBankDetails({ ...userBankDetails, accountNo: text })
-            }
-            keyboardType="numeric"
-            onBlur={validateAccNo}
-          />
-        </View>
-        {errors.accnoErrMsg && (
-          <Text style={styles.error}>{errors.accnoErrMsg}</Text>
-        )}
+          <View style={styles.inputContainer}>
+            <FontAwesome name="id-card-o" size={20} style={styles.icon} />
+            <TextInput
+              style={styles.input}
+              placeholder="Enter account number"
+              value={userBankDetails.accountNo}
+              onChangeText={(text) =>
+                setUserBankDetails({ ...userBankDetails, accountNo: text })
+              }
+              keyboardType="numeric"
+              onBlur={validateAccNo}
+            />
+          </View>
+          {errors.accnoErrMsg && (
+            <Text style={styles.error}>{errors.accnoErrMsg}</Text>
+          )}
 
-        <View style={styles.inputContainer}>
-          <FontAwesome5 name="code-branch" size={20} style={styles.icon} />
-          <TextInput
-            style={styles.input}
-            placeholder="Enter branch name"
-            value={userBankDetails.branchName}
-            onChangeText={(text) =>
-              setUserBankDetails({ ...userBankDetails, branchName: text })
-            }
-            onBlur={validateBranchName}
-          />
-        </View>
-        {errors.branchErrMsg && (
-          <Text style={styles.error}>{errors.branchErrMsg}</Text>
-        )}
+          <View style={styles.inputContainer}>
+            <FontAwesome5 name="code-branch" size={20} style={styles.icon} />
+            <TextInput
+              style={styles.input}
+              placeholder="Enter branch name"
+              value={userBankDetails.branchName}
+              onChangeText={(text) =>
+                setUserBankDetails({ ...userBankDetails, branchName: text })
+              }
+              onBlur={validateBranchName}
+            />
+          </View>
+          {errors.branchErrMsg && (
+            <Text style={styles.error}>{errors.branchErrMsg}</Text>
+          )}
 
-        <View style={styles.inputContainer}>
-          <MaterialCommunityIcons
-            name="cash-multiple"
-            size={20}
-            style={styles.icon}
-          />
-          <TextInput
-            style={styles.input}
-            placeholder="Enter balance amount"
-            value={userBankDetails.balance}
-            onChangeText={(text) =>
-              setUserBankDetails({ ...userBankDetails, balance: text })
-            }
-            keyboardType="numeric"
-            onBlur={validateBalance}
-          />
-        </View>
-        {errors.balanceErrMsg && (
-          <Text style={styles.error}>{errors.balanceErrMsg}</Text>
-        )}
+          <View style={styles.inputContainer}>
+            <MaterialCommunityIcons
+              name="cash-multiple"
+              size={20}
+              style={styles.icon}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Enter balance amount"
+              value={userBankDetails.balance}
+              onChangeText={(text) =>
+                setUserBankDetails({ ...userBankDetails, balance: text })
+              }
+              keyboardType="numeric"
+              onBlur={validateBalance}
+            />
+          </View>
+          {errors.balanceErrMsg && (
+            <Text style={styles.error}>{errors.balanceErrMsg}</Text>
+          )}
 
-        <TouchableOpacity style={styles.button} onPress={handleAccountBtn}>
-          <Text style={styles.buttonText}>Add Account</Text>
-        </TouchableOpacity>
-      </View>
-    </TouchableWithoutFeedback>
+          <TouchableOpacity style={styles.button} onPress={handleAccountBtn}>
+            <Text style={styles.buttonText}>Add Account</Text>
+          </TouchableOpacity>
+        </View>
+      </TouchableWithoutFeedback>
+      {/* Toast message component */}
+      <Toast ref={(ref) => Toast.setRef(ref)} />
+    </>
   );
 };
 
