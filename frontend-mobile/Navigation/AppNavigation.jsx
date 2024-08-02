@@ -23,6 +23,8 @@ import OnboardingScreen from "../Screens/OnboardingScreen";
 import CustomDrawer from "../Components/CustomDrawer";
 import MyProfileScreen from "../Screens/MyProfileScreen";
 import AddAccountScreen from "../Screens/AddAccountScreen";
+import AddTransactionScreen from "../Screens/AddTransactionScreen";
+import EditAccountScreen from "../Screens/EditAccountScreen";
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -174,6 +176,36 @@ const AppNavigation = () => {
           // options={{ headerShown: false }}
           options={{
             title: "Add New Account",
+            headerStyle: {
+              backgroundColor: "#012970",
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              fontFamily: "merriweather-bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="EditAccount"
+          component={EditAccountScreen}
+          // options={{ headerShown: false }}
+          options={{
+            title: "Edit Account Information",
+            headerStyle: {
+              backgroundColor: "#012970",
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              fontFamily: "merriweather-bold",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="AddTransaction"
+          component={AddTransactionScreen}
+          // options={{ headerShown: false }}
+          options={{
+            title: "Add New Transaction",
             headerStyle: {
               backgroundColor: "#012970",
             },
