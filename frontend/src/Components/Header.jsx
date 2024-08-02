@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useAuth } from '../Context/AuthContext';
 import axios from 'axios';
+import profileImg from '../Assets/PP.png'
 
 const Header = () => {
     const { authUser } = useAuth();
@@ -17,7 +18,7 @@ const Header = () => {
             console.log("Already Logged In")
             axios.get(`http://localhost:7026/api/UserAuth/${authUser.emailID}`)
                 .then((response) => {
-                    setProfilePhoto(response.data.imageName); // Set the profile photo URL
+                    setProfilePhoto(response.data.imageName || profileImg); // Set the profile photo URL
                 })
                 .catch((error) => {
                     console.error('Error fetching profile photo:', error);

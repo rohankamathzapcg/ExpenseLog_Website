@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../Context/AuthContext';
 import { toast, ToastContainer } from 'react-toastify';
 import axios from 'axios';
+import profileImg from '../Assets/PP.png'
 
 const Profile = () => {
     const { authUser, setAuthUser } = useAuth();
@@ -22,7 +23,7 @@ const Profile = () => {
         axios.get(`http://localhost:7026/api/UserAuth/${authUser.emailID}`)
             .then((result) => {
                 setUserDetails(result.data);
-                setImagePreview(result.data.imageName); // Set the preview URL
+                setImagePreview(result.data.imageName || profileImg); // Set the preview URL
             })
             .catch((error) => {
                 console.log(error);
@@ -63,7 +64,7 @@ const Profile = () => {
                     });
                     setAuthUser(userDetails);
                     // Refresh the image preview
-                    setImagePreview(result.data.imageName); 
+                    setImagePreview(result.data.imageName || profileImg); 
                 }
             })
             .catch((err) => {

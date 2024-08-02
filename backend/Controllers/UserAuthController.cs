@@ -58,7 +58,7 @@ namespace ExpenseTracker.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(string id, [FromForm] UserDTO userDTO, IFormFile imageFile)
+        public async Task<IActionResult> UpdateUser(string id, [FromForm] UserDTO userDTO, IFormFile? imageFile)
         {
             var existingUser = await _repository.GetByIdAsync(id);
             if (existingUser == null)
