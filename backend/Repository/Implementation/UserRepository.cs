@@ -73,7 +73,7 @@ namespace ExpenseTracker.Repository.Implementation
             await _context.SaveChangesAsync();
             return user;
         }
-        public async Task<User> UpdateAsync(User user, IFormFile imageFile)
+        public async Task<User> UpdateAsync(User user, IFormFile? imageFile)
         {
             // Update user details
             user.FullName = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(user.FullName.ToLower());
