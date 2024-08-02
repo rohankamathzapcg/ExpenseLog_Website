@@ -17,6 +17,8 @@ import microsoft from "../assets/microsoft.png";
 import facebook from "../assets/facebook-icon.png";
 import Toast from "react-native-toast-message";
 import axios from "axios";
+import { useAuth } from "../Context/AuthContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const LoginScreen = ({ navigation }) => {
   const [fontsLoaded] = useCustomFonts();
@@ -24,6 +26,8 @@ const LoginScreen = ({ navigation }) => {
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+
+  const { login, authUser } = useAuth();
 
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -66,6 +70,33 @@ const LoginScreen = ({ navigation }) => {
             });
             setEmail("");
             setPassword("");
+
+            login(result.data);
+
+            //printing async storage key values in console
+            // async function showAsyncStorageContent() {
+            //   try {
+            //     // Retrieve all keys
+            //     const keys = await AsyncStorage.getAllKeys();
+            //     console.log("Keys:", keys);
+
+            //     // Retrieve values for each key
+            //     const result = await AsyncStorage.multiGet(keys);
+
+            //     // Log keys and values
+            //     result.forEach(([key, value]) => {
+            //       console.log(`Key: ${key}, Value: ${value}`);
+            //     });
+            //   } catch (error) {
+            //     console.error("Error fetching AsyncStorage content:", error);
+            //   }
+            // }
+
+            // // Call the function to log AsyncStorage content
+            // showAsyncStorageContent();
+
+            //end of async storage function
+
             setTimeout(() => {
               navigation.dispatch(
                 CommonActions.reset(
