@@ -200,7 +200,7 @@ const styles = StyleSheet.create({
   },
   carouselContainer: {
     marginBottom: 20,
-    alignItems: "center", // Center pagination dots horizontally
+    alignItems: "center",
   },
   additionalCardsContainer: {
     flexDirection: "row",

@@ -29,10 +29,10 @@ const DashCard = ({ title, balance, icon }) => {
 
 const styles = StyleSheet.create({
   card: {
-    width: 180,
+    width: 300,
     height: 120,
     marginRight: 10,
-    marginLeft: 100,
+    marginLeft: 50,
     backgroundColor: "#fff",
     borderRadius: 10,
     elevation: 4, // For Android shadow

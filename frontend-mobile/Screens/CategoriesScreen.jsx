@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { useCustomFonts } from "../fonts/useCustomFont";
 import AppLoading from "expo-app-loading";
+import Toast from "react-native-toast-message";
 import AddCategoryModal from "../Components/AddCategoryModal";
 
 const CategoriesScreen = ({ navigation }) => {
@@ -43,6 +44,12 @@ const CategoriesScreen = ({ navigation }) => {
 
   const handleSaveChanges = () => {
     // Code to save changes (e.g., API call) would go here
+    Toast.show({
+      type: "success",
+      text1: "Categories saved successfully!!",
+      position: "top",
+      visibilityTime: 2000,
+    });
     console.log("Categories saved:", myCategory);
   };
 
@@ -101,6 +108,8 @@ const CategoriesScreen = ({ navigation }) => {
         onClose={() => setModalVisible(false)}
         onAddCategory={addCategory}
       />
+      {/* Toast message component */}
+      <Toast ref={(ref) => Toast.setRef(ref)} />
     </ScrollView>
   );
 };
