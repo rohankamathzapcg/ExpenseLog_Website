@@ -181,7 +181,7 @@ const LoginScreen = ({ navigation }) => {
         </View>
         <View style={styles.forgotPasswordContainer}>
           <Text
-            // onPress={() => navigation.navigate("Register")}
+            onPress={() => navigation.navigate("ForgotPassword")}
             style={styles.forgotPasswordText}
           >
             {" "}

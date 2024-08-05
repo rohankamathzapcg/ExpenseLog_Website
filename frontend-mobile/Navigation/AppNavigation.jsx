@@ -25,6 +25,7 @@ import MyProfileScreen from "../Screens/MyProfileScreen";
 import AddAccountScreen from "../Screens/AddAccountScreen";
 import AddTransactionScreen from "../Screens/AddTransactionScreen";
 import EditAccountScreen from "../Screens/EditAccountScreen";
+import ForgotPasswordScreen from "../Screens/ForgotPasswordScreen";
 
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator();
@@ -149,6 +150,21 @@ const AppNavigation = () => {
           name="Login"
           component={LoginScreen}
           options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="ForgotPassword"
+          component={ForgotPasswordScreen}
+          // options={{ headerShown: false }}
+          options={{
+            title: "Account Recovery",
+            headerStyle: {
+              backgroundColor: "#012970",
+            },
+            headerTintColor: "#fff",
+            headerTitleStyle: {
+              fontFamily: "merriweather-bold",
+            },
+          }}
         />
         <Stack.Screen
           name="Register"
