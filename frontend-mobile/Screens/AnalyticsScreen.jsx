@@ -194,22 +194,22 @@ const pieData = [
     name: "Food",
     population: 215,
     color: "#f00",
-    legendFontColor: "#fff",
-    legendFontSize: 15,
+    legendFontColor: "#000",
+    legendFontSize: 12,
   },
   {
     name: "Rent",
     population: 280,
     color: "#0f0",
-    legendFontColor: "#fff",
-    legendFontSize: 15,
+    legendFontColor: "#000",
+    legendFontSize: 12,
   },
   {
     name: "Utilities",
     population: 525,
     color: "#00f",
-    legendFontColor: "#fff",
-    legendFontSize: 15,
+    legendFontColor: "#000",
+    legendFontSize: 12,
   },
 ];
 

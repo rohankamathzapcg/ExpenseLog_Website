@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Text, View, Image, StyleSheet, StatusBar, LogBox } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { NavigationContainer } from "@react-navigation/native";
 import AppNavigation from "./Navigation/AppNavigation";
+import { AuthProvider } from "./Context/AuthContext";
 
 export default function App() {
   LogBox.ignoreAllLogs(true);
@@ -46,9 +48,13 @@ export default function App() {
   /* Splash Screen Section Ends */
 
   return (
-    <NavigationContainer>
-      <AppNavigation />
-    </NavigationContainer>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <AuthProvider>
+        <NavigationContainer>
+          <AppNavigation />
+        </NavigationContainer>
+      </AuthProvider>
+    </GestureHandlerRootView>
   );
 }
 

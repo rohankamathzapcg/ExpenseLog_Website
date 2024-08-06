@@ -20,10 +20,10 @@ const OPTIONS = [
 const ChartFilter = (props) => {
   const [fontsLoaded] = useCustomFonts();
   const [visible, setVisible] = useState(false);
-  const [selectedFilter, setSelectedFilter] = useState("");
+  const [selectedFilter, setSelectedFilter] = useState("Filters");
 
-  const handleFilterChange = (filter) => {
-    setSelectedFilter(filter);
+  const handleFilterChange = (filter, label) => {
+    setSelectedFilter(label);
     props.filterChange(filter);
     setVisible(false);
   };
@@ -35,7 +35,7 @@ const ChartFilter = (props) => {
   const renderOption = ({ item }) => (
     <TouchableOpacity
       style={styles.option}
-      onPress={() => handleFilterChange(item.value)}
+      onPress={() => handleFilterChange(item.value, item.label)}
     >
       <Text style={styles.optionText}>{item.label}</Text>
     </TouchableOpacity>
@@ -48,7 +48,7 @@ const ChartFilter = (props) => {
         style={styles.button}
       >
         <Ionicons name="funnel-outline" style={styles.icon} />
-        <Text style={styles.buttonText}>Filters</Text>
+        <Text style={styles.buttonText}>{selectedFilter}</Text>
       </TouchableOpacity>
       {visible && (
         <View style={styles.dropdown}>
