@@ -7,10 +7,11 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
+import Toast from "react-native-toast-message";
 import { useCustomFonts } from "../fonts/useCustomFont";
 import AppLoading from "expo-app-loading";
 
-const MyProfileScreen = () => {
+const MyProfileScreen = ({ navigation }) => {
   const [fontsLoaded] = useCustomFonts();
   const [userDetails, setUserDetails] = useState({
     fullName: "Rohan Kamath",
@@ -22,6 +23,12 @@ const MyProfileScreen = () => {
 
   const handleEditBtn = () => {
     // Add your update logic here
+    Toast.show({
+      type: "success",
+      text1: "Profile Updated Successfully",
+      position: "top",
+      visibilityTime: 2000,
+    });
     console.log("Updated:", userDetails);
   };
 
@@ -101,6 +108,8 @@ const MyProfileScreen = () => {
           <Text style={styles.updateButtonText}>Update</Text>
         </TouchableOpacity>
       </View>
+      {/* Toast message component */}
+      <Toast ref={(ref) => Toast.setRef(ref)} />
     </View>
   );
 };
