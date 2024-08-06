@@ -74,27 +74,21 @@ const LoginScreen = ({ navigation }) => {
             login(result.data);
 
             //printing async storage key values in console
-            // async function showAsyncStorageContent() {
-            //   try {
-            //     // Retrieve all keys
-            //     const keys = await AsyncStorage.getAllKeys();
-            //     console.log("Keys:", keys);
+            async function showAsyncStorageContent() {
+              try {
+                const keys = await AsyncStorage.getAllKeys();
+                console.log("Keys:", keys);
 
-            //     // Retrieve values for each key
-            //     const result = await AsyncStorage.multiGet(keys);
+                const result = await AsyncStorage.multiGet(keys);
 
-            //     // Log keys and values
-            //     result.forEach(([key, value]) => {
-            //       console.log(`Key: ${key}, Value: ${value}`);
-            //     });
-            //   } catch (error) {
-            //     console.error("Error fetching AsyncStorage content:", error);
-            //   }
-            // }
-
-            // // Call the function to log AsyncStorage content
-            // showAsyncStorageContent();
-
+                result.forEach(([key, value]) => {
+                  console.log(`Key: ${key}, Value: ${value}`);
+                });
+              } catch (error) {
+                console.error("Error fetching AsyncStorage content:", error);
+              }
+            }
+            showAsyncStorageContent();
             //end of async storage function
 
             setTimeout(() => {
@@ -164,16 +158,16 @@ const LoginScreen = ({ navigation }) => {
               errors.passwordLogin && styles.errorInput,
             ]}
             placeholder="Enter your password"
-            secureTextEntry={!showPassword} // Toggle password visibility
+            secureTextEntry={!showPassword}
             value={password}
             onChangeText={setPassword}
           />
           <TouchableOpacity
             style={styles.eyeIconContainer}
-            onPress={() => setShowPassword(!showPassword)} // Toggle eye icon and password visibility
+            onPress={() => setShowPassword(!showPassword)}
           >
             <Entypo
-              name={showPassword ? "eye-with-line" : "eye"} // Change icon based on visibility state
+              name={showPassword ? "eye-with-line" : "eye"}
               size={22}
               color="gray"
             />
@@ -208,7 +202,6 @@ const LoginScreen = ({ navigation }) => {
           </Text>
         </Text>
       </View>
-      {/* Toast message component */}
       <Toast ref={(ref) => Toast.setRef(ref)} />
     </>
   );

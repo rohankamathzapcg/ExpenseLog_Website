@@ -12,12 +12,12 @@ import LottieView from "lottie-react-native";
 import { useCustomFonts } from "../fonts/useCustomFont";
 import AppLoading from "expo-app-loading";
 import Accordion from "react-native-collapsible/Accordion";
+import { useAuth } from "../Context/AuthContext";
 
 const HelpCenterScreen = () => {
   const [fontsLoaded] = useCustomFonts();
   const [activeSections, setActiveSections] = useState([]);
-  const [fullname, setFullname] = useState("Rohan Kamath");
-  const [email, setEmail] = useState("rkamath391@gmail.com");
+  const { login, authUser } = useAuth();
 
   const FAQ = [
     {
@@ -133,7 +133,7 @@ const HelpCenterScreen = () => {
             <TextInput
               style={styles.input}
               placeholder="Enter your full name"
-              value={fullname}
+              value={authUser.fullName}
               autoComplete="off"
             />
           </View>
@@ -142,7 +142,7 @@ const HelpCenterScreen = () => {
             <TextInput
               style={[styles.input, styles.disabled]}
               placeholder="Enter your email-id"
-              value={email}
+              value={authUser.emailID}
               autoComplete="off"
               editable={false}
             />

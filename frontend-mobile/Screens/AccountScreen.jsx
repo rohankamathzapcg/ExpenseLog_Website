@@ -17,7 +17,7 @@ const AccountScreen = ({ navigation }) => {
   useEffect(() => {
     axios
       .get(
-        `http://localhost:7026/api/Account/AllAccounts?EmailId=${encodeURIComponent(
+        `http://10.0.2.2:7026/api/Account/AllAccounts?EmailId=${encodeURIComponent(
           authUser.emailID
         )}`
       )

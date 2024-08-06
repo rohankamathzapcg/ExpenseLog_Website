@@ -10,12 +10,14 @@ import Toast from "react-native-toast-message";
 import Icon from "react-native-vector-icons/Ionicons";
 import { useCustomFonts } from "../fonts/useCustomFont";
 import AppLoading from "expo-app-loading";
+import axios from "axios";
 
 const ForgotPasswordScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [codeSent, setCodeSent] = useState(false);
   const [isOtpVerified, setIsOtpVerified] = useState(false);
+  const [generatedOtp, setGeneratedOtp] = useState("");
   const [showPasswordFields, setShowPasswordFields] = useState(false);
   const [newPassword, setNewPassword] = useState("");
   const [newCPassword, setNewCPassword] = useState("");
@@ -26,41 +28,45 @@ const ForgotPasswordScreen = ({ navigation }) => {
   const [isOtpSent, setIsOtpSent] = useState(false);
   const [fontsLoaded] = useCustomFonts();
 
-  // Refs for OTP inputs
   const otpRefs = useRef([]);
 
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
   const handleSendCode = () => {
-    if (!validateEmail(email)) {
-      setMessage({
-        text: "Please enter a valid email address.",
-        type: "error",
-      });
-      return;
-    }
-
     const newOtp = generateOtp();
-    console.log(`Generated OTP: ${newOtp}`);
-    setCodeSent(true);
-    setIsOtpSent(true);
-    setSeconds(60);
-    setMessage({ text: "OTP has been sent to your email!", type: "success" });
+    setGeneratedOtp(newOtp);
+
+    axios
+      .post("http://10.0.2.2:5000/send_recovery_email", {
+        userEmail: email,
+        OTP: newOtp,
+      })
+      .then((response) => {
+        setCodeSent(true);
+        setIsOtpSent(true);
+        setSeconds(60);
+        setShowPasswordFields(false);
+        setMessage({
+          text: "OTP has been sent to your email!",
+          type: "success",
+        });
+      })
+      .catch((err) => {
+        console.log("Error sending OTP", err);
+        setMessage({
+          text: "Error sending OTP. Please try again.",
+          type: "error",
+        });
+      });
   };
 
   const handleChangeCode = (text, index) => {
     if (text.length > 1) {
-      text = text.slice(-1); // Allow only one character
+      text = text.slice(-1);
     }
 
     const newOtp = [...otp];
     newOtp[index] = text;
     setOtp(newOtp);
 
-    // Move focus to the next input if the current one is filled
     if (text && index < otp.length - 1) {
       otpRefs.current[index + 1].focus();
     }
@@ -68,7 +74,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
 
   const verifyOtpBtn = () => {
     const enteredOtp = otp.join("");
-    if (enteredOtp === "123456") {
+    if (enteredOtp === generatedOtp) {
       setIsOtpVerified(true);
       setShowPasswordFields(true);
       setMessage({ text: "Valid OTP... Reset your password", type: "success" });
@@ -91,14 +97,25 @@ const ForgotPasswordScreen = ({ navigation }) => {
       return;
     }
 
-    Toast.show({
-      type: "success",
-      text1: "Password updated successfully",
-      visibilityTime: 2000,
-      onHide: () => {
-        navigation.goBack();
-      },
-    });
+    const updatedPassword = {
+      emailId: email,
+      password: newPassword,
+    };
+    axios
+      .put("http://10.0.2.2:7026/api/UserAuth/ChangePassword", updatedPassword)
+      .then((result) => {
+        if (result.status === 202) {
+          Toast.show({
+            type: "success",
+            text1: "Password updated successfully",
+            visibilityTime: 2000,
+            onHide: () => {
+              navigation.goBack();
+            },
+          });
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   const generateOtp = () => {
@@ -108,13 +125,20 @@ const ForgotPasswordScreen = ({ navigation }) => {
   useEffect(() => {
     let timer;
     if (isOtpSent && seconds > 0) {
-      timer = setInterval(
-        () => setSeconds((prevSeconds) => prevSeconds - 1),
-        1000
-      );
-    } else if (seconds === 0) {
-      setIsOtpSent(false); // Allow code resend after timer expires
+      timer = setInterval(() => {
+        setSeconds((prevSeconds) => {
+          if (prevSeconds <= 1) {
+            clearInterval(timer);
+            setIsOtpSent(false);
+            return 0;
+          }
+          return prevSeconds - 1;
+        });
+      }, 1000);
+    } else {
+      clearInterval(timer);
     }
+
     return () => clearInterval(timer);
   }, [isOtpSent, seconds]);
 

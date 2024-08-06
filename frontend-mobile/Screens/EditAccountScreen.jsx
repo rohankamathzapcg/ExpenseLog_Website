@@ -6,6 +6,7 @@ import AppLoading from "expo-app-loading";
 import { MaterialCommunityIcons, FontAwesome } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import axios from "axios";
 
 const EditAccountScreen = () => {
   const navigation = useNavigation();
@@ -17,6 +18,7 @@ const EditAccountScreen = () => {
     accountNo: "",
     branchName: "",
     balance: "",
+    email: "",
   });
 
   const [fontsLoaded] = useCustomFonts();
@@ -27,23 +29,43 @@ const EditAccountScreen = () => {
         bankName: accountData.bankName,
         accountNo: accountData.accountNo,
         branchName: accountData.branchName,
-        balance: accountData.balance,
+        balance: accountData.balance.toString(),
+        email: accountData.userId,
       });
     }
   }, [accountData]);
 
   const handleUpdateAccount = () => {
-    // For demonstration purposes, just log the updated account details
-    console.log("Updated Account Details:", accountDetails);
-    Toast.show({
-      type: "success",
-      text1: "Account Details Updated Successfully",
-      position: "top",
-      visibilityTime: 2000,
-      onHide: () => {
-        navigation.goBack();
-      },
-    });
+    const userAccountUpdate = {
+      accountNo: accountDetails.accountNo,
+      bankName: accountDetails.bankName,
+      branchName: accountDetails.branchName,
+      balance: accountDetails.balance,
+      emailID: accountDetails.email,
+    };
+    axios
+      .put("http://10.0.2.2:7026/api/Account/UpdateAccount", userAccountUpdate)
+      .then((result) => {
+        if (result.status === 200) {
+          Toast.show({
+            type: "success",
+            text1: "Account Details Updated Successfully",
+            position: "top",
+            visibilityTime: 2000,
+            onHide: () => {
+              navigation.goBack();
+            },
+          });
+        } else {
+          Toast.show({
+            type: "error",
+            text1: "Some Error Occurred",
+            position: "top",
+            visibilityTime: 2000,
+          });
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   if (!fontsLoaded) {

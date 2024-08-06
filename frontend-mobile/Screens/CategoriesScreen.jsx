@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -10,48 +10,79 @@ import { useCustomFonts } from "../fonts/useCustomFont";
 import AppLoading from "expo-app-loading";
 import Toast from "react-native-toast-message";
 import AddCategoryModal from "../Components/AddCategoryModal";
+import axios from "axios";
+import { useAuth } from "../Context/AuthContext";
 
 const CategoriesScreen = ({ navigation }) => {
   const [fontsLoaded] = useCustomFonts();
   const [myCategory, setMyCategory] = useState([]);
-  const [categories, setCategories] = useState([
-    { categoryName: "Food", categoryId: 1 },
-    { categoryName: "Travel", categoryId: 2 },
-    { categoryName: "Shopping", categoryId: 3 },
-  ]);
+  const [categories, setCategories] = useState([]);
+  const [updateCategory, setUpdateCategory] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const { login, authUser } = useAuth();
 
-  if (!fontsLoaded) {
-    return <AppLoading />;
-  }
+  useEffect(() => {
+    axios
+      .get("http://10.0.2.2:7026/api/Category")
+      .then((result) => {
+        setCategories(result.data);
+      })
+      .catch((err) => console.log(err));
+  });
+
+  useEffect(() => {
+    axios
+      .get(`http://10.0.2.2:7026/api/CatMapUsers/${authUser.emailID}`)
+      .then((result) => {
+        if (result.status === 200) {
+          setMyCategory(result.data);
+        } else if (result.status === 202) {
+          setMyCategory([]);
+        }
+      })
+      .catch((err) => console.log(err));
+  }, [authUser.emailID]);
 
   const isSelected = (categoryName) =>
     myCategory.some((cat) => cat.catName === categoryName);
 
-  const handleCategoryClick = (categoryName) => {
+  const handleCategoryClick = (categoryName, id) => {
     if (!isSelected(categoryName)) {
       setMyCategory([...myCategory, { catName: categoryName }]);
+      setUpdateCategory([
+        ...updateCategory,
+        { categoryId: id, emailID: authUser.emailID },
+      ]);
     }
   };
 
-  const addCategory = (newCategoryName) => {
-    const newCategory = {
-      categoryName: newCategoryName,
-      categoryId: categories.length + 1,
-    };
-    setCategories((prevCategories) => [...prevCategories, newCategory]);
+  const handleSaveChanges = () => {
+    axios
+      .put("http://10.0.2.2:7026/api/CatMapUsers", updateCategory)
+      .then((result) => {
+        if (result.status === 200) {
+          Toast.show({
+            type: "success",
+            text1: "Categories saved successfully!!",
+            position: "top",
+            visibilityTime: 2000,
+          });
+        }
+      })
+      .catch((err) => {
+        Toast.show({
+          type: "error",
+          text1: "Some error occured!!",
+          position: "top",
+          visibilityTime: 2000,
+        });
+        console.log(err);
+      });
   };
 
-  const handleSaveChanges = () => {
-    // Code to save changes (e.g., API call) would go here
-    Toast.show({
-      type: "success",
-      text1: "Categories saved successfully!!",
-      position: "top",
-      visibilityTime: 2000,
-    });
-    console.log("Categories saved:", myCategory);
-  };
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -65,7 +96,9 @@ const CategoriesScreen = ({ navigation }) => {
                 styles.badge,
                 isSelected(category.categoryName) && styles.selectedBadge,
               ]}
-              onPress={() => handleCategoryClick(category.categoryName)}
+              onPress={() =>
+                handleCategoryClick(category.categoryName, category.categoryId)
+              }
             >
               <Text
                 style={[
@@ -106,7 +139,6 @@ const CategoriesScreen = ({ navigation }) => {
       <AddCategoryModal
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
-        onAddCategory={addCategory}
       />
       {/* Toast message component */}
       <Toast ref={(ref) => Toast.setRef(ref)} />
@@ -175,6 +207,12 @@ const styles = StyleSheet.create({
   },
   myCategoryContainer: {
     marginTop: 24,
+    paddingLeft: 25,
+    paddingTop: 25,
+    paddingBottom: 10,
+    paddingRight: 25,
+    borderColor: "#000",
+    borderWidth: 0.8,
   },
   myBadge: {
     backgroundColor: "#012970",
@@ -186,17 +224,18 @@ const styles = StyleSheet.create({
     borderWidth: 0.9,
     borderColor: "#012970",
     backgroundColor: "#fff",
-    width: "45%",
-    height: 45,
-    padding: 10,
+    width: 100,
+    height: 32,
+    padding: 8,
+
     borderRadius: 8,
-    marginTop: 16,
-    marginHorizontal: 100,
+    marginTop: 30,
+    marginHorizontal: 210,
     alignItems: "center",
   },
   saveButtonText: {
     color: "#012970",
-    fontSize: 14,
+    fontSize: 10,
     fontFamily: "merriweather-regular",
   },
 });
