@@ -16,15 +16,19 @@ import {
   FontAwesome,
   FontAwesome5,
 } from "@expo/vector-icons";
+import { useAuth } from "../Context/AuthContext";
+import axios from "axios";
 
 const AddAccountScreen = ({ navigation }) => {
+  const { authUser } = useAuth();
+
   const [fontsLoaded] = useCustomFonts();
   const [userBankDetails, setUserBankDetails] = useState({
     accountNo: "",
     bankName: "",
     branchName: "",
     balance: "",
-    emailID: "rkamath391@gmail.com",
+    emailID: authUser.emailID,
   });
   const [errors, setErrors] = useState({});
 
@@ -96,22 +100,36 @@ const AddAccountScreen = ({ navigation }) => {
     ) {
       return;
     }
-    Toast.show({
-      type: "success",
-      text1: "Account Added Successfully",
-      position: "top",
-      visibilityTime: 2000,
-      onHide: () => {
-        navigation.goBack();
-      },
-    });
-    setUserBankDetails({
-      accountNo: "",
-      bankName: "",
-      branchName: "",
-      balance: "",
-      //   emailID: authUser.emailID,
-    });
+
+    axios
+      .post("http://10.0.2.2:7026/api/Account/", userBankDetails)
+      .then((result) => {
+        if (result.status === 200) {
+          Toast.show({
+            type: "success",
+            text1: "Account Added Successfully",
+            position: "top",
+            visibilityTime: 2000,
+            onHide: () => {
+              setUserBankDetails({
+                accountNo: "",
+                bankName: "",
+                branchName: "",
+                balance: "",
+              });
+              navigation.goBack();
+            },
+          });
+        } else {
+          Toast.show({
+            type: "error",
+            text1: result.data,
+            position: "top",
+            visibilityTime: 2000,
+          });
+        }
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
