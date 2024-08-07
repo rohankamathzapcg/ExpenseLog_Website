@@ -1,83 +1,16 @@
 import { StyleSheet, Text, View, Dimensions, ScrollView } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useCustomFonts } from "../fonts/useCustomFont";
 import AppLoading from "expo-app-loading";
 import { BarChart, PieChart } from "react-native-chart-kit";
 import DashCard from "../Components/DashCard";
 import Carousel from "react-native-reanimated-carousel";
 import PaginationDots from "../Components/PaginationDots";
-import { MaterialCommunityIcons } from "react-native-vector-icons";
 import Feather from "@expo/vector-icons/Feather";
+import { useAuth } from "../Context/AuthContext";
+import axios from "axios";
 
 const screenWidth = Dimensions.get("window").width;
-
-const cardData = [
-  {
-    id: "1",
-    title: "Balance",
-    balance: 3000,
-    icon: "wallet-outline",
-    type: "balance",
-  },
-  {
-    id: "2",
-    title: "Income",
-    balance: 5000,
-    icon: "cash-plus",
-    type: "income",
-  },
-  {
-    id: "3",
-    title: "Expense",
-    balance: 2000,
-    icon: "cash-minus",
-    type: "expense",
-  },
-];
-
-const expenseCategories = [
-  { categoryName: "Food", categoryId: 1 },
-  { categoryName: "Travel", categoryId: 2 },
-];
-
-const recentTransactions = [
-  { amount: "400", remark: "Jeans Pant", color: "red", type: "expense" },
-  { amount: "1500", remark: "Salary", color: "green", type: "income" },
-  { amount: "200", remark: "Groceries", color: "red", type: "expense" },
-];
-
-const barData = {
-  labels: ["Page A", "Page B", "Page C", "Page D"],
-  datasets: [
-    {
-      data: [4000, 3000, 2390, 3490],
-    },
-  ],
-};
-
-const pieData = [
-  {
-    name: "Expense",
-    population: 215,
-    color: "#f00",
-    legendFontColor: "#000",
-    legendFontSize: 15,
-  },
-  {
-    name: "Income",
-    population: 280,
-    color: "#0f0",
-    legendFontColor: "#000",
-    legendFontSize: 15,
-  },
-  {
-    name: "Balance",
-    population: 525,
-    color: "#00f",
-    legendFontColor: "#000",
-    legendFontSize: 15,
-  },
-];
 
 const chartConfig = {
   backgroundGradientFrom: "#ffffff",
@@ -100,6 +33,152 @@ const chartConfig = {
 const DashboardScreen = () => {
   const [fontsLoaded] = useCustomFonts();
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [myCategory, setMyCategory] = useState([]);
+  const [myRecentTransactions, setMyRecentTransactions] = useState([]);
+  const [balance, setBalance] = useState(0);
+  const [expense, setExpense] = useState(0);
+  const [income, setIncome] = useState(0);
+  const [categoryData, setCategoryData] = useState([]);
+  const { authUser } = useAuth();
+  const [cardData, setCardData] = useState([
+    {
+      id: "1",
+      title: "Balance",
+      balance: 0,
+      icon: "wallet-outline",
+      type: "balance",
+    },
+    {
+      id: "2",
+      title: "Income",
+      balance: 0,
+      icon: "cash-plus",
+      type: "income",
+    },
+    {
+      id: "3",
+      title: "Expense",
+      balance: 0,
+      icon: "cash-minus",
+      type: "expense",
+    },
+  ]);
+
+  useEffect(() => {
+    const date = new Date();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+
+    if (authUser && authUser.emailID) {
+      axios
+        .get(`http://10.0.2.2:7026/api/CatMapUsers/${authUser.emailID}`)
+        .then((result) => {
+          if (result.status === 200) {
+            setMyCategory(result.data);
+          } else if (result.status === 202) {
+            setMyCategory([]);
+          }
+        })
+        .catch((err) => console.log(err));
+
+      axios
+        .get(`http://10.0.2.2:7026/api/Transaction/${authUser.emailID}`)
+        .then((result) => {
+          if (result.status === 200) {
+            setMyRecentTransactions(result.data);
+          } else if (result.status === 202) {
+            setMyRecentTransactions([]);
+          }
+        })
+        .catch((err) => console.log(err));
+
+      axios
+        .get(`http://10.0.2.2:7026/api/Account/balance/${authUser.emailID}`)
+        .then((result) => {
+          if (result.status === 200) {
+            setBalance(result.data);
+          } else if (result.status === 202) {
+            setBalance(0);
+          }
+        })
+        .catch((err) => console.log(err));
+
+      axios
+        .get(
+          `http://10.0.2.2:7026/api/Analytics/total-expense-by-month?email=${encodeURIComponent(
+            authUser.emailID
+          )}&year=${encodeURIComponent(year)}&month=${encodeURIComponent(
+            month
+          )}`
+        )
+        .then((result) => {
+          if (result.status === 200) {
+            setExpense(result.data);
+          } else if (result.status === 202) {
+            setExpense(0);
+          }
+        })
+        .catch((err) => console.log(err));
+
+      axios
+        .get(
+          `http://10.0.2.2:7026/api/Analytics/total-income-by-month?email=${encodeURIComponent(
+            authUser.emailID
+          )}&year=${encodeURIComponent(year)}&month=${encodeURIComponent(
+            month
+          )}`
+        )
+        .then((result) => {
+          if (result.status === 200) {
+            setIncome(result.data);
+          } else if (result.status === 202) {
+            setIncome(0);
+          }
+        })
+        .catch((err) => console.log(err));
+
+      setCardData([
+        {
+          id: "1",
+          title: "Balance",
+          balance: balance || 0,
+          icon: "wallet-outline",
+          type: "balance",
+        },
+        {
+          id: "2",
+          title: "Income",
+          balance: income || 0,
+          icon: "cash-plus",
+          type: "income",
+        },
+        {
+          id: "3",
+          title: "Expense",
+          balance: expense || 0,
+          icon: "cash-minus",
+          type: "expense",
+        },
+      ]);
+
+      axios
+        .get(
+          `http://10.0.2.2:7026/api/Analytics/total-expense-by-category-this-month?email=${encodeURIComponent(
+            authUser.emailID
+          )}&month=${encodeURIComponent(month)}&year=${encodeURIComponent(
+            year
+          )}`
+        )
+        .then((result) => {
+          if (result.status === 200) {
+            setCategoryData(result.data);
+          } else if (result.status === 202) {
+            setCategoryData({});
+          }
+        })
+        .catch((err) => console.log(err));
+    }
+  }, [balance, income, expense]);
 
   if (!fontsLoaded) {
     return <AppLoading />;
@@ -108,6 +187,39 @@ const DashboardScreen = () => {
   const handleSnapToItem = (index) => {
     setCurrentIndex(index);
   };
+
+  const barData = {
+    labels: categoryData.map((item) => item.key),
+    datasets: [
+      {
+        data: categoryData.map((item) => item.value),
+      },
+    ],
+  };
+
+  const pieData = [
+    {
+      name: "Balance",
+      population: balance,
+      color: "#FFBB28",
+      legendFontColor: "#000",
+      legendFontSize: 15,
+    },
+    {
+      name: "Income",
+      population: income,
+      color: "#012970",
+      legendFontColor: "#000",
+      legendFontSize: 15,
+    },
+    {
+      name: "Expense",
+      population: expense,
+      color: "#00C49F",
+      legendFontColor: "#000",
+      legendFontSize: 15,
+    },
+  ];
 
   return (
     <ScrollView style={styles.scrollView}>
@@ -118,7 +230,7 @@ const DashboardScreen = () => {
             autoPlay
             autoPlayInterval={3000}
             width={screenWidth}
-            height={150} // Adjust the height as needed
+            height={150}
             data={cardData}
             layout="parallax-horizontal"
             renderItem={({ item }) => (
@@ -141,11 +253,9 @@ const DashboardScreen = () => {
             >
               <Text style={styles.cardTitle}>Expense Categories</Text>
               <View style={styles.badgesContainer}>
-                {expenseCategories.map((category, index) => (
+                {myCategory.map((category, index) => (
                   <View key={index} style={styles.badge}>
-                    <Text style={styles.badgeText}>
-                      {category.categoryName}
-                    </Text>
+                    <Text style={styles.badgeText}>{category.catName}</Text>
                   </View>
                 ))}
               </View>
@@ -157,22 +267,22 @@ const DashboardScreen = () => {
               showsVerticalScrollIndicator={false}
             >
               <Text style={styles.cardTitle}>Recent Transactions</Text>
-              {recentTransactions.map((transaction, index) => (
+              {myRecentTransactions.map((transaction, index) => (
                 <View key={index} style={styles.transactionItem}>
                   <Feather
                     name={
-                      transaction.type === "income"
+                      transaction.type === "Income"
                         ? "arrow-down-left"
                         : "arrow-up-right"
                     }
                     size={20}
-                    color={transaction.type === "income" ? "green" : "red"}
+                    color={transaction.type === "Income" ? "green" : "red"}
                     style={styles.transactionIcon}
                   />
                   <Text style={[styles.transactionText]}>
                     ₹{transaction.amount} -
                     <Text style={{ color: "#012970" }}>
-                      {transaction.remark}
+                      {transaction.remarks}
                     </Text>
                   </Text>
                 </View>

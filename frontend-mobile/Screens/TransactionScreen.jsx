@@ -5,39 +5,21 @@ import { useCustomFonts } from "../fonts/useCustomFont";
 import AppLoading from "expo-app-loading";
 import { useNavigation } from "@react-navigation/native";
 import TransactionCard from "../Components/TransactionCard";
+import { useAuth } from "../Context/AuthContext";
+import axios from "axios";
 
 const TransactionScreen = () => {
   const [fontsLoaded] = useCustomFonts();
   const [transactions, setTransactions] = useState([]);
   const navigation = useNavigation();
-
+  const { login, authUser } = useAuth();
   useEffect(() => {
-    // Fetch transactions data from API or use dummy data
-    const fetchedTransactions = [
-      {
-        transactionId: 1,
-        formattedDate: "2024-08-01",
-        accountNo: "1234567890",
-        amount: 500,
-        type: "Expense",
-        categoryName: "Food",
-        remarks: "Lunch",
-        newBalance: 4500,
-      },
-      {
-        transactionId: 2,
-        formattedDate: "2024-08-01",
-        accountNo: "1234567890",
-        amount: 15000,
-        type: "Income",
-        categoryName: "N/A",
-        remarks: "Salary",
-        newBalance: 14500,
-      },
-
-      // Add more transactions here
-    ];
-    setTransactions(fetchedTransactions);
+    axios
+      .get(`http://10.0.2.2:7026/api/Transaction/${authUser.emailID}`)
+      .then((result) => {
+        setTransactions(result.data);
+      })
+      .catch((err) => console.log(err));
   }, []);
 
   if (!fontsLoaded) {

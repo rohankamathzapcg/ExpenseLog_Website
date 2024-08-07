@@ -9,6 +9,8 @@ import AppLoading from "expo-app-loading";
 import { CommonActions } from "@react-navigation/native";
 import { MaterialCommunityIcons, Entypo, Ionicons } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { useAuth } from "../Context/AuthContext";
+import axios from "axios";
 
 const CustomDrawer = (props) => {
   const [fontsLoaded] = useCustomFonts();
@@ -16,6 +18,7 @@ const CustomDrawer = (props) => {
     return <AppLoading />;
   }
   const { navigation } = props;
+  const { login, authUser } = useAuth();
 
   return (
     <View style={styles.DrawerContainer}>
@@ -29,7 +32,7 @@ const CustomDrawer = (props) => {
               source={require("../assets/PP.jpg")}
               style={styles.ProfileImage}
             />
-            <Text style={styles.ProfileText}>Rohan Kamath</Text>
+            <Text style={styles.ProfileText}>{authUser.fullName}</Text>
             <View style={{ flexDirection: "row" }}>
               <MaterialCommunityIcons
                 style={{ marginTop: 5 }}
@@ -45,7 +48,7 @@ const CustomDrawer = (props) => {
                   margin: 5,
                 }}
               >
-                rkamath391@gmail.com
+                {authUser.emailID}
               </Text>
             </View>
           </TouchableOpacity>

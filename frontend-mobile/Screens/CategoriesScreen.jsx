@@ -154,11 +154,21 @@ const styles = StyleSheet.create({
   },
   categoryContainer: {
     marginBottom: 24,
+    borderColor: "#fff",
+    borderWidth: 0.8,
+    borderRadius: 10,
+    elevation: 4, // For Android shadow
+    shadowColor: "#000", // For iOS shadow
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    padding: 16,
+    backgroundColor: "#fff",
   },
   sectionTitle: {
     fontSize: 15,
     fontFamily: "merriweather-bold",
-    marginBottom: 8,
+    marginBottom: 10,
   },
   badgesContainer: {
     flexDirection: "row",
@@ -207,18 +217,25 @@ const styles = StyleSheet.create({
   },
   myCategoryContainer: {
     marginTop: 24,
-    paddingLeft: 25,
-    paddingTop: 25,
+    paddingLeft: 20,
+    paddingTop: 15,
     paddingBottom: 10,
     paddingRight: 25,
-    borderColor: "#000",
+    borderColor: "#fff",
     borderWidth: 0.8,
+    borderRadius: 10,
+    elevation: 4, // For Android shadow
+    shadowColor: "#000", // For iOS shadow
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    backgroundColor: "#fff",
   },
   myBadge: {
     backgroundColor: "#012970",
     padding: 10,
     borderRadius: 8,
-    margin: 4,
+    marginEnd: 5,
   },
   saveButton: {
     borderWidth: 0.9,
